@@ -70,6 +70,19 @@ public class ListSolver {
         return listOfLists;
     }
 
+
+    public static <T> ListItem<ListItem<T>> reverseListOfLists(ListItem<ListItem<T>> lst) {
+        ListItem<ListItem<T>> head = lst;
+        ListItem<ListItem<T>> p = head;
+        while(p.next != null) {
+            p.key = reverseList(p.key);
+            ListItem<ListItem<T>> nextItem = p.next;
+            p.next = p.next.next;
+            nextItem.next = head;
+            head = nextItem;
+        }
+        return head;
+    }
     /**
      *
      * @param list
@@ -93,15 +106,43 @@ public class ListSolver {
         return null;
     }
 
+
+    /**
+     *
+     * Only maybe
+     *
+     * @param lst
+     * @return
+     * @param <T>
+     */
     public static <T> ListItem<T> shiftItemToLeft(ListItem<T> lst) {
         return null;
     }
 
-    public static <T> ListItem<T> filterList(ListItem<T> lst, UnaryOperator<T> fct) {
-        return null;
-    }
 
     public static <T> ListOfListsIterator<T> iterator(ListItem<ListItem<T>> listOfLists) {
         return new ListOfListsIterator<>(listOfLists);
+    }
+
+    public static <T> String toString(ListItem<ListItem<T>> lst) {
+        StringBuilder builder = new StringBuilder("[");
+
+        for(ListItem<ListItem<T>> p = lst; p != null; p = p.next) {
+            builder.append("(");
+            for(ListItem<T> pIn = p.key; pIn != null; pIn = pIn.next) {
+                builder.append(pIn.key);
+                if(pIn.next != null) {
+                    builder.append(", ");
+                }
+            }
+
+            builder.append(")");
+            if(p.next != null) {
+                builder.append(", ");
+            }
+        }
+        builder.append("]");
+
+        return builder.toString();
     }
 }
