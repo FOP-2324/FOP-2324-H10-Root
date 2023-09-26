@@ -102,9 +102,6 @@ public class ListSolver {
     }
 
 
-    public static <T> ListItem<T> mergeLists(ListItem<T> lst1, ListItem<T> lst2, Adder<T> adder) {
-        return null;
-    }
 
 
     /**
