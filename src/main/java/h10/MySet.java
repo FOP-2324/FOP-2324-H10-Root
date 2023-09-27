@@ -46,15 +46,16 @@ public class MySet<T> {
         return new MySet<T>(head.next);
     }
 
-    public MySet<T> intersectionInPlace(MySet<T> set) {
-        return intersection(set, true);
+    public MySet<T> intersectionInPlace(MyLinkedList<MySet<T>> sets) {
+        return intersection(sets, true);
     }
 
-    public MySet<T> intersectionAsCopy(MySet<T> set) {
-        return intersection(set, false);
+    public MySet<T> intersectionAsCopy(MyLinkedList<MySet<T>> sets) {
+        return intersection(sets, false);
     }
 
-    private MySet<T> intersection(MySet<T> set, boolean inPlace) {
+    private MySet<T> intersection(MyLinkedList<MySet<T>> sets, boolean inPlace) {
+
         ListItem<T> head = new ListItem<T>();
         ListItem<T> tail = head;
 
@@ -63,25 +64,27 @@ public class MySet<T> {
             tail = tail.next;
         }
 
-        ListItem<T> intersection = getListOfItemsInSet(head.next, set.setList);
+        for(ListItem<MySet<T>> set = sets.getHead(); set != null; set = set.next) {
+            ListItem<T> intersection = getListOfItemsInSet(head.next, set.key.setList);
 
-        ListItem<T> current = head.next;
-        ListItem<T> prev = head;
+            ListItem<T> current = head.next;
+            ListItem<T> prev = head;
 
-        while(current != null) {
-            if(!contains(intersection, current.key)) {
-                prev.next = current.next;
-                current.next = null;
-                current = prev.next;
+            while(current != null) {
+                if(!contains(intersection, current.key)) {
+                    prev.next = current.next;
+                    current.next = null;
+                    current = prev.next;
+                }
+                else {
+                    current = current.next;
+                    prev = prev.next;
+                }
             }
-            else {
-                current = current.next;
-                prev = prev.next;
-            }
-
         }
 
-        return new MySet<>(head.next);
+
+        return new MySet<T>(head.next, this.cmp);
     }
 
 
