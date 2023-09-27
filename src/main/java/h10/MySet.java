@@ -84,6 +84,19 @@ public class MySet<T> {
         return new MySet<>(head.next);
     }
 
+
+    public MySet<T> differenceInPlace(MySet<T> set) {
+        return null;
+    }
+
+    public MySet<T> differenceAsCopy(MySet<T> set) {
+        return null;
+    }
+
+    private MySet<T> difference(MySet<T> set, boolean inPlace) {
+        return null;
+    }
+
     private ListItem<T> getListOfItemsInSet(ListItem<T> lst1, ListItem<T> lst2) {
         ListItem<T> head = new ListItem<T>();
         ListItem<T> tail = head;
