@@ -31,7 +31,7 @@ public class ListProvider {
      */
     public static String toString(ListItem<?> lst) {
         StringBuilder builder = new StringBuilder();
-        builder.append("(");
+        builder.append("[");
         while(lst != null) {
             builder.append(lst.key instanceof ListItem<?> item ? toString(item) : lst.key);
             if(lst.next != null) {
@@ -39,7 +39,7 @@ public class ListProvider {
             }
             lst = lst.next;
         }
-        builder.append(")");
+        builder.append("]");
         return builder.toString();
     }
 }
