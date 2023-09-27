@@ -30,6 +30,7 @@ public class MySet<T> {
     private MySet<T> union(MySet<T> set, boolean inPlace) {
         ListItem<T> head = new ListItem<T>();
         ListItem<T> tail = head;
+
         for(ListItem<T> p = this.setList; p != null; p = p.next) {
             tail.next = inPlace ? p : new ListItem<T>(p.key);
             tail = tail.next;
@@ -54,7 +55,47 @@ public class MySet<T> {
     }
 
     private MySet<T> intersection(MySet<T> set, boolean inPlace) {
-        return null;
+        ListItem<T> head = new ListItem<T>();
+        ListItem<T> tail = head;
+
+        for(ListItem<T> p = this.setList; p != null; p = p.next) {
+            tail.next = inPlace ? p : new ListItem<T>(p.key);
+            tail = tail.next;
+        }
+
+        ListItem<T> intersection = getListOfItemsInSet(head.next, set.setList);
+
+        ListItem<T> current = head.next;
+        ListItem<T> prev = head;
+
+        while(current != null) {
+            if(!contains(intersection, current.key)) {
+                prev.next = current.next;
+                current.next = null;
+                current = prev.next;
+            }
+            else {
+                current = current.next;
+                prev = prev.next;
+            }
+
+        }
+
+        return new MySet<>(head.next);
+    }
+
+    private ListItem<T> getListOfItemsInSet(ListItem<T> lst1, ListItem<T> lst2) {
+        ListItem<T> head = new ListItem<T>();
+        ListItem<T> tail = head;
+        for(ListItem<T> p = lst2; p != null; p = p.next) {
+            for(ListItem<T> curr = lst1; curr != null; curr = curr.next) {
+                if(this.cmp.compare(p.key, curr.key) == 0) {
+                    tail.next = new ListItem<T>(curr.key);
+                    tail = tail.next;
+                }
+            }
+        }
+        return head.next;
     }
 
     private boolean contains(ListItem<T> set, T key) {
