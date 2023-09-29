@@ -1,6 +1,7 @@
 package h10;
 
 import java.util.Comparator;
+import java.util.function.Predicate;
 
 public class MySet<T> {
 
@@ -31,16 +32,27 @@ public class MySet<T> {
         ListItem<T> head = new ListItem<T>();
         ListItem<T> tail = head;
 
+
         for(ListItem<T> p = this.setList; p != null; p = p.next) {
             tail.next = inPlace ? p : new ListItem<T>(p.key);
             tail = tail.next;
         }
 
-        for(ListItem<T> p = set.setList; p != null; p = p.next) {
+        ListItem<T> p = set.setList;
+        while(p != null) {
+            ListItem<T> next = p.next;
             if(!contains(head.next, p.key)) {
-                tail.next = inPlace ? p : new ListItem<T>(p.key);
-                tail = tail.next;
+                if(inPlace) {
+                    tail.next = p;
+                    tail = tail.next;
+                    p.next = null;
+                }
+                else {
+                    tail.next = new ListItem<>(p.key);
+                    tail = tail.next;
+                }
             }
+            p = next;
         }
 
         return new MySet<T>(head.next);
@@ -59,12 +71,21 @@ public class MySet<T> {
         ListItem<T> head = new ListItem<T>();
         ListItem<T> tail = head;
 
+        if(this.setList == null) {
+            return new MySet<>(null, this.cmp);
+        }
+
         for(ListItem<T> p = this.setList; p != null; p = p.next) {
             tail.next = inPlace ? p : new ListItem<T>(p.key);
             tail = tail.next;
         }
 
         for(ListItem<MySet<T>> set = sets.getHead(); set != null; set = set.next) {
+
+            if(set.key.setList == null) {
+                return new MySet<>(null, this.cmp);
+            }
+
             ListItem<T> intersection = getListOfItemsInSet(head.next, set.key.setList);
 
             ListItem<T> current = head.next;
@@ -87,17 +108,113 @@ public class MySet<T> {
         return new MySet<T>(head.next, this.cmp);
     }
 
+    public MySet<T> makeSubsetInPlace(Predicate<T> pred) {
+        return makeSubset(pred, true);
+    }
+
+    public MySet<T> makeSubsetAsCopy(Predicate<T> pred) {
+        return makeSubset(pred, false);
+    }
+
+    private MySet<T> makeSubset(Predicate<T> pred, boolean inPlace) {
+        ListItem<T> head = new ListItem<T>();
+        ListItem<T> tail = head;
+
+        for(ListItem<T> p = this.setList; p != null; p = p.next) {
+            if(pred.test(p.key)) {
+                tail.next = inPlace ? p : new ListItem<T>(p.key);
+                tail = tail.next;
+            }
+        }
+
+        return new MySet<>(head.next);
+    }
+
 
     public MySet<T> differenceInPlace(MySet<T> set) {
-        return null;
+        return difference(set, true);
     }
 
     public MySet<T> differenceAsCopy(MySet<T> set) {
-        return null;
+        return difference(set, false);
     }
 
     private MySet<T> difference(MySet<T> set, boolean inPlace) {
-        return null;
+
+        ListItem<T> head = new ListItem<>();
+        ListItem<T> tail = head;
+
+        for(ListItem<T> p = this.setList; p != null; p = p.next) {
+            tail.next = inPlace ? p : new ListItem<>(p.key);
+            tail = tail.next;
+        }
+
+        ListItem<T> current = head.next;
+        ListItem<T> prev = head;
+        ListItem<T> p = set.setList;
+
+        while(p != null) {
+            if(contains(head.next, p.key)) {
+                prev.next = current.next;
+                current.next = null;
+                current = prev.next;
+            }
+            else {
+                current = current.next;
+                prev = prev.next;
+            }
+            p = p.next;
+        }
+
+        return new MySet<>(head.next, this.cmp);
+    }
+
+
+    private MySet<Tuple<T, ListItem<T>>> disjointUnion(MyLinkedList<MySet<T>> sets, MySet<T> indexSet,boolean inPlace) {
+        ListItem<Tuple<T, ListItem<T>>> head = new ListItem<>();
+        ListItem<Tuple<T, ListItem<T>>> tail = head;
+
+        ListItem<T> index = indexSet.setList;
+        ListItem<T> current = this.setList;
+
+        while(current != null) {
+            if(inPlace) {
+                ListItem<T> next = current.next;
+                current.next = null;
+                tail.next = new ListItem<>(new Tuple<>(index.key, current));
+                current = next;
+            }
+            else {
+                tail.next = new ListItem<>(new Tuple<>(index.key, new ListItem<>(current.key)));
+                current = current.next;
+            }
+            tail = tail.next;
+        }
+
+        index = index.next;
+        ListItem<MySet<T>> set = sets.getHead();
+
+        while(index != null) {
+            current = set.key.setList;
+            while(current != null) {
+                if(inPlace) {
+                    ListItem<T> next = current.next;
+                    current.next = null;
+                    tail.next = new ListItem<>(new Tuple<>(index.key, current));
+                    current = next;
+                }
+                else {
+                    tail.next = new ListItem<>(new Tuple<>(index.key, new ListItem<>(current.key)));
+                    current = current.next;
+                }
+                tail = tail.next;
+            }
+            set = set.next;
+            index = index.next;
+
+        }
+
+        return new MySet<>(head.next);
     }
 
     private ListItem<T> getListOfItemsInSet(ListItem<T> lst1, ListItem<T> lst2) {
