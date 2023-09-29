@@ -149,19 +149,21 @@ public class MySet<T> {
             tail = tail.next;
         }
 
-        ListItem<T> current = head.next;
-        ListItem<T> prev = head;
+
         ListItem<T> p = set.setList;
 
         while(p != null) {
-            if(contains(head.next, p.key)) {
-                prev.next = current.next;
-                current.next = null;
-                current = prev.next;
-            }
-            else {
+            ListItem<T> current = head.next;
+            ListItem<T> prev = head;
+
+            while(current != null && this.cmp.compare(current.key, p.key) != 0) {
                 current = current.next;
                 prev = prev.next;
+            }
+
+            if(current != null) {
+                prev.next = current.next;
+                current.next = null;
             }
             p = p.next;
         }
