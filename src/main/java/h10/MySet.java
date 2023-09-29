@@ -253,7 +253,7 @@ public class MySet<T> {
         StringBuilder builder = new StringBuilder("{");
 
         for(ListItem<T> p = this.setList; p != null; p = p.next) {
-            builder.append(p.key);
+            builder.append(p.toString());
             if(p.next != null) {
                 builder.append(", ");
             }
