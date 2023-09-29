@@ -12,7 +12,7 @@ public class Tuple<T1, T2> {
 
     @Override
     public String toString() {
-        return "(" + this.FIRST_ITEM + ", " + this.SECOND_ITEM + ")";
+        return "(" + this.FIRST_ITEM.toString() + ", " + this.SECOND_ITEM.toString() + ")";
     }
 
     public T1 getFirstItem() {
