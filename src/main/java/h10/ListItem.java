@@ -10,4 +10,8 @@ public class ListItem<T> {
     public ListItem(T key) {
         this.key = key;
     }
+
+    public String toString() {
+        return ""+ this.key+"";
+    }
 }
