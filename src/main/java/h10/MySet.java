@@ -170,6 +170,14 @@ public class MySet<T> {
     }
 
 
+    public MySet<Tuple<T, ListItem<T>>> disjointUnionInPlace(MyLinkedList<MySet<T>> sets, MySet<T> indexSet) {
+        return disjointUnion(sets, indexSet, true);
+    }
+
+    public MySet<Tuple<T, ListItem<T>>> disjointUnionAsCopy(MyLinkedList<MySet<T>> sets, MySet<T> indexSet) {
+        return disjointUnion(sets, indexSet, false);
+    }
+
     private MySet<Tuple<T, ListItem<T>>> disjointUnion(MyLinkedList<MySet<T>> sets, MySet<T> indexSet,boolean inPlace) {
         ListItem<Tuple<T, ListItem<T>>> head = new ListItem<>();
         ListItem<Tuple<T, ListItem<T>>> tail = head;
