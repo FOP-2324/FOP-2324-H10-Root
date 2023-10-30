@@ -3,10 +3,11 @@ package h10;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
-public class MySetInPlace<T> extends AbstractMySet<T> {
+public class MySetInPlace<T> extends MySet<T> {
 
-    protected MySetInPlace(Comparator<? super T> cmp) {
-        super(cmp);
+
+    protected MySetInPlace(ListItem<T> head) {
+        super(head);
     }
 
     @Override
@@ -25,8 +26,7 @@ public class MySetInPlace<T> extends AbstractMySet<T> {
             }
         }
 
-        AbstractMySet<T> subSet = new MySetInPlace<T>(this.cmp);
-        subSet.head = head;
+        MySet<T> subSet = new MySetInPlace<T>(head);
         return subSet;
     }
 
