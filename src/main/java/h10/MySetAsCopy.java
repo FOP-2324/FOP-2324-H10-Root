@@ -11,11 +11,29 @@ public class MySetAsCopy<T> extends AbstractMySet<T> {
 
     @Override
     public MySet<T> makeSubset(Predicate<? super T> pred) {
-        return null;
+        ListItem<T> head = new ListItem<>();
+        ListItem<T> tail = head;
+        for(ListItem<T> p = this.head; p != null; p = p.next) {
+            if(pred.test(p.key)) {
+                tail.next = new ListItem<>(p.key);
+                tail = tail.next;
+            }
+        }
+        AbstractMySet<T> subSet = new MySetAsCopy<>(this.cmp);
+        subSet.head = head.next;
+        return subSet;
     }
 
     @Override
     public MySet<T> difference(MySet<T> other) {
+        ListItem<T> head = new ListItem<T>();
+        ListItem<T> tail = head;
+
+        for(ListItem<T> p = this.head; p != null; p = p.next) {
+            tail = tail.next = new ListItem<T>(p.key);
+        }
+
+
         return null;
     }
 
