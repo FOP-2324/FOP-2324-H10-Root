@@ -12,37 +12,133 @@ public class MySetInPlace<T> extends MySet<T> {
 
     @Override
     public MySet<T> makeSubset(Predicate<? super T> pred) {
-        ListItem<T> head = null;
-        ListItem<T> tail = null;
+        ListItem<T> current = this.head;
+        ListItem<T> prev = null;
+        ListItem<T> newHead = null;
 
-        for(ListItem<T> p = this.head; p != null; p = p.next) {
-            if(pred.test(p.key)) {
-                if(head == null) {
-                    head = tail = p;
+        while(current != null) {
+            if(!pred.test(current.key)) {
+                ListItem<T> next = current.next;
+                current.next = null;
+                if(prev == null) {
+                    current = next;
                 }
                 else {
-                    tail = tail.next = p;
+                    prev.next = current = next;
                 }
             }
+            else {
+                if(newHead == null) {
+                    newHead = current;
+                }
+                prev = current;
+                current = current.next;
+            }
         }
-
-        MySet<T> subSet = new MySetInPlace<T>(head);
-        return subSet;
+        this.head = newHead;
+        return this;
     }
 
     @Override
     public MySet<T> difference(MySet<T> other) {
-        return null;
+
+        ListItem<T> p = other.getHead();
+        while(p != null) {
+            ListItem<T> current = this.head;
+            ListItem<T> prev = null;
+
+            while(current != null && !p.key.equals(current.key)) {
+                prev = current;
+                current = current.next;
+            }
+
+            if(current != null) {
+                ListItem<T> next = current.next;
+                if(prev != null) {
+                    prev.next = next;
+                }
+                if(current == this.head) {
+                    this.head = next;
+                }
+                current.next = null;
+            }
+            p = p.next;
+        }
+
+        return this;
     }
 
     @Override
     public MySet<T> intersection(ListItem<MySet<T>> others) {
-        return null;
+        if(this.head == null) {
+            return this;
+        }
+
+        for(ListItem<MySet<T>> set = others; set != null; set = set.next) {
+            if(set.key.getHead() == null) {
+                this.head = null;
+                return this;
+            }
+
+            ListItem<T> intersection = getListOfItemsInSet(this.head, set.key.getHead());
+            ListItem<T> current = this.head;
+            ListItem<T> prev = null;
+            ListItem<T> newHead = null;
+
+            while(current != null) {
+                ListItem<T> next = current.next;
+                if(!contains(intersection, current.key)) {
+                    current.next = null;
+                    if(prev != null) {
+                        prev.next = next;
+                    }
+                }
+                else {
+                    if(newHead == null) {
+                        newHead = current;
+                    }
+                    prev = current;
+                }
+                current = next;
+            }
+            this.head = newHead;
+        }
+        return this;
     }
 
     @Override
     public MySet<T> union(ListItem<MySet<T>> others) {
-        return null;
+        ListItem<T> tail = this.head;
+        for(ListItem<T> p = this.head; p.next != null; p = p.next) {
+            tail = tail.next;
+        }
+
+        for(ListItem<MySet<T>> set = others; set != null; set = set.next) {
+            ListItem<T> current = set.key.getHead();
+            ListItem<T> prev = null;
+            ListItem<T> newHead = null;
+
+            while(current != null) {
+                ListItem<T> next = current.next;
+                if(!contains(this.head, current.key)) {
+                    tail = tail.next = current;
+                    current.next = null;
+                    if(prev != null) {
+                        prev.next = next;
+                    }
+                }
+                else {
+                    if(newHead == null) {
+                        newHead = current;
+                    }
+                    prev = current;
+                }
+                current = next;
+            }
+            set.key.setHead(newHead);
+         }
+
+        return this;
     }
 
     @Override
