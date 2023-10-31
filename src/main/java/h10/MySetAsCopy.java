@@ -39,7 +39,7 @@ public class MySetAsCopy<T> extends MySet<T> {
             ListItem<T> current = head.next;
             ListItem<T> prev = head;
 
-            while(current != null && !p.equals(current)) {
+            while(current != null && !p.key.equals(current.key)) {
                 current = current.next;
                 prev = prev.next;
             }
@@ -108,11 +108,10 @@ public class MySetAsCopy<T> extends MySet<T> {
             ListItem<T> p = set.key.getHead();
 
             while(p != null) {
-                ListItem<T> next = p.next;
-
                 if(!contains(head.next, p.key)) {
                     tail = tail.next = new ListItem<>(p.key);
                 }
+                p = p.next;
             }
         }
 
