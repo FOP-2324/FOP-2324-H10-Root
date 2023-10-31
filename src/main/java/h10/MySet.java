@@ -14,7 +14,7 @@ public abstract class MySet<T> {
 
     protected boolean contains(ListItem<T> set, T key) {
         for(ListItem<T> p = set; p != null; p = p.next) {
-            if(p.key == key) {
+            if(p.key.equals(key)) {
                 return true;
             }
         }
@@ -27,7 +27,7 @@ public abstract class MySet<T> {
         ListItem<T> tail = head;
         for(ListItem<T> p = lst2; p != null; p = p.next) {
             for(ListItem<T> curr = lst1; curr != null; curr = curr.next) {
-                if(p.equals(curr)) {
+                if(p.key.equals(curr.key)) {
                     tail.next = new ListItem<T>(curr.key);
                     tail = tail.next;
                 }
@@ -42,6 +42,9 @@ public abstract class MySet<T> {
 
     public ListItem<T> getHead() {
         return this.head;
+    }
+    public void setHead(ListItem<T> head) {
+        this.head = head;
     }
 
     public MySet<T> makeSubset(Predicate<? super T> pred) {return null;}
