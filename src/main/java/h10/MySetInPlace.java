@@ -1,6 +1,5 @@
 package h10;
 
-import java.util.Comparator;
 import java.util.function.Predicate;
 
 public class MySetInPlace<T> extends MySet<T> {
@@ -143,6 +142,34 @@ public class MySetInPlace<T> extends MySet<T> {
 
     @Override
     public MySet<Tuple<T, ListItem<T>>> disjointUnion(ListItem<MySet<T>> others, MySet<T> indexes) {
-        return null;
+        ListItem<Tuple<T, ListItem<T>>> head = new ListItem<>();
+        ListItem<Tuple<T, ListItem<T>>> tail = head;
+
+        ListItem<T> index = indexes.getHead();
+        ListItem<T> current = this.head;
+
+        while(current != null) {
+            ListItem<T> next = current.next;
+            current.next = null;
+            tail = tail.next = new ListItem<>(new Tuple<>(index.key,current));
+            current = next;
+        }
+
+        index = index.next;
+        ListItem<MySet<T>> set = others;
+
+        while(index != null) {
+            current = set.key.getHead();
+            while (current != null) {
+                ListItem<T> next = current.next;
+                current.next = null;
+                tail = tail.next = new ListItem<>(new Tuple<>(index.key,current));
+                current = next;
+            }
+            set = set.next;
+            index = index.next;
+        }
+
+        return new MySetInPlace<>(head.next);
     }
 }
