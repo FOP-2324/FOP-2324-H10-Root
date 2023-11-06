@@ -13,10 +13,11 @@ public class Main {
      * @param args program arguments, currently ignored
      */
     public static void main(String[] args) {
-        boolean inPlace = false;
+        boolean inPlace = true;
         testIntersection(inPlace);
         testUnion(inPlace);
         testDifference(inPlace);
+        testDisjointUnion(inPlace);
     }
 
 
@@ -133,6 +134,40 @@ public class Main {
         else {
             System.out.println("Result set:\n" + result.toString());
         }
+    }
+
+    public static void testDisjointUnion(boolean inPlace) {
+        if(inPlace) {
+            System.out.println("#### TEST DISJOINT UNION IN-PLACE ####");
+        }
+        else {
+            System.out.println("#### TEST DISJOINT UNION AS-COPY ####");
+        }
+        Integer[] elems1 = new Integer[]{1,2,3,4,5,6};
+        Integer[] elems2 = new Integer[]{1,2,3,7,8,9};
+        Integer[] elems3 = new Integer[]{1,3,5,7,9};
+        ListItem<Integer> lst1 = generateList(elems1);
+        ListItem<Integer> lst2 = generateList(elems2);
+        ListItem<Integer> lst3 = generateList(elems3);
+
+        MySet<Integer> set1 = generateSet(lst1, inPlace);
+        MySet<Integer> set2 = generateSet(lst2, inPlace);
+        MySet<Integer> set3 = generateSet(lst3, inPlace);
+        ListItem<MySet<Integer>> sets = new ListItem<>(set2);
+        sets.next = new ListItem<>(set3);
+
+        System.out.println("Set to check method on:\n" + set1.toString());
+        System.out.println("List of sets to check:");
+        printList(sets);
+
+        Integer[] indexArray = new Integer[]{1,2,3};
+        ListItem<Integer> idxList = generateList(indexArray);
+        MySet<Integer> indices = generateSet(idxList, true);
+
+        MySet<Tuple<Integer, ListItem<Integer>>> result = set1.disjointUnion(sets, indices);
+        System.out.println("Result of parameter list:");
+        printList(sets);
+        System.out.println("Result set:\n" + result.toString());
     }
 
     public static <T> void printList(ListItem<T> lst) {
