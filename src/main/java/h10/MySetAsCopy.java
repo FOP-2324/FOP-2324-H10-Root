@@ -1,16 +1,29 @@
 package h10;
 
+import java.util.Comparator;
 import java.util.function.Predicate;
 
+/**
+ * An out-of-place implementation of MySet.
+ *
+ * @param <T> the type of the elements in the set
+ * @author Lars Waßmann, Nhan Huynh
+ */
 public class MySetAsCopy<T> extends MySet<T> {
 
-
-    protected MySetAsCopy(ListItem<T> head) {
-        super(head);
+    /**
+     * Constructs and initializes a new set with the given elements.
+     *
+     * @param head the head of the set
+     * @param cmp  the comparator to compare elements
+     * @throws IllegalArgumentException if the given elements are not pairwise different or not ordered
+     */
+    public MySetAsCopy(ListItem<T> head, Comparator<? super T> cmp) {
+        super(head, cmp);
     }
 
     @Override
-    public MySet<T> makeSubset(Predicate<? super T> pred) {
+    public MySet<T> subset(Predicate<? super T> pred) {
         ListItem<T> head = new ListItem<>();
         ListItem<T> tail = head;
         for (ListItem<T> p = this.head; p != null; p = p.next) {
@@ -19,7 +32,7 @@ public class MySetAsCopy<T> extends MySet<T> {
                 tail = tail.next;
             }
         }
-        MySet<T> subSet = new MySetAsCopy<>(head);
+        MySet<T> subSet = new MySetAsCopy<>(head, cmp);
         return subSet;
     }
 
@@ -65,7 +78,7 @@ public class MySetAsCopy<T> extends MySet<T> {
         }
 
 
-        return new MySetAsCopy<>(head);
+        return new MySetAsCopy<>(head, cmp);
     }
 
     @Override
@@ -74,7 +87,7 @@ public class MySetAsCopy<T> extends MySet<T> {
         ListItem<T> tail = null;
 
         if (this.head == null) {
-            return new MySetAsCopy<T>(null);
+            return new MySetAsCopy<T>(null, cmp);
         }
 
         for (ListItem<T> p = this.head; p != null; p = p.next) {
@@ -88,7 +101,7 @@ public class MySetAsCopy<T> extends MySet<T> {
 
         for (ListItem<MySet<T>> set = others; set != null; set = set.next) {
             if (set.key.head == null) {
-                return new MySetAsCopy<>(null);
+                return new MySetAsCopy<>(null, cmp);
             }
 
             ListItem<T> intersection = getListOfItemsInSet(head, set.key.head);
@@ -120,7 +133,7 @@ public class MySetAsCopy<T> extends MySet<T> {
 
         }
 
-        return new MySetAsCopy<>(head);
+        return new MySetAsCopy<>(head, cmp);
     }
 
     @Override
@@ -148,7 +161,7 @@ public class MySetAsCopy<T> extends MySet<T> {
             }
         }
 
-        return new MySetAsCopy<>(head);
+        return new MySetAsCopy<>(head, cmp);
     }
 
     @Override
@@ -182,6 +195,7 @@ public class MySetAsCopy<T> extends MySet<T> {
             index = index.next;
         }
 
-        return new MySetAsCopy<>(head);
+        return new MySetAsCopy<>(head, Comparator.comparing((Tuple<T, ListItem<T>> o) -> o.first(), cmp)
+            .thenComparing((Tuple<T, ListItem<T>> o) -> o.second().key, cmp));
     }
 }

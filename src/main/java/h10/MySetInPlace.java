@@ -1,16 +1,29 @@
 package h10;
 
+import java.util.Comparator;
 import java.util.function.Predicate;
 
+/**
+ * An in-place implementation of MySet.
+ *
+ * @param <T> the type of the elements in the set
+ * @author Lars Waßmann, Nhan Huynh
+ */
 public class MySetInPlace<T> extends MySet<T> {
 
-
-    protected MySetInPlace(ListItem<T> head) {
-        super(head);
+    /**
+     * Constructs and initializes a new set with the given elements.
+     *
+     * @param head the head of the set
+     * @param cmp  the comparator to compare elements
+     * @throws IllegalArgumentException if the given elements are not pairwise different or not ordered
+     */
+    public MySetInPlace(ListItem<T> head, Comparator<? super T> cmp) {
+        super(head, cmp);
     }
 
     @Override
-    public MySet<T> makeSubset(Predicate<? super T> pred) {
+    public MySet<T> subset(Predicate<? super T> pred) {
         ListItem<T> current = this.head;
         ListItem<T> prev = null;
         ListItem<T> newHead = null;
@@ -166,6 +179,7 @@ public class MySetInPlace<T> extends MySet<T> {
             index = index.next;
         }
 
-        return new MySetInPlace<>(head.next);
+        return new MySetInPlace<>(head, Comparator.comparing((Tuple<T, ListItem<T>> o) -> o.first(), cmp)
+            .thenComparing((Tuple<T, ListItem<T>> o) -> o.second().key, cmp));
     }
 }
