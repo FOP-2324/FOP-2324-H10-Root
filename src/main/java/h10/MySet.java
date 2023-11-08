@@ -13,8 +13,8 @@ public abstract class MySet<T> {
 
 
     protected boolean contains(ListItem<T> set, T key) {
-        for(ListItem<T> p = set; p != null; p = p.next) {
-            if(p.key.equals(key)) {
+        for (ListItem<T> p = set; p != null; p = p.next) {
+            if (p.key.equals(key)) {
                 return true;
             }
         }
@@ -25,9 +25,9 @@ public abstract class MySet<T> {
     protected ListItem<T> getListOfItemsInSet(ListItem<T> lst1, ListItem<T> lst2) {
         ListItem<T> head = new ListItem<>();
         ListItem<T> tail = head;
-        for(ListItem<T> p = lst2; p != null; p = p.next) {
-            for(ListItem<T> curr = lst1; curr != null; curr = curr.next) {
-                if(p.key.equals(curr.key)) {
+        for (ListItem<T> p = lst2; p != null; p = p.next) {
+            for (ListItem<T> curr = lst1; curr != null; curr = curr.next) {
+                if (p.key.equals(curr.key)) {
                     tail.next = new ListItem<T>(curr.key);
                     tail = tail.next;
                 }
@@ -37,17 +37,15 @@ public abstract class MySet<T> {
     }
 
 
-    public abstract MySet<? extends T> makeSubset(Predicate<? super T> pred);
+    public abstract MySet<T> makeSubset(Predicate<? super T> pred);
 
-    public abstract MySet<? extends T> difference(MySet<T> other);
+    public abstract MySet<T> difference(MySet<? extends T> other);
 
     public abstract MySet<T> intersection(ListItem<MySet<T>> others);
 
     public abstract MySet<T> union(ListItem<MySet<T>> others);
 
     public abstract MySet<Tuple<T, ListItem<T>>> disjointUnion(ListItem<MySet<T>> others, MySet<T> indexes);
-
-
 
     @Override
     public boolean equals(Object o) {
@@ -56,8 +54,6 @@ public abstract class MySet<T> {
         MySet<?> mySet = (MySet<?>) o;
         return Objects.equals(head, mySet.head);
     }
-
-
 
 
     @Override

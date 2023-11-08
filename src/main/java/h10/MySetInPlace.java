@@ -10,24 +10,22 @@ public class MySetInPlace<T> extends MySet<T> {
     }
 
     @Override
-    public MySet<? extends T> makeSubset(Predicate<? super T> pred) {
+    public MySet<T> makeSubset(Predicate<? super T> pred) {
         ListItem<T> current = this.head;
         ListItem<T> prev = null;
         ListItem<T> newHead = null;
 
-        while(current != null) {
-            if(!pred.test(current.key)) {
+        while (current != null) {
+            if (!pred.test(current.key)) {
                 ListItem<T> next = current.next;
                 current.next = null;
-                if(prev == null) {
+                if (prev == null) {
                     current = next;
-                }
-                else {
+                } else {
                     prev.next = current = next;
                 }
-            }
-            else {
-                if(newHead == null) {
+            } else {
+                if (newHead == null) {
                     newHead = current;
                 }
                 prev = current;
@@ -39,24 +37,24 @@ public class MySetInPlace<T> extends MySet<T> {
     }
 
     @Override
-    public MySet<? extends T> difference(MySet<T> other) {
+    public MySet<T> difference(MySet<? extends T> other) {
 
-        ListItem<T> p = other.head;
-        while(p != null) {
+        ListItem<? extends T> p = other.head;
+        while (p != null) {
             ListItem<T> current = this.head;
             ListItem<T> prev = null;
 
-            while(current != null && !p.key.equals(current.key)) {
+            while (current != null && !p.key.equals(current.key)) {
                 prev = current;
                 current = current.next;
             }
 
-            if(current != null) {
+            if (current != null) {
                 ListItem<T> next = current.next;
-                if(prev != null) {
+                if (prev != null) {
                     prev.next = next;
                 }
-                if(current == this.head) {
+                if (current == this.head) {
                     this.head = next;
                 }
                 current.next = null;
@@ -69,12 +67,12 @@ public class MySetInPlace<T> extends MySet<T> {
 
     @Override
     public MySet<T> intersection(ListItem<MySet<T>> others) {
-        if(this.head == null) {
+        if (this.head == null) {
             return this;
         }
 
-        for(ListItem<MySet<T>> set = others; set != null; set = set.next) {
-            if(set.key.head == null) {
+        for (ListItem<MySet<T>> set = others; set != null; set = set.next) {
+            if (set.key.head == null) {
                 this.head = null;
                 return this;
             }
@@ -84,16 +82,15 @@ public class MySetInPlace<T> extends MySet<T> {
             ListItem<T> prev = null;
             ListItem<T> newHead = null;
 
-            while(current != null) {
+            while (current != null) {
                 ListItem<T> next = current.next;
-                if(!contains(intersection, current.key)) {
+                if (!contains(intersection, current.key)) {
                     current.next = null;
-                    if(prev != null) {
+                    if (prev != null) {
                         prev.next = next;
                     }
-                }
-                else {
-                    if(newHead == null) {
+                } else {
+                    if (newHead == null) {
                         newHead = current;
                     }
                     prev = current;
@@ -108,26 +105,25 @@ public class MySetInPlace<T> extends MySet<T> {
     @Override
     public MySet<T> union(ListItem<MySet<T>> others) {
         ListItem<T> tail = this.head;
-        for(ListItem<T> p = this.head; p.next != null; p = p.next) {
+        for (ListItem<T> p = this.head; p.next != null; p = p.next) {
             tail = tail.next;
         }
 
-        for(ListItem<MySet<T>> set = others; set != null; set = set.next) {
+        for (ListItem<MySet<T>> set = others; set != null; set = set.next) {
             ListItem<T> current = set.key.head;
             ListItem<T> prev = null;
             ListItem<T> newHead = null;
 
-            while(current != null) {
+            while (current != null) {
                 ListItem<T> next = current.next;
-                if(!contains(this.head, current.key)) {
+                if (!contains(this.head, current.key)) {
                     tail = tail.next = current;
                     current.next = null;
-                    if(prev != null) {
+                    if (prev != null) {
                         prev.next = next;
                     }
-                }
-                else {
-                    if(newHead == null) {
+                } else {
+                    if (newHead == null) {
                         newHead = current;
                     }
                     prev = current;
@@ -135,7 +131,7 @@ public class MySetInPlace<T> extends MySet<T> {
                 current = next;
             }
             set.key.head = newHead;
-         }
+        }
 
         return this;
     }
@@ -148,22 +144,22 @@ public class MySetInPlace<T> extends MySet<T> {
         ListItem<T> index = indexes.head;
         ListItem<T> current = this.head;
 
-        while(current != null) {
+        while (current != null) {
             ListItem<T> next = current.next;
             current.next = null;
-            tail = tail.next = new ListItem<>(new Tuple<>(index.key,current));
+            tail = tail.next = new ListItem<>(new Tuple<>(index.key, current));
             current = next;
         }
 
         index = index.next;
         ListItem<MySet<T>> set = others;
 
-        while(index != null) {
+        while (index != null) {
             current = set.key.head;
             while (current != null) {
                 ListItem<T> next = current.next;
                 current.next = null;
-                tail = tail.next = new ListItem<>(new Tuple<>(index.key,current));
+                tail = tail.next = new ListItem<>(new Tuple<>(index.key, current));
                 current = next;
             }
             set = set.next;

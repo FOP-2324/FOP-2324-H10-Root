@@ -1,6 +1,5 @@
 package h10;
 
-import java.util.Comparator;
 import java.util.function.Predicate;
 
 public class MySetAsCopy<T> extends MySet<T> {
@@ -11,11 +10,11 @@ public class MySetAsCopy<T> extends MySet<T> {
     }
 
     @Override
-    public MySet<? extends T> makeSubset(Predicate<? super T> pred) {
+    public MySet<T> makeSubset(Predicate<? super T> pred) {
         ListItem<T> head = new ListItem<>();
         ListItem<T> tail = head;
-        for(ListItem<T> p = this.head; p != null; p = p.next) {
-            if(pred.test(p.key)) {
+        for (ListItem<T> p = this.head; p != null; p = p.next) {
+            if (pred.test(p.key)) {
                 tail.next = new ListItem<>(p.key);
                 tail = tail.next;
             }
@@ -25,42 +24,39 @@ public class MySetAsCopy<T> extends MySet<T> {
     }
 
     @Override
-    public MySet<? extends T> difference(MySet<T> other) {
+    public MySet<T> difference(MySet<? extends T> other) {
         ListItem<T> head = null;
         ListItem<T> tail = null;
 
-        for(ListItem<T> p = this.head; p != null; p = p.next) {
-            if(head == null) {
+        for (ListItem<T> p = this.head; p != null; p = p.next) {
+            if (head == null) {
                 head = new ListItem<>(p.key);
                 tail = head;
-            }
-            else {
+            } else {
                 tail = tail.next = new ListItem<T>(p.key);
             }
         }
 
-        ListItem<T> p = other.head;
+        ListItem<? extends T> p = other.head;
 
-        while(p != null) {
+        while (p != null) {
             ListItem<T> current = head;
             ListItem<T> prev = null;
 
 
-            while(current != null && !p.key.equals(current.key)) {
-                if(prev == null) {
+            while (current != null && !p.key.equals(current.key)) {
+                if (prev == null) {
                     prev = current;
-                }
-                else {
+                } else {
                     prev = prev.next;
                 }
                 current = current.next;
             }
 
-            if(current != null) {
-                if(prev != null) {
+            if (current != null) {
+                if (prev != null) {
                     prev.next = current.next;
-                }
-                else {
+                } else {
                     head = current.next;
                 }
                 current.next = null;
@@ -77,22 +73,21 @@ public class MySetAsCopy<T> extends MySet<T> {
         ListItem<T> head = null;
         ListItem<T> tail = null;
 
-        if(this.head == null) {
+        if (this.head == null) {
             return new MySetAsCopy<T>(null);
         }
 
-        for(ListItem<T> p = this.head; p != null; p = p.next) {
-            if(head == null) {
+        for (ListItem<T> p = this.head; p != null; p = p.next) {
+            if (head == null) {
                 head = new ListItem<>(p.key);
                 tail = head;
-            }
-            else {
+            } else {
                 tail = tail.next = new ListItem<T>(p.key);
             }
         }
 
-        for(ListItem<MySet<T>> set = others; set != null; set = set.next) {
-            if(set.key.head == null) {
+        for (ListItem<MySet<T>> set = others; set != null; set = set.next) {
+            if (set.key.head == null) {
                 return new MySetAsCopy<>(null);
             }
 
@@ -101,25 +96,22 @@ public class MySetAsCopy<T> extends MySet<T> {
             ListItem<T> current = head;
             ListItem<T> prev = null;
 
-            while(current != null) {
-                if(!contains(intersection, current.key)) {
-                    if(prev != null) {
+            while (current != null) {
+                if (!contains(intersection, current.key)) {
+                    if (prev != null) {
                         prev.next = current.next;
                         current.next = null;
                         current = prev.next;
-                    }
-                    else {
+                    } else {
                         ListItem<T> next = current.next;
                         current.next = null;
                         current = next;
                     }
-                }
-                else {
-                    if(prev == null) {
+                } else {
+                    if (prev == null) {
                         prev = current;
                         head = current;
-                    }
-                    else {
+                    } else {
                         prev = prev.next;
                     }
                     current = current.next;
@@ -136,21 +128,20 @@ public class MySetAsCopy<T> extends MySet<T> {
         ListItem<T> head = null;
         ListItem<T> tail = null;
 
-        for(ListItem<T> p = this.head; p != null; p = p.next) {
-            if(head == null) {
+        for (ListItem<T> p = this.head; p != null; p = p.next) {
+            if (head == null) {
                 head = new ListItem<>(p.key);
                 tail = head;
-            }
-            else {
+            } else {
                 tail = tail.next = new ListItem<T>(p.key);
             }
         }
 
-        for(ListItem<MySet<T>> set = others; set != null; set = set.next) {
+        for (ListItem<MySet<T>> set = others; set != null; set = set.next) {
             ListItem<T> p = set.key.head;
 
-            while(p != null) {
-                if(!contains(head.next, p.key)) {
+            while (p != null) {
+                if (!contains(head.next, p.key)) {
                     tail = tail.next = new ListItem<>(p.key);
                 }
                 p = p.next;
@@ -168,12 +159,11 @@ public class MySetAsCopy<T> extends MySet<T> {
         ListItem<T> index = indexes.head;
         ListItem<T> current = this.head;
 
-        while(current != null) {
-            if(head == null) {
+        while (current != null) {
+            if (head == null) {
                 head = new ListItem<>(new Tuple<>(index.key, new ListItem<>(current.key)));
                 tail = head;
-            }
-            else {
+            } else {
                 tail = tail.next = new ListItem<>(new Tuple<>(index.key, new ListItem<>(current.key)));
             }
             current = current.next;
@@ -182,9 +172,9 @@ public class MySetAsCopy<T> extends MySet<T> {
         index = index.next;
         ListItem<MySet<T>> set = others;
 
-        while(index != null) {
+        while (index != null) {
             current = set.key.head;
-            while(current != null) {
+            while (current != null) {
                 tail = tail.next = new ListItem<>(new Tuple<>(index.key, new ListItem<>(current.key)));
                 current = current.next;
             }
