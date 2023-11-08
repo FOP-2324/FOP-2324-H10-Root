@@ -24,55 +24,87 @@ public class MySetInPlace<T> extends MySet<T> {
 
     @Override
     public MySet<T> subset(Predicate<? super T> pred) {
-        ListItem<T> current = this.head;
-        ListItem<T> prev = null;
-        ListItem<T> newHead = null;
+        // Remember the previous element in order to decouple the current element from the set
+        ListItem<T> previous = null;
+        ListItem<T> current = head;
 
         while (current != null) {
+            // Remove the element from the set when it does not satisfy the predicate
             if (!pred.test(current.key)) {
-                ListItem<T> next = current.next;
-                current.next = null;
-                if (prev == null) {
-                    current = next;
+                if (previous == null) {
+                    // Case 1: The element to remove is the head
+                    head = current.next;
                 } else {
-                    prev.next = current = next;
+                    // Case 2: The element to remove is not the head
+                    // Since the previous element is the element which is not removed and the successor needs to be
+                    // removed which is the current element, we can safely set the successor of the previous element to
+                    // the successor of the current element to remove the current element from the set
+                    previous.next = current.next;
                 }
             } else {
-                if (newHead == null) {
-                    newHead = current;
-                }
-                prev = current;
-                current = current.next;
+                // Case 3: Remember the previous element which is not removed
+                previous = current;
             }
+            current = current.next;
         }
-        this.head = newHead;
         return this;
     }
 
     @Override
-    public MySet<T> difference(MySet<? extends T> other) {
+    public MySet<T> difference(MySet<T> other) {
+        ListItem<T> current = head;
+        ListItem<T> otherCurrent = other.head;
+        // Remember the previous element in order to decouple the current element from the set
+        ListItem<T> previous = null;
 
-        ListItem<? extends T> p = other.head;
-        while (p != null) {
-            ListItem<T> current = this.head;
-            ListItem<T> prev = null;
+        while (current != null && otherCurrent != null) {
+            int compare = cmp.compare(current.key, otherCurrent.key);
 
-            while (current != null && !p.key.equals(current.key)) {
-                prev = current;
+            if (compare < 0) {
+                // Case 1: Since the element in the other set is greater than the element in this set,
+                // we need to check the next element in this set if it is equal, smaller or greater to the current
+                // element in the other set
+                // E.g. this set: 1, 2, 3, 4, 5 and other set: 2, 3, 4, 5, 6
+                // Since 1 < 2, move the pointer of this set to the next element
+                previous = current;
+                current = current.next;
+            } else if (compare > 0) {
+                // Case 2: Since the element in the other set is smaller than the element in this set,
+                // we need to check the next element in the other set if it is equal, smaller or greater to the current
+                // element in this set
+                // E.g. this set: 1, 2, 3, 4, 5 and other set: 0, 1, 2, 3, 4
+                // Since 0 < 1, move the pointer of the other set to the next element
+                otherCurrent = otherCurrent.next;
+            } else {
+                // Case 3: Elements are equal, remove the element from the current set
+                if (previous == null) {
+                    // Case 3.1: The element to remove is the head
+                    head = current.next;
+                } else {
+                    // Case 3.1: The element to remove is not the head
+                    // Since the previous element is the element which is not removed and the successor needs to be
+                    // removed which is the current element, we can safely set the successor of the previous element to
+                    // the successor of the current element to remove the current element from the set
+                    previous.next = current.next;
+                }
                 current = current.next;
             }
+        }
 
-            if (current != null) {
-                ListItem<T> next = current.next;
-                if (prev != null) {
-                    prev.next = next;
-                }
-                if (current == this.head) {
-                    this.head = next;
-                }
-                current.next = null;
+        // If there are remaining elements in the current set, keep them
+        while (current != null) {
+            previous = current;
+            current = current.next;
+        }
+
+        // If there are remaining elements in the other set, remove them
+        if (otherCurrent != null) {
+            if (previous == null) {
+                // This set was empty
+                head = otherCurrent;
+            } else {
+                previous.next = otherCurrent;
             }
-            p = p.next;
         }
 
         return this;

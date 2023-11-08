@@ -1,6 +1,7 @@
 package h10;
 
 import java.util.Comparator;
+import java.util.function.Predicate;
 
 /**
  * Main entry point in executing the program.
@@ -13,11 +14,13 @@ public class Main {
      * @param args program arguments, currently ignored
      */
     public static void main(String[] args) {
-        boolean inPlace = false;
-        testIntersection(inPlace);
-        testUnion(inPlace);
-        testDifference(inPlace);
-        testDisjointUnion(inPlace);
+        boolean inPlace = true;
+        testSubset(inPlace);
+         testDifference(inPlace);
+        // testIntersection(inPlace);
+        //  testUnion(inPlace);
+        //    testDifference(inPlace);
+        //    testDisjointUnion(inPlace);
     }
 
 
@@ -43,6 +46,20 @@ public class Main {
         return head.next;
     }
 
+    public static void testSubset(boolean inPlace) {
+        if (inPlace) {
+            System.out.println("#### TEST SUBSET IN-PLACE ####");
+        } else {
+            System.out.println("#### TEST SUBSET AS-COPY ####");
+        }
+        Comparator<Integer> cmp = Integer::compareTo;
+        Integer[] elems = new Integer[]{1, 2, 3, 4, 5, 6};
+        Predicate<Integer> pred = x -> x % 2 == 0;
+        ListItem<Integer> lst = generateList(elems);
+        MySet<Integer> set = generateSet(lst, cmp, inPlace);
+        System.out.println("Set to check method on:\n" + set.toString());
+        System.out.println("Subset:" + set.subset(pred));
+    }
 
     public static void testUnion(boolean inPlace) {
         if (inPlace) {

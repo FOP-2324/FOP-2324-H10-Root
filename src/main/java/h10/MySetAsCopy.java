@@ -24,61 +24,85 @@ public class MySetAsCopy<T> extends MySet<T> {
 
     @Override
     public MySet<T> subset(Predicate<? super T> pred) {
-        ListItem<T> head = new ListItem<>();
-        ListItem<T> tail = head;
-        for (ListItem<T> p = this.head; p != null; p = p.next) {
-            if (pred.test(p.key)) {
-                tail.next = new ListItem<>(p.key);
-                tail = tail.next;
+        ListItem<T> newHead = null;
+        ListItem<T> tail = null;
+        for (ListItem<T> current = head; current != null; current = current.next) {
+            if (pred.test(current.key)) {
+                ListItem<T> item = new ListItem<>(current.key);
+                if (newHead == null) {
+                    newHead = item;
+                } else {
+                    tail.next = item;
+                }
+                tail = item;
             }
         }
-        MySet<T> subSet = new MySetAsCopy<>(head, cmp);
-        return subSet;
+        return new MySetAsCopy<>(newHead, cmp);
     }
 
     @Override
-    public MySet<T> difference(MySet<? extends T> other) {
-        ListItem<T> head = null;
+    public MySet<T> difference(MySet<T> other) {
+        ListItem<T> newHead = null;
         ListItem<T> tail = null;
 
-        for (ListItem<T> p = this.head; p != null; p = p.next) {
-            if (head == null) {
-                head = new ListItem<>(p.key);
-                tail = head;
-            } else {
-                tail = tail.next = new ListItem<T>(p.key);
-            }
-        }
+        ListItem<T> current = head;
+        ListItem<T> otherCurrent = other.head;
 
-        ListItem<? extends T> p = other.head;
-
-        while (p != null) {
-            ListItem<T> current = head;
-            ListItem<T> prev = null;
-
-
-            while (current != null && !p.key.equals(current.key)) {
-                if (prev == null) {
-                    prev = current;
-                } else {
-                    prev = prev.next;
-                }
+        while (current != null && otherCurrent != null) {
+            int compare = cmp.compare(current.key, otherCurrent.key);
+            if (compare == 0) {
+                // Case 1: Skip both elements on both sets if they are equal
                 current = current.next;
+                otherCurrent = otherCurrent.next;
+                continue;
             }
-
-            if (current != null) {
-                if (prev != null) {
-                    prev.next = current.next;
-                } else {
-                    head = current.next;
-                }
-                current.next = null;
+            // Case 2: If they are not equal, always add the element to the new set
+            ListItem<T> item = new ListItem<>(current.key);
+            if (newHead == null) {
+                newHead = item;
+            } else {
+                tail.next = item;
             }
-            p = p.next;
+            tail = item;
+            if (compare < 0) {
+                // Case 2.1: Since the element in the other set is greater than the element in this set,
+                // we need to check the next element in this set if it is equal, smaller or greater to the current
+                // element in the other set
+                // E.g. this set: 1, 2, 3, 4, 5 and other set: 2, 3, 4, 5, 6
+                // Since 1 < 2, move the pointer of this set to the next element
+                current = current.next;
+            } else {
+                // Case 2.2: Since the element in the other set is smaller than the element in this set,
+                // we need to check the next element in the other set if it is equal, smaller or greater to the current
+                // element in this set
+                // E.g. this set: 1, 2, 3, 4, 5 and other set: 0, 1, 2, 3, 4
+                // Since 0 < 1, move the pointer of the other set to the next element
+                otherCurrent = otherCurrent.next;
+            }
         }
-
-
-        return new MySetAsCopy<>(head, cmp);
+        while (current != null) {
+            // Case 3: If the other set is empty, add all remaining elements of this set to the new set
+            ListItem<T> item = new ListItem<>(current.key);
+            if (newHead == null) {
+                newHead = item;
+            } else {
+                tail.next = item;
+            }
+            tail = item;
+            current = current.next;
+        }
+        while (otherCurrent != null) {
+            // Case 4: If this set is empty, add all remaining elements of the other set to the new set
+            ListItem<T> item = new ListItem<>(otherCurrent.key);
+            if (newHead == null) {
+                newHead = item;
+            } else {
+                tail.next = item;
+            }
+            tail = item;
+            otherCurrent = otherCurrent.next;
+        }
+        return new MySetAsCopy<>(newHead, cmp);
     }
 
     @Override

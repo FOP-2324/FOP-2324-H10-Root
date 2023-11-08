@@ -117,7 +117,7 @@ public abstract class MySet<T> {
      * @param other the set to subtract from this set
      * @return the difference of this set and the given set
      */
-    public abstract MySet<T> difference(MySet<? extends T> other);
+    public abstract MySet<T> difference(MySet<T> other);
 
     /**
      * Returns the intersection of this set and the given sets, more formally {@code this ∩ other1 ∩ ... ∩ otherN}.
