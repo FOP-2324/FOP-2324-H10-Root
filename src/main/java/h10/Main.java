@@ -13,7 +13,7 @@ public class Main {
      * @param args program arguments, currently ignored
      */
     public static void main(String[] args) {
-        boolean inPlace = true;
+        boolean inPlace = false;
         testIntersection(inPlace);
         testUnion(inPlace);
         testDifference(inPlace);
@@ -85,7 +85,7 @@ public class Main {
         }
         Integer[] elems1 = new Integer[]{1,2,3,4,5,6};
         Integer[] elems2 = new Integer[]{4,5,6,7,8,9};
-        Integer[] elems3 = new Integer[]{};
+        Integer[] elems3 = new Integer[]{4,5,8,10,11};
         ListItem<Integer> lst1 = generateList(elems1);
         ListItem<Integer> lst2 = generateList(elems2);
         ListItem<Integer> lst3 = generateList(elems3);
@@ -126,7 +126,7 @@ public class Main {
         System.out.println("Set to check method on:\n" + set1.toString());
         System.out.println("List of sets to check:\n" + set2.toString());
 
-        MySet<Integer> result = set1.difference(set2);
+        MySet<Integer> result = (MySet<Integer>) set1.difference(set2);
         System.out.println("Result of parameter list:\n" + set2.toString());
         if(inPlace) {
             System.out.println("Result set:\n" + set1.toString());
