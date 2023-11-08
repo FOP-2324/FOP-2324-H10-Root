@@ -7,7 +7,7 @@ public abstract class MySet<T> {
 
     protected ListItem<T> head;
 
-    protected MySet(ListItem<T> head) {
+    public MySet(ListItem<T> head) {
         this.head = head;
     }
 
@@ -36,26 +36,16 @@ public abstract class MySet<T> {
         return head.next;
     }
 
-    void add(T e) {
 
-    }
+    public abstract MySet<? extends T> makeSubset(Predicate<? super T> pred);
 
-    public ListItem<T> getHead() {
-        return this.head;
-    }
-    public void setHead(ListItem<T> head) {
-        this.head = head;
-    }
+    public abstract MySet<? extends T> difference(MySet<T> other);
 
-    public MySet<T> makeSubset(Predicate<? super T> pred) {return null;}
+    public abstract MySet<T> intersection(ListItem<MySet<T>> others);
 
-    public MySet<T> difference(MySet<T> other) {return null;}
+    public abstract MySet<T> union(ListItem<MySet<T>> others);
 
-    public MySet<T> intersection(ListItem<MySet<T>> others) {return null;}
-
-    public MySet<T> union(ListItem<MySet<T>> others) {return null;}
-
-    public MySet<Tuple<T, ListItem<T>>> disjointUnion(ListItem<MySet<T>> others, MySet<T> indexes) {return null;}
+    public abstract MySet<Tuple<T, ListItem<T>>> disjointUnion(ListItem<MySet<T>> others, MySet<T> indexes);
 
 
 
@@ -63,18 +53,18 @@ public abstract class MySet<T> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractMySet<?> that = (AbstractMySet<?>) o;
-        return Objects.equals(head, that.head);
+        MySet<?> mySet = (MySet<?>) o;
+        return Objects.equals(head, mySet.head);
     }
 
 
 
-    /*
+
     @Override
     public int hashCode() {
-        return Objects.hash(head, cmp);
+        return Objects.hash(head);
     }
-    */
+
 
     @Override
     public String toString() {
