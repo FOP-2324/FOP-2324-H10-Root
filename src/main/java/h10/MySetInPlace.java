@@ -10,7 +10,7 @@ public class MySetInPlace<T> extends MySet<T> {
     }
 
     @Override
-    public MySet<T> makeSubset(Predicate<? super T> pred) {
+    public MySet<? extends T> makeSubset(Predicate<? super T> pred) {
         ListItem<T> current = this.head;
         ListItem<T> prev = null;
         ListItem<T> newHead = null;
@@ -39,9 +39,9 @@ public class MySetInPlace<T> extends MySet<T> {
     }
 
     @Override
-    public MySet<T> difference(MySet<T> other) {
+    public MySet<? extends T> difference(MySet<T> other) {
 
-        ListItem<T> p = other.getHead();
+        ListItem<T> p = other.head;
         while(p != null) {
             ListItem<T> current = this.head;
             ListItem<T> prev = null;
@@ -74,12 +74,12 @@ public class MySetInPlace<T> extends MySet<T> {
         }
 
         for(ListItem<MySet<T>> set = others; set != null; set = set.next) {
-            if(set.key.getHead() == null) {
+            if(set.key.head == null) {
                 this.head = null;
                 return this;
             }
 
-            ListItem<T> intersection = getListOfItemsInSet(this.head, set.key.getHead());
+            ListItem<T> intersection = getListOfItemsInSet(this.head, set.key.head);
             ListItem<T> current = this.head;
             ListItem<T> prev = null;
             ListItem<T> newHead = null;
@@ -113,7 +113,7 @@ public class MySetInPlace<T> extends MySet<T> {
         }
 
         for(ListItem<MySet<T>> set = others; set != null; set = set.next) {
-            ListItem<T> current = set.key.getHead();
+            ListItem<T> current = set.key.head;
             ListItem<T> prev = null;
             ListItem<T> newHead = null;
 
@@ -134,7 +134,7 @@ public class MySetInPlace<T> extends MySet<T> {
                 }
                 current = next;
             }
-            set.key.setHead(newHead);
+            set.key.head = newHead;
          }
 
         return this;
@@ -145,7 +145,7 @@ public class MySetInPlace<T> extends MySet<T> {
         ListItem<Tuple<T, ListItem<T>>> head = new ListItem<>();
         ListItem<Tuple<T, ListItem<T>>> tail = head;
 
-        ListItem<T> index = indexes.getHead();
+        ListItem<T> index = indexes.head;
         ListItem<T> current = this.head;
 
         while(current != null) {
@@ -159,7 +159,7 @@ public class MySetInPlace<T> extends MySet<T> {
         ListItem<MySet<T>> set = others;
 
         while(index != null) {
-            current = set.key.getHead();
+            current = set.key.head;
             while (current != null) {
                 ListItem<T> next = current.next;
                 current.next = null;
