@@ -57,7 +57,6 @@ public class ListItem<T> {
         if (this == o) {
             return true;
         }
-        // instance of
         if (!(o instanceof ListItem<?> other)) {
             return false;
         }
