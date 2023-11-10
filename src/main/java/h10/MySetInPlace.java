@@ -24,18 +24,19 @@ public class MySetInPlace<T> extends MySet<T> {
 
     @Override
     public MySet<T> subset(Predicate<? super T> pred) {
-        // Remember the previous element in order to decouple the current element from the set
+        // The previous element is the last element of the set which is not decoupled
         ListItem<T> previous = null;
         ListItem<T> current = head;
 
         while (current != null) {
             // Remove the element from the set when it does not satisfy the predicate
+            // Previous will always be set to the current element if it should not be decoupled
             if (!pred.test(current.key)) {
                 if (previous == null) {
-                    // Case 1: The element to remove is the head
+                    // Case 1: Since previous is not set yet, this means we the head of the set should be decoupled
                     head = current.next;
                 } else {
-                    // Case 2: The element to remove is not the head
+                    // Case 2: Previous is set to the last element which is not decoupled from the set
                     // Since the previous element is the element which is not removed and the successor needs to be
                     // removed which is the current element, we can safely set the successor of the previous element to
                     // the successor of the current element to remove the current element from the set
@@ -54,7 +55,7 @@ public class MySetInPlace<T> extends MySet<T> {
     public MySet<T> difference(MySet<T> other) {
         ListItem<T> current = head;
         ListItem<T> otherCurrent = other.head;
-        // Remember the previous element in order to decouple the current element from the set
+        // The previous element is the last element of the set which is not decoupled
         ListItem<T> previous = null;
 
         while (current != null && otherCurrent != null) {
@@ -77,11 +78,12 @@ public class MySetInPlace<T> extends MySet<T> {
                 otherCurrent = otherCurrent.next;
             } else {
                 // Case 3: Elements are equal, remove the element from the current set
+                // Previous will always be set to the current element if it should not be decoupled
                 if (previous == null) {
-                    // Case 3.1: The element to remove is the head
+                    // Case 3.1: Since previous is not set yet, this means we the head of the set should be decoupled
                     head = current.next;
                 } else {
-                    // Case 3.1: The element to remove is not the head
+                    // Case 3.1: Previous is set to the last element which is not decoupled from the set
                     // Since the previous element is the element which is not removed and the successor needs to be
                     // removed which is the current element, we can safely set the successor of the previous element to
                     // the successor of the current element to remove the current element from the set
