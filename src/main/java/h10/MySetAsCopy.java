@@ -107,57 +107,75 @@ public class MySetAsCopy<T> extends MySet<T> {
 
     @Override
     public MySet<T> intersection(ListItem<MySet<T>> others) {
-        ListItem<T> head = null;
+        ListItem<ListItem<T>> heads = null;
+        ListItem<ListItem<T>> tails = null;
+
+        // Retrieve pointers to head pointer fron all sets
+        if (head != null) {
+            heads = new ListItem<>(head);
+            tails = heads;
+        }
+        for (ListItem<MySet<T>> otherSets = others; otherSets != null; otherSets = otherSets.next) {
+            ListItem<T> otherHead = otherSets.key.head;
+            ListItem<ListItem<T>> item = new ListItem<>(otherHead);
+            if (heads == null) {
+                heads = item;
+            } else {
+                tails.next = item;
+            }
+            tails = item;
+        }
+
+        ListItem<T> newHead = null;
         ListItem<T> tail = null;
 
-        if (this.head == null) {
-            return new MySetAsCopy<T>(null, cmp);
-        }
+        while (heads != null && heads.next != null && heads.key != null) {
+            T current = heads.key.key;
+            heads.key = heads.key.next;
+            // Check if the current element is contained in all sets
+            boolean common = true;
+            for (ListItem<ListItem<T>> otherHeads = heads.next; otherHeads != null; ) {
+                // Case 1: The other set is smaller than the current set. We do not have to check for common elements
+                // anymore
+                if (otherHeads.key == null) {
+                    return new MySetAsCopy<>(newHead, cmp);
+                }
+                T other = otherHeads.key.key;
+                int comparison = cmp.compare(current, other);
 
-        for (ListItem<T> p = this.head; p != null; p = p.next) {
-            if (head == null) {
-                head = new ListItem<>(p.key);
-                tail = head;
-            } else {
-                tail = tail.next = new ListItem<T>(p.key);
-            }
-        }
-
-        for (ListItem<MySet<T>> set = others; set != null; set = set.next) {
-            if (set.key.head == null) {
-                return new MySetAsCopy<>(null, cmp);
-            }
-
-            ListItem<T> intersection = getListOfItemsInSet(head, set.key.head);
-
-            ListItem<T> current = head;
-            ListItem<T> prev = null;
-
-            while (current != null) {
-                if (!contains(intersection, current.key)) {
-                    if (prev != null) {
-                        prev.next = current.next;
-                        current.next = null;
-                        current = prev.next;
-                    } else {
-                        ListItem<T> next = current.next;
-                        current.next = null;
-                        current = next;
-                    }
+                if (comparison == 0) {
+                    // Case 2: Current set contains the element, check next set
+                    otherHeads.key = otherHeads.key.next;
+                    otherHeads = otherHeads.next;
+                } else if (comparison < 0) {
+                    // Case 3: Current set does not contain the element, check next element in current set
+                    // Since the elements are ordered and the element x < y where x is in this set and y is in the other
+                    // set, we can safely assume that the element is not contained in the other sets or else we would
+                    // have found it already
+                    common = false;
+                    break;
                 } else {
-                    if (prev == null) {
-                        prev = current;
-                        head = current;
-                    } else {
-                        prev = prev.next;
-                    }
-                    current = current.next;
+                    // Case 4: Current set is greater than the other set, check successor element of the other set
+                    otherHeads.key = otherHeads.key.next;
                 }
             }
 
+            // If the element is not contained in all sets, skip it
+            if (!common) {
+                continue;
+            }
+
+            // Add the element to the new set if it is contained in all sets
+            ListItem<T> item = new ListItem<>(current);
+            if (newHead == null) {
+                newHead = item;
+            } else {
+                tail.next = item;
+            }
+            tail = item;
         }
 
-        return new MySetAsCopy<>(head, cmp);
+        return new MySetAsCopy<>(newHead, cmp);
     }
 
     @Override

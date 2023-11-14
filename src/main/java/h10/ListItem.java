@@ -70,7 +70,13 @@ public class ListItem<T> {
 
     @Override
     public String toString() {
-        return String.valueOf(key);
+        StringBuilder sb = new StringBuilder();
+        sb.append("{").append(key).append(" -> ");
+        for (ListItem<T> current = next; current != null; current = current.next) {
+            sb.append(current.key).append(" -> ");
+        }
+        sb.append("null}");
+        return sb.toString();
     }
 
 }

@@ -172,14 +172,7 @@ public abstract class MySet<T> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        ListItem<T> current = head;
-        while (current != null) {
-            sb.append(current.key).append(" -> ");
-            current = current.next;
-        }
-        sb.append("null");
-        return sb.toString();
+       return String.valueOf(head);
     }
 
 }
