@@ -120,12 +120,40 @@ public abstract class MySet<T> {
     public abstract MySet<T> difference(MySet<T> other);
 
     /**
+     * Returns the intersection of the sets, more formally {@code set1 ∩ set2 ∩ ... ∩ setN}.
+     *
+     * @param heads the sets to intersect
+     * @return the intersection of this set and the given sets
+     */
+    protected abstract MySet<T> intersectionHelper(ListItem<ListItem<T>> heads);
+
+    /**
      * Returns the intersection of this set and the given sets, more formally {@code this ∩ other1 ∩ ... ∩ otherN}.
      *
      * @param others the sets to intersect with this set
      * @return the intersection of this set and the given sets
      */
-    public abstract MySet<T> intersection(ListItem<MySet<T>> others);
+    public MySet<T> intersection(ListItem<MySet<T>> others) {
+        ListItem<ListItem<T>> heads = null;
+        ListItem<ListItem<T>> tails = null;
+
+        // Retrieve pointers to head pointer from all sets
+        if (head != null) {
+            heads = new ListItem<>(head);
+            tails = heads;
+        }
+        for (ListItem<MySet<T>> otherSets = others; otherSets != null; otherSets = otherSets.next) {
+            ListItem<T> otherHead = otherSets.key.head;
+            ListItem<ListItem<T>> item = new ListItem<>(otherHead);
+            if (heads == null) {
+                heads = item;
+            } else {
+                tails.next = item;
+            }
+            tails = item;
+        }
+        return intersectionHelper(heads);
+    }
 
     /**
      * Returns the intersection of this set and the given set, more formally {@code this ∩ other}.
@@ -172,7 +200,7 @@ public abstract class MySet<T> {
 
     @Override
     public String toString() {
-       return String.valueOf(head);
+        return String.valueOf(head);
     }
 
 }

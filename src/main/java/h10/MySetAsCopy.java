@@ -106,26 +106,7 @@ public class MySetAsCopy<T> extends MySet<T> {
     }
 
     @Override
-    public MySet<T> intersection(ListItem<MySet<T>> others) {
-        ListItem<ListItem<T>> heads = null;
-        ListItem<ListItem<T>> tails = null;
-
-        // Retrieve pointers to head pointer fron all sets
-        if (head != null) {
-            heads = new ListItem<>(head);
-            tails = heads;
-        }
-        for (ListItem<MySet<T>> otherSets = others; otherSets != null; otherSets = otherSets.next) {
-            ListItem<T> otherHead = otherSets.key.head;
-            ListItem<ListItem<T>> item = new ListItem<>(otherHead);
-            if (heads == null) {
-                heads = item;
-            } else {
-                tails.next = item;
-            }
-            tails = item;
-        }
-
+    protected MySet<T> intersectionHelper(ListItem<ListItem<T>> heads) {
         ListItem<T> newHead = null;
         ListItem<T> tail = null;
 

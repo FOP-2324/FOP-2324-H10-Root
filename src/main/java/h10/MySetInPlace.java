@@ -113,39 +113,58 @@ public class MySetInPlace<T> extends MySet<T> {
     }
 
     @Override
-    public MySet<T> intersection(ListItem<MySet<T>> others) {
-        if (this.head == null) {
-            return this;
-        }
+    protected MySet<T> intersectionHelper(ListItem<ListItem<T>> heads) {
+        ListItem<T> newHead = null;
+        ListItem<T> tail = null;
 
-        for (ListItem<MySet<T>> set = others; set != null; set = set.next) {
-            if (set.key.head == null) {
-                this.head = null;
-                return this;
-            }
-
-            ListItem<T> intersection = getListOfItemsInSet(this.head, set.key.head);
-            ListItem<T> current = this.head;
-            ListItem<T> prev = null;
-            ListItem<T> newHead = null;
-
-            while (current != null) {
-                ListItem<T> next = current.next;
-                if (!contains(intersection, current.key)) {
-                    current.next = null;
-                    if (prev != null) {
-                        prev.next = next;
-                    }
-                } else {
-                    if (newHead == null) {
-                        newHead = current;
-                    }
-                    prev = current;
+        while (heads != null && heads.next != null && heads.key != null) {
+            T current = heads.key.key;
+            // Check if the current element is contained in all sets
+            boolean common = true;
+            for (ListItem<ListItem<T>> otherHeads = heads.next; otherHeads != null; ) {
+                // Case 1: The other set is smaller than the current set. We do not have to check for common elements
+                // anymore
+                if (otherHeads.key == null) {
+                    head = newHead;
+                    return this;
                 }
-                current = next;
+                T other = otherHeads.key.key;
+                int comparison = cmp.compare(current, other);
+
+                if (comparison == 0) {
+                    // Case 2: Current set contains the element, check next set
+                    otherHeads.key = otherHeads.key.next;
+                    otherHeads = otherHeads.next;
+                } else if (comparison < 0) {
+                    // Case 3: Current set does not contain the element, check next element in current set
+                    // Since the elements are ordered and the element x < y where x is in this set and y is in the other
+                    // set, we can safely assume that the element is not contained in the other sets or else we would
+                    // have found it already
+                    common = false;
+                    break;
+                } else {
+                    // Case 4: Current set is greater than the other set, check successor element of the other set
+                    otherHeads.key = otherHeads.key.next;
+                }
             }
-            this.head = newHead;
+
+            // If the element is not contained in all sets, skip it
+            if (!common) {
+                heads.key = heads.key.next;
+                continue;
+            }
+
+            // Add the element to the new set if it is contained in all sets
+            if (newHead == null) {
+                newHead = heads.key;
+            } else {
+                tail.next = heads.key;
+            }
+            tail = heads.key;
+            heads.key = heads.key.next;
         }
+        head = newHead;
+        tail.next = null;
         return this;
     }
 
