@@ -128,12 +128,12 @@ public abstract class MySet<T> {
     protected abstract MySet<T> intersectionListItems(ListItem<ListItem<T>> heads);
 
     /**
-     * Returns the intersection of this set and the given sets, more formally {@code this ∩ other1 ∩ ... ∩ otherN}.
+     * Returns a converted version of the sets as a list.
      *
-     * @param others the sets to intersect with this set
-     * @return the intersection of this set and the given sets
+     * @param others the sets to convert
+     * @return the converted version of the sets as a list
      */
-    public MySet<T> intersection(ListItem<MySet<T>> others) {
+    protected ListItem<ListItem<T>> toListItem(ListItem<MySet<T>> others) {
         ListItem<ListItem<T>> heads = null;
         ListItem<ListItem<T>> tails = null;
 
@@ -152,7 +152,17 @@ public abstract class MySet<T> {
             }
             tails = item;
         }
-        return intersectionListItems(heads);
+        return heads;
+    }
+
+    /**
+     * Returns the intersection of this set and the given sets, more formally {@code this ∩ other1 ∩ ... ∩ otherN}.
+     *
+     * @param others the sets to intersect with this set
+     * @return the intersection of this set and the given sets
+     */
+    public MySet<T> intersection(ListItem<MySet<T>> others) {
+        return intersectionListItems(toListItem(others));
     }
 
     /**
@@ -166,12 +176,22 @@ public abstract class MySet<T> {
     }
 
     /**
+     * Returns the union of sets, more formally {@code set1 ∪ set2 ∪ ... ∪ setN}.
+     *
+     * @param heads the sets to union
+     * @return the union of sets
+     */
+    protected abstract MySet<T> unionListItems(ListItem<ListItem<T>> heads);
+
+    /**
      * Returns the union of this set and the given sets, more formally {@code this ∪ other1 ∪ ... ∪ otherN}.
      *
      * @param others the sets to union with this set
      * @return the union of this set and the given sets
      */
-    public abstract MySet<T> union(ListItem<MySet<T>> others);
+    public MySet<T> union(ListItem<MySet<T>> others) {
+        return unionListItems(toListItem(others));
+    }
 
     /**
      * Returns the union of this set and the given set, more formally {@code this ∪ other}.

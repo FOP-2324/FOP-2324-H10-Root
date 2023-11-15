@@ -169,6 +169,11 @@ public class MySetInPlace<T> extends MySet<T> {
     }
 
     @Override
+    protected MySet<T> unionListItems(ListItem<ListItem<T>> heads) {
+        return null;
+    }
+
+    @Override
     public MySet<T> union(ListItem<MySet<T>> others) {
         ListItem<T> tail = this.head;
         for (ListItem<T> p = this.head; p.next != null; p = p.next) {

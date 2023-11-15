@@ -160,6 +160,11 @@ public class MySetAsCopy<T> extends MySet<T> {
     }
 
     @Override
+    protected MySet<T> unionListItems(ListItem<ListItem<T>> heads) {
+        return null;
+    }
+
+    @Override
     public MySet<T> union(ListItem<MySet<T>> others) {
         ListItem<T> head = null;
         ListItem<T> tail = null;
