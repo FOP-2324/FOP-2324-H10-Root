@@ -120,12 +120,12 @@ public abstract class MySet<T> {
     public abstract MySet<T> difference(MySet<T> other);
 
     /**
-     * Returns the intersection of the sets, more formally {@code set1 ∩ set2 ∩ ... ∩ setN}.
+     * Returns the intersection of sets, more formally {@code set1 ∩ set2 ∩ ... ∩ setN}.
      *
      * @param heads the sets to intersect
-     * @return the intersection of this set and the given sets
+     * @return the intersection of sets
      */
-    protected abstract MySet<T> intersectionHelper(ListItem<ListItem<T>> heads);
+    protected abstract MySet<T> intersectionListItems(ListItem<ListItem<T>> heads);
 
     /**
      * Returns the intersection of this set and the given sets, more formally {@code this ∩ other1 ∩ ... ∩ otherN}.
@@ -152,7 +152,7 @@ public abstract class MySet<T> {
             }
             tails = item;
         }
-        return intersectionHelper(heads);
+        return intersectionListItems(heads);
     }
 
     /**

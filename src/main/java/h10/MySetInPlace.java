@@ -113,7 +113,7 @@ public class MySetInPlace<T> extends MySet<T> {
     }
 
     @Override
-    protected MySet<T> intersectionHelper(ListItem<ListItem<T>> heads) {
+    protected MySet<T> intersectionListItems(ListItem<ListItem<T>> heads) {
         ListItem<T> newHead = null;
         ListItem<T> tail = null;
 
