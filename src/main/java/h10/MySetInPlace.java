@@ -169,45 +169,6 @@ public class MySetInPlace<T> extends MySet<T> {
     }
 
     @Override
-    protected MySet<T> unionListItems(ListItem<ListItem<T>> heads) {
-        return null;
-    }
-
-    @Override
-    public MySet<T> union(ListItem<MySet<T>> others) {
-        ListItem<T> tail = this.head;
-        for (ListItem<T> p = this.head; p.next != null; p = p.next) {
-            tail = tail.next;
-        }
-
-        for (ListItem<MySet<T>> set = others; set != null; set = set.next) {
-            ListItem<T> current = set.key.head;
-            ListItem<T> prev = null;
-            ListItem<T> newHead = null;
-
-            while (current != null) {
-                ListItem<T> next = current.next;
-                if (!contains(this.head, current.key)) {
-                    tail = tail.next = current;
-                    current.next = null;
-                    if (prev != null) {
-                        prev.next = next;
-                    }
-                } else {
-                    if (newHead == null) {
-                        newHead = current;
-                    }
-                    prev = current;
-                }
-                current = next;
-            }
-            set.key.head = newHead;
-        }
-
-        return this;
-    }
-
-    @Override
     public MySet<Tuple<T, ListItem<T>>> disjointUnion(ListItem<MySet<T>> others, MySet<T> indexes) {
         ListItem<Tuple<T, ListItem<T>>> head = new ListItem<>();
         ListItem<Tuple<T, ListItem<T>>> tail = head;

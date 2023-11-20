@@ -21,13 +21,6 @@ public class Main {
         //  testUnion(inPlace);
         //    testDifference(inPlace);
         //    testDisjointUnion(inPlace);
-        Integer[] elems = new Integer[]{1, 2, 3};
-        ListItem<Integer> lst = generateList(elems);
-        Integer[] elems2 = new Integer[]{4, 5, 6, 7};
-        ListItem<Integer> lst2 = generateList(elems2);
-        MySet<Integer> set1 = new MySetInPlace<>(lst, Integer::compareTo);
-        MySet<Integer> set2 = new MySetInPlace<>(lst2, Integer::compareTo);
-        System.out.println(  set1.cartesianProduct(set2.head));
     }
 
 
@@ -66,37 +59,6 @@ public class Main {
         MySet<Integer> set = generateSet(lst, cmp, inPlace);
         System.out.println("Set to check method on:\n" + set.toString());
         System.out.println("Subset:" + set.subset(pred));
-    }
-
-    public static void testUnion(boolean inPlace) {
-        if (inPlace) {
-            System.out.println("#### TEST UNION IN-PLACE ####");
-        } else {
-            System.out.println("#### TEST UNION AS-COPY ####");
-        }
-        Comparator<Integer> cmp = Integer::compareTo;
-        Integer[] elems1 = new Integer[]{1, 2, 3, 4, 5, 6};
-        Integer[] elems2 = new Integer[]{4, 5, 6, 7, 8, 9};
-        Integer[] elems3 = new Integer[]{};
-        ListItem<Integer> lst1 = generateList(elems1);
-        ListItem<Integer> lst2 = generateList(elems2);
-        ListItem<Integer> lst3 = generateList(elems3);
-        MySet<Integer> set1 = generateSet(lst1, cmp, inPlace);
-        MySet<Integer> set2 = generateSet(lst2, cmp, inPlace);
-        MySet<Integer> set3 = generateSet(lst3, cmp, inPlace);
-        ListItem<MySet<Integer>> sets = new ListItem<>(set2);
-        sets.next = new ListItem<>(set3);
-        System.out.println("Set to check method on:\n" + set1.toString());
-        System.out.println("List of sets to check:");
-        printList(sets);
-        MySet<Integer> result = set1.union(sets);
-        System.out.println("Result of parameter list:");
-        printList(sets);
-        if (inPlace) {
-            System.out.println("Result set:\n" + set1.toString());
-        } else {
-            System.out.println("Result set:\n" + result.toString());
-        }
     }
 
     public static void testIntersection(boolean inPlace) {

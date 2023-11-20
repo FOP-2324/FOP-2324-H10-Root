@@ -160,39 +160,6 @@ public class MySetAsCopy<T> extends MySet<T> {
     }
 
     @Override
-    protected MySet<T> unionListItems(ListItem<ListItem<T>> heads) {
-        return null;
-    }
-
-    @Override
-    public MySet<T> union(ListItem<MySet<T>> others) {
-        ListItem<T> head = null;
-        ListItem<T> tail = null;
-
-        for (ListItem<T> p = this.head; p != null; p = p.next) {
-            if (head == null) {
-                head = new ListItem<>(p.key);
-                tail = head;
-            } else {
-                tail = tail.next = new ListItem<T>(p.key);
-            }
-        }
-
-        for (ListItem<MySet<T>> set = others; set != null; set = set.next) {
-            ListItem<T> p = set.key.head;
-
-            while (p != null) {
-                if (!contains(head.next, p.key)) {
-                    tail = tail.next = new ListItem<>(p.key);
-                }
-                p = p.next;
-            }
-        }
-
-        return new MySetAsCopy<>(head, cmp);
-    }
-
-    @Override
     public MySet<Tuple<T, ListItem<T>>> disjointUnion(ListItem<MySet<T>> others, MySet<T> indexes) {
         ListItem<Tuple<T, ListItem<T>>> head = null;
         ListItem<Tuple<T, ListItem<T>>> tail = null;

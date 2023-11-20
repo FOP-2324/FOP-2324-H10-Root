@@ -175,34 +175,6 @@ public abstract class MySet<T> {
         return intersection(new ListItem<>(other));
     }
 
-    /**
-     * Returns the union of sets, more formally {@code set1 ∪ set2 ∪ ... ∪ setN}.
-     *
-     * @param heads the sets to union
-     * @return the union of sets
-     */
-    protected abstract MySet<T> unionListItems(ListItem<ListItem<T>> heads);
-
-    /**
-     * Returns the union of this set and the given sets, more formally {@code this ∪ other1 ∪ ... ∪ otherN}.
-     *
-     * @param others the sets to union with this set
-     * @return the union of this set and the given sets
-     */
-    public MySet<T> union(ListItem<MySet<T>> others) {
-        return unionListItems(toListItem(others));
-    }
-
-    /**
-     * Returns the union of this set and the given set, more formally {@code this ∪ other}.
-     *
-     * @param other the set to union with this set
-     * @return the union of this set and the given set
-     */
-    public MySet<T> union(MySet<T> other) {
-        return union(new ListItem<>(other));
-    }
-
     public abstract MySet<Tuple<T, ListItem<T>>> disjointUnion(ListItem<MySet<T>> others, MySet<T> indexes);
 
     /**
