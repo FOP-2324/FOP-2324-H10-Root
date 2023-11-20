@@ -226,4 +226,29 @@ public class MySetAsCopy<T> extends MySet<T> {
         return new MySetAsCopy<>(head, Comparator.comparing((Tuple<T, ListItem<T>> o) -> o.first(), cmp)
             .thenComparing((Tuple<T, ListItem<T>> o) -> o.second().key, cmp));
     }
+
+    @Override
+    public MySet<ListItem<T>> cartesianProduct(MySet<T> other) {
+        ListItem<ListItem<T>> newHead = null;
+        ListItem<ListItem<T>> tail = null;
+        for (ListItem<T> current = this.head; current != null; current = current.next) {
+            for (ListItem<T> otherCurrent = other.head; otherCurrent != null; otherCurrent = otherCurrent.next) {
+                ListItem<T> item = new ListItem<>(current.key);
+                item.next = new ListItem<>(otherCurrent.key);
+                ListItem<ListItem<T>> pair = new ListItem<>(item);
+                if (newHead == null) {
+                    newHead = pair;
+                } else {
+                    tail.next = pair;
+                }
+                tail = pair;
+            }
+        }
+        return new MySetAsCopy<>(newHead, Comparator.comparing((ListItem<T> o) -> o.key, cmp)
+            .thenComparing((ListItem<T> o) -> {
+                assert o.next != null;
+                return o.next.key;
+            }, cmp));
+    }
+
 }

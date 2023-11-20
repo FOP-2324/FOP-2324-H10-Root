@@ -15,12 +15,19 @@ public class Main {
      */
     public static void main(String[] args) {
         boolean inPlace = true;
-   //     testSubset(inPlace);
-     //   testDifference(inPlace);
-        testIntersection(inPlace);
+        //     testSubset(inPlace);
+        //   testDifference(inPlace);
+        //   testIntersection(inPlace);
         //  testUnion(inPlace);
         //    testDifference(inPlace);
         //    testDisjointUnion(inPlace);
+        Integer[] elems = new Integer[]{1, 2, 3};
+        ListItem<Integer> lst = generateList(elems);
+        Integer[] elems2 = new Integer[]{4, 5, 6, 7};
+        ListItem<Integer> lst2 = generateList(elems2);
+        MySet<Integer> set1 = new MySetInPlace<>(lst, Integer::compareTo);
+        MySet<Integer> set2 = new MySetInPlace<>(lst2, Integer::compareTo);
+        System.out.println(  set1.cartesianProduct(set2.head));
     }
 
 

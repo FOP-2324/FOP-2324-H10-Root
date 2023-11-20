@@ -205,6 +205,14 @@ public abstract class MySet<T> {
 
     public abstract MySet<Tuple<T, ListItem<T>>> disjointUnion(ListItem<MySet<T>> others, MySet<T> indexes);
 
+    /**
+     * Returns the cartesian product of this set and the given set, more formally {@code this × other}.
+     *
+     * @param other the set to multiply with this set
+     * @return the cartesian product of this set and the given set
+     */
+    public abstract MySet<ListItem<T>> cartesianProduct(MySet<T> other);
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

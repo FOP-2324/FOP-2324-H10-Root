@@ -240,4 +240,51 @@ public class MySetInPlace<T> extends MySet<T> {
         return new MySetInPlace<>(head, Comparator.comparing((Tuple<T, ListItem<T>> o) -> o.first(), cmp)
             .thenComparing((Tuple<T, ListItem<T>> o) -> o.second().key, cmp));
     }
+
+    @Override
+    public MySet<ListItem<T>> cartesianProduct(MySet<T> other) {
+        ListItem<ListItem<T>> newHead = null;
+        ListItem<ListItem<T>> tail = null;
+        ListItem<T> current = this.head;
+        while (current != null) {
+            // Item will be decoupled after processing
+            ListItem<T> decoupled = current;
+            ListItem<T> otherCurrent = other.head;
+            while (otherCurrent != null) {
+                ListItem<T> item = new ListItem<>(current.key);
+                item.next = new ListItem<>(otherCurrent.key);
+                ListItem<ListItem<T>> pair = new ListItem<>(item);
+                if (newHead == null) {
+                    newHead = pair;
+                } else {
+                    tail.next = pair;
+                }
+                tail = pair;
+
+                // Decouple the other element from the set only if it is the last iteration since we need
+                // the reference to the element in the set for all other iterations
+                if (current.next == null) {
+                    ListItem<T> otherDecoupled = otherCurrent;
+                    otherCurrent = otherCurrent.next;
+                    otherDecoupled.next = null;
+                } else {
+                    otherCurrent = otherCurrent.next;
+                }
+            }
+
+            current = current.next;
+            // Decouple the current element from the set
+            decoupled.next = null;
+        }
+
+        return new MySetInPlace<>(newHead, Comparator.comparing((ListItem<T> o) -> o.key, cmp)
+            .thenComparing((ListItem<T> o) -> {
+                if (o.next == null) {
+                    return null;
+                }
+                return o.next.key;
+            }, cmp));
+    }
+
+
 }
