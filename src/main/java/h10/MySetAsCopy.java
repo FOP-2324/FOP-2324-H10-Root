@@ -211,11 +211,12 @@ public class MySetAsCopy<T> extends MySet<T> {
                 tail = pair;
             }
         }
-        return new MySetAsCopy<>(newHead, Comparator.comparing((ListItem<T> o) -> o.key, cmp)
-            .thenComparing((ListItem<T> o) -> {
-                assert o.next != null;
-                return o.next.key;
-            }, cmp));
+        return new MySetInPlace<>(newHead, Comparator.comparing((ListItem<T> o) -> o.key, cmp)
+            .thenComparing(
+                (ListItem<T> o) -> {
+                    assert o.next != null;
+                    return o.next.key;
+                }, cmp));
     }
 
 }

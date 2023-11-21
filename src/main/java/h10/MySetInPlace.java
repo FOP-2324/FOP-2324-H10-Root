@@ -239,13 +239,11 @@ public class MySetInPlace<T> extends MySet<T> {
         }
 
         return new MySetInPlace<>(newHead, Comparator.comparing((ListItem<T> o) -> o.key, cmp)
-            .thenComparing((ListItem<T> o) -> {
-                if (o.next == null) {
-                    return null;
-                }
-                return o.next.key;
-            }, cmp));
+            .thenComparing(
+                (ListItem<T> o) -> {
+                    assert o.next != null;
+                    return o.next.key;
+                }, cmp));
     }
-
 
 }
