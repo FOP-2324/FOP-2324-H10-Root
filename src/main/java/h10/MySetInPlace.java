@@ -1,5 +1,8 @@
 package h10;
 
+import org.tudalgo.algoutils.student.annotation.DoNotTouch;
+import org.tudalgo.algoutils.student.annotation.StudentImplementationRequired;
+
 import java.util.Comparator;
 import java.util.function.Predicate;
 
@@ -9,6 +12,7 @@ import java.util.function.Predicate;
  * @param <T> the type of the elements in the set
  * @author Lars Waßmann, Nhan Huynh
  */
+@DoNotTouch
 public class MySetInPlace<T> extends MySet<T> {
 
     /**
@@ -18,11 +22,13 @@ public class MySetInPlace<T> extends MySet<T> {
      * @param cmp  the comparator to compare elements
      * @throws IllegalArgumentException if the given elements are not pairwise different or not ordered
      */
+    @DoNotTouch
     public MySetInPlace(ListItem<T> head, Comparator<? super T> cmp) {
         super(head, cmp);
     }
 
     @Override
+    @StudentImplementationRequired
     public MySet<T> subset(Predicate<? super T> pred) {
         // The previous element is the last element of the set which is not decoupled
         ListItem<T> previous = null;
@@ -52,6 +58,7 @@ public class MySetInPlace<T> extends MySet<T> {
     }
 
     @Override
+    @StudentImplementationRequired
     public MySet<T> difference(MySet<T> other) {
         ListItem<T> current = head;
         ListItem<T> otherCurrent = other.head;
@@ -113,6 +120,7 @@ public class MySetInPlace<T> extends MySet<T> {
     }
 
     @Override
+    @StudentImplementationRequired
     protected MySet<T> intersectionListItems(ListItem<ListItem<T>> heads) {
         ListItem<T> newHead = null;
         ListItem<T> tail = null;
@@ -169,40 +177,7 @@ public class MySetInPlace<T> extends MySet<T> {
     }
 
     @Override
-    public MySet<Tuple<T, ListItem<T>>> disjointUnion(ListItem<MySet<T>> others, MySet<T> indexes) {
-        ListItem<Tuple<T, ListItem<T>>> head = new ListItem<>();
-        ListItem<Tuple<T, ListItem<T>>> tail = head;
-
-        ListItem<T> index = indexes.head;
-        ListItem<T> current = this.head;
-
-        while (current != null) {
-            ListItem<T> next = current.next;
-            current.next = null;
-            tail = tail.next = new ListItem<>(new Tuple<>(index.key, current));
-            current = next;
-        }
-
-        index = index.next;
-        ListItem<MySet<T>> set = others;
-
-        while (index != null) {
-            current = set.key.head;
-            while (current != null) {
-                ListItem<T> next = current.next;
-                current.next = null;
-                tail = tail.next = new ListItem<>(new Tuple<>(index.key, current));
-                current = next;
-            }
-            set = set.next;
-            index = index.next;
-        }
-
-        return new MySetInPlace<>(head, Comparator.comparing((Tuple<T, ListItem<T>> o) -> o.first(), cmp)
-            .thenComparing((Tuple<T, ListItem<T>> o) -> o.second().key, cmp));
-    }
-
-    @Override
+    @StudentImplementationRequired
     public MySet<ListItem<T>> cartesianProduct(MySet<T> other) {
         ListItem<ListItem<T>> newHead = null;
         ListItem<ListItem<T>> tail = null;
