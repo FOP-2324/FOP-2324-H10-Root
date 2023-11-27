@@ -30,6 +30,7 @@ public class MySetInPlace<T> extends MySet<T> {
     @Override
     @StudentImplementationRequired
     public MySet<T> subset(Predicate<? super T> pred) {
+        // TODO H1.2
         // The previous element is the last element of the set which is not decoupled
         ListItem<T> previous = null;
         ListItem<T> current = head;
@@ -59,7 +60,54 @@ public class MySetInPlace<T> extends MySet<T> {
 
     @Override
     @StudentImplementationRequired
+    public MySet<ListItem<T>> cartesianProduct(MySet<T> other) {
+        // TODO H2.2
+        ListItem<ListItem<T>> newHead = null;
+        ListItem<ListItem<T>> tail = null;
+        ListItem<T> current = this.head;
+        while (current != null) {
+            // Item will be decoupled after processing
+            ListItem<T> decoupled = current;
+            ListItem<T> otherCurrent = other.head;
+            while (otherCurrent != null) {
+                ListItem<T> item = new ListItem<>(current.key);
+                item.next = new ListItem<>(otherCurrent.key);
+                ListItem<ListItem<T>> pair = new ListItem<>(item);
+                if (newHead == null) {
+                    newHead = pair;
+                } else {
+                    tail.next = pair;
+                }
+                tail = pair;
+
+                // Decouple the other element from the set only if it is the last iteration since we need
+                // the reference to the element in the set for all other iterations
+                if (current.next == null) {
+                    ListItem<T> otherDecoupled = otherCurrent;
+                    otherCurrent = otherCurrent.next;
+                    otherDecoupled.next = null;
+                } else {
+                    otherCurrent = otherCurrent.next;
+                }
+            }
+
+            current = current.next;
+            // Decouple the current element from the set
+            decoupled.next = null;
+        }
+
+        return new MySetInPlace<>(newHead, Comparator.comparing((ListItem<T> o) -> o.key, cmp)
+            .thenComparing(
+                (ListItem<T> o) -> {
+                    assert o.next != null;
+                    return o.next.key;
+                }, cmp));
+    }
+
+    @Override
+    @StudentImplementationRequired
     public MySet<T> difference(MySet<T> other) {
+        // TODO H3.2
         ListItem<T> current = head;
         ListItem<T> otherCurrent = other.head;
         // The previous element is the last element of the set which is not decoupled
@@ -122,6 +170,7 @@ public class MySetInPlace<T> extends MySet<T> {
     @Override
     @StudentImplementationRequired
     protected MySet<T> intersectionListItems(ListItem<ListItem<T>> heads) {
+        // TODO H4.2
         ListItem<T> newHead = null;
         ListItem<T> tail = null;
 
@@ -174,51 +223,6 @@ public class MySetInPlace<T> extends MySet<T> {
         head = newHead;
         tail.next = null;
         return this;
-    }
-
-    @Override
-    @StudentImplementationRequired
-    public MySet<ListItem<T>> cartesianProduct(MySet<T> other) {
-        ListItem<ListItem<T>> newHead = null;
-        ListItem<ListItem<T>> tail = null;
-        ListItem<T> current = this.head;
-        while (current != null) {
-            // Item will be decoupled after processing
-            ListItem<T> decoupled = current;
-            ListItem<T> otherCurrent = other.head;
-            while (otherCurrent != null) {
-                ListItem<T> item = new ListItem<>(current.key);
-                item.next = new ListItem<>(otherCurrent.key);
-                ListItem<ListItem<T>> pair = new ListItem<>(item);
-                if (newHead == null) {
-                    newHead = pair;
-                } else {
-                    tail.next = pair;
-                }
-                tail = pair;
-
-                // Decouple the other element from the set only if it is the last iteration since we need
-                // the reference to the element in the set for all other iterations
-                if (current.next == null) {
-                    ListItem<T> otherDecoupled = otherCurrent;
-                    otherCurrent = otherCurrent.next;
-                    otherDecoupled.next = null;
-                } else {
-                    otherCurrent = otherCurrent.next;
-                }
-            }
-
-            current = current.next;
-            // Decouple the current element from the set
-            decoupled.next = null;
-        }
-
-        return new MySetInPlace<>(newHead, Comparator.comparing((ListItem<T> o) -> o.key, cmp)
-            .thenComparing(
-                (ListItem<T> o) -> {
-                    assert o.next != null;
-                    return o.next.key;
-                }, cmp));
     }
 
 }

@@ -30,6 +30,7 @@ public class MySetAsCopy<T> extends MySet<T> {
     @Override
     @StudentImplementationRequired
     public MySet<T> subset(Predicate<? super T> pred) {
+        // TODO H1.1
         ListItem<T> newHead = null;
         ListItem<T> tail = null;
         for (ListItem<T> current = head; current != null; current = current.next) {
@@ -48,7 +49,35 @@ public class MySetAsCopy<T> extends MySet<T> {
 
     @Override
     @StudentImplementationRequired
+    public MySet<ListItem<T>> cartesianProduct(MySet<T> other) {
+        // TODO H2.1
+        ListItem<ListItem<T>> newHead = null;
+        ListItem<ListItem<T>> tail = null;
+        for (ListItem<T> current = this.head; current != null; current = current.next) {
+            for (ListItem<T> otherCurrent = other.head; otherCurrent != null; otherCurrent = otherCurrent.next) {
+                ListItem<T> item = new ListItem<>(current.key);
+                item.next = new ListItem<>(otherCurrent.key);
+                ListItem<ListItem<T>> pair = new ListItem<>(item);
+                if (newHead == null) {
+                    newHead = pair;
+                } else {
+                    tail.next = pair;
+                }
+                tail = pair;
+            }
+        }
+        return new MySetInPlace<>(newHead, Comparator.comparing((ListItem<T> o) -> o.key, cmp)
+            .thenComparing(
+                (ListItem<T> o) -> {
+                    assert o.next != null;
+                    return o.next.key;
+                }, cmp));
+    }
+
+    @Override
+    @StudentImplementationRequired
     public MySet<T> difference(MySet<T> other) {
+        // TODO H3.1
         ListItem<T> newHead = null;
         ListItem<T> tail = null;
 
@@ -115,6 +144,7 @@ public class MySetAsCopy<T> extends MySet<T> {
     @Override
     @StudentImplementationRequired
     protected MySet<T> intersectionListItems(ListItem<ListItem<T>> heads) {
+        // TODO H4.1
         ListItem<T> newHead = null;
         ListItem<T> tail = null;
 
@@ -165,32 +195,6 @@ public class MySetAsCopy<T> extends MySet<T> {
         }
 
         return new MySetAsCopy<>(newHead, cmp);
-    }
-
-    @Override
-    @StudentImplementationRequired
-    public MySet<ListItem<T>> cartesianProduct(MySet<T> other) {
-        ListItem<ListItem<T>> newHead = null;
-        ListItem<ListItem<T>> tail = null;
-        for (ListItem<T> current = this.head; current != null; current = current.next) {
-            for (ListItem<T> otherCurrent = other.head; otherCurrent != null; otherCurrent = otherCurrent.next) {
-                ListItem<T> item = new ListItem<>(current.key);
-                item.next = new ListItem<>(otherCurrent.key);
-                ListItem<ListItem<T>> pair = new ListItem<>(item);
-                if (newHead == null) {
-                    newHead = pair;
-                } else {
-                    tail.next = pair;
-                }
-                tail = pair;
-            }
-        }
-        return new MySetInPlace<>(newHead, Comparator.comparing((ListItem<T> o) -> o.key, cmp)
-            .thenComparing(
-                (ListItem<T> o) -> {
-                    assert o.next != null;
-                    return o.next.key;
-                }, cmp));
     }
 
 }

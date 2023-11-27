@@ -97,6 +97,15 @@ public abstract class MySet<T> {
     public abstract MySet<T> subset(Predicate<? super T> pred);
 
     /**
+     * Returns the cartesian product of this set and the given set, more formally {@code this × other}.
+     *
+     * @param other the set to multiply with this set
+     * @return the cartesian product of this set and the given set
+     */
+    @DoNotTouch
+    public abstract MySet<ListItem<T>> cartesianProduct(MySet<T> other);
+
+    /**
      * Returns the difference of this set and the given set, more formally {@code this \ other}.
      *
      * @param other the set to subtract from this set
@@ -164,15 +173,6 @@ public abstract class MySet<T> {
     public MySet<T> intersection(MySet<T> other) {
         return intersection(new ListItem<>(other));
     }
-
-    /**
-     * Returns the cartesian product of this set and the given set, more formally {@code this × other}.
-     *
-     * @param other the set to multiply with this set
-     * @return the cartesian product of this set and the given set
-     */
-    @DoNotTouch
-    public abstract MySet<ListItem<T>> cartesianProduct(MySet<T> other);
 
     @Override
     @DoNotTouch
