@@ -21,15 +21,34 @@ import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * Defines the public tests for H1.
+ */
 public abstract class H1_PublicTests extends AbstractTest {
 
+    /**
+     * The path to the test resources.
+     */
     private static final String TEST_RESOURCE_PATH = "h1/";
 
+    /**
+     * The name of the method to test.
+     */
     private static final String METHOD_NAME = "subset";
 
+    /**
+     * The input to validate where we check if the requirements are met.
+     */
     protected @Nullable MySet<VisitorElement<Integer>> validateInput;
 
+    /**
+     * The output to validate where we check if the requirements are met.
+     */
     protected @Nullable MySet<VisitorElement<Integer>> validateOutput;
+
+    /**
+     * The context to validate where we check if the requirements are met.
+     */
     protected @Nullable Context.Builder<?> validateContext;
 
     @BeforeAll
@@ -39,10 +58,24 @@ public abstract class H1_PublicTests extends AbstractTest {
         method = Links.getMethodLink(type, METHOD_NAME);
     }
 
-    public abstract MySet<VisitorElement<Integer>> create(ListItem<VisitorElement<Integer>> head);
-
+    /**
+     * Returns the type of the set to test.
+     *
+     * @return the type of the set to test.
+     */
     public abstract TypeLink getType();
 
+    /**
+     * Creates a new set from the given head.
+     *
+     * @param head the head of the list.
+     * @return a new set from the given head.
+     */
+    public abstract MySet<VisitorElement<Integer>> create(ListItem<VisitorElement<Integer>> head);
+
+    /**
+     * Checks the requirements after each test.
+     */
     @AfterEach
     public void tearDown() {
         Assumptions.assumeTrue(validateInput != null);
@@ -59,6 +92,9 @@ public abstract class H1_PublicTests extends AbstractTest {
         checkRequirements();
     }
 
+    /**
+     * Checks the requirements.
+     */
     public abstract void checkRequirements();
 
     @RubricOrder(types = {MySetAsCopy.class, MySetInPlace.class}, orders = {1, 3})
@@ -130,5 +166,6 @@ public abstract class H1_PublicTests extends AbstractTest {
         validateInput = source;
         validateContext = builder;
         validateOutput = result;
+
     }
 }

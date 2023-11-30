@@ -6,10 +6,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
 
+/**
+ * Defines the public tests for H1.2.
+ *
+ * @author Nhan Huynh
+ */
 @DisplayName("H1.2 | InPlace")
 public class H1_2_PublicTests extends H1_PublicTests {
-
-    private static final Class<?> CLASS = MySetInPlace.class;
 
     @Override
     public MySet<VisitorElement<Integer>> create(ListItem<VisitorElement<Integer>> head) {
@@ -18,7 +21,7 @@ public class H1_2_PublicTests extends H1_PublicTests {
 
     @Override
     public TypeLink getType() {
-        return Links.getTypeLink(CLASS);
+        return Links.getTypeLink(MySetInPlace.class);
     }
 
     @Override

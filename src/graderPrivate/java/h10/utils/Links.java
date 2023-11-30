@@ -36,9 +36,8 @@ public class Links {
     }
 
     /**
-     * Returns the type link for the given package and class.
+     * Returns the type link for the given class.
      *
-     * @param p     the package to get the type link for
      * @param clazz the class in the package to get the type link for
      * @return the type link
      */
@@ -49,6 +48,14 @@ public class Links {
         );
     }
 
+    /**
+     * Returns the method link for the given method name.
+     *
+     * @param type       the type to get the method link for
+     * @param methodName the method name
+     * @param matchers   the matchers to match the method name
+     * @return the method link for the given method name
+     */
     @SafeVarargs
     public static MethodLink getMethodLink(TypeLink type, String methodName, Matcher<MethodLink>... matchers) {
         return Assertions3.assertMethodExists(
@@ -57,6 +64,14 @@ public class Links {
         );
     }
 
+    /**
+     * Returns the method link for the given method name.
+     *
+     * @param clazz      the type to get the method link for
+     * @param methodName the method name
+     * @param matchers   the matchers to match the method name
+     * @return the method link for the given method name
+     */
     @SafeVarargs
     public static MethodLink getMethodLink(Class<?> clazz, String methodName, Matcher<MethodLink>... matchers) {
         return getMethodLink(getTypeLink(clazz), methodName, matchers);
