@@ -32,58 +32,11 @@ public abstract class MySet<T> {
      *
      * @param head the head of the set
      * @param cmp  the comparator to compare elements
-     * @throws IllegalArgumentException if the given elements are not pairwise different or not ordered
      */
     @DoNotTouch
     public MySet(ListItem<T> head, Comparator<? super T> cmp) {
-        if (!isOrdered(head, cmp)) {
-            throw new IllegalArgumentException("The given elements are not ordered");
-        }
-        if (!isPairwiseDifferent(head, cmp)) {
-            throw new IllegalArgumentException("The given elements are not pairwise different");
-        }
-
         this.head = head;
         this.cmp = cmp;
-    }
-
-    /**
-     * Returns {@code true} if the given list is ordered according to the given comparator.
-     *
-     * @param head the head of the list
-     * @param cmp  the comparator to compare elements
-     * @return {@code true} if the given list is ordered according to the given comparator
-     */
-    @DoNotTouch
-    private boolean isOrdered(ListItem<T> head, Comparator<? super T> cmp) {
-        if (head == null) {
-            return true;
-        }
-        for (ListItem<T> current = head; current.next != null; current = current.next) {
-            if (cmp.compare(current.key, current.next.key) > 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Returns {@code true} if the given list contains pairwise different elements according to the given comparator.
-     *
-     * @param head the head of the list
-     * @param cmp  the comparator to compare elements
-     * @return {@code true} if the given list contains pairwise different elements according to the given comparator
-     */
-    @DoNotTouch
-    private boolean isPairwiseDifferent(ListItem<T> head, Comparator<? super T> cmp) {
-        for (ListItem<T> current = head; current != null; current = current.next) {
-            for (ListItem<T> other = current.next; other != null; other = other.next) {
-                if (cmp.compare(current.key, other.key) == 0) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     /**

@@ -1,9 +1,10 @@
-package h10.converter;
+package h10.utils.converter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import h10.ListItem;
+import h10.utils.visitor.VisitorElement;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.converter.ArgumentConversionException;
 import org.junit.jupiter.params.converter.ArgumentConverter;
@@ -30,13 +31,13 @@ public abstract class ListItemConverter<T> implements ArgumentConverter {
 
     protected abstract T map(JsonNode node);
 
-    public static class Integer extends ListItemConverter<java.lang.Integer> {
+    public static class VisitorNode extends ListItemConverter<VisitorElement<Integer>> {
         @Override
-        protected java.lang.Integer map(JsonNode node) {
+        protected VisitorElement<Integer> map(JsonNode node) {
             if (!(node instanceof IntNode intNode)) {
                 throw new ArgumentConversionException("Element in array is not an integer, got " + node.getClass());
             }
-            return intNode.asInt();
+            return new VisitorElement<>(intNode.asInt());
         }
     }
 
