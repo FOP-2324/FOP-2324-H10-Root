@@ -48,14 +48,4 @@ public abstract class AbstractTest {
     public Context.Builder<?> defaultBuilder() {
         return Assertions2.contextBuilder().subject(method);
     }
-
-    /**
-     * Returns the original hashcode of the item.
-     *
-     * @param item the item to get the hashcode from.
-     * @return the original hashcode of the item.
-     */
-    public String toString(ListItem<?> item) {
-        return item.getClass().getName() + "@" + System.identityHashCode(item);
-    }
 }

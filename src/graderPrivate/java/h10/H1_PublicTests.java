@@ -1,14 +1,11 @@
 package h10;
 
-import h10.utils.Links;
 import h10.utils.RubricOrder;
 import h10.utils.converter.IntPredicateConverter;
 import h10.utils.converter.ListItemConverter;
 import h10.utils.visitor.VisitorElement;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
@@ -18,13 +15,12 @@ import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
 
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
  * Defines the public tests for H1.
  */
-public abstract class H1_PublicTests extends AbstractTest {
+public abstract class H1_PublicTests extends SimpleTest {
 
     /**
      * The path to the test resources.
@@ -37,41 +33,16 @@ public abstract class H1_PublicTests extends AbstractTest {
     private static final String METHOD_NAME = "subset";
 
     /**
-     * The input to validate where we check if the requirements are met.
-     */
-    protected @Nullable MySet<VisitorElement<Integer>> validateInput;
-
-    /**
-     * The output to validate where we check if the requirements are met.
-     */
-    protected @Nullable MySet<VisitorElement<Integer>> validateOutput;
-
-    /**
-     * The context to validate where we check if the requirements are met.
-     */
-    protected @Nullable Context.Builder<?> validateContext;
-
-    @BeforeAll
-    @Override
-    public void globalSetup() {
-        type = getType();
-        method = Links.getMethodLink(type, METHOD_NAME);
-    }
-
-    /**
      * Returns the type of the set to test.
      *
      * @return the type of the set to test.
      */
     public abstract TypeLink getType();
 
-    /**
-     * Creates a new set from the given head.
-     *
-     * @param head the head of the list.
-     * @return a new set from the given head.
-     */
-    public abstract MySet<VisitorElement<Integer>> create(ListItem<VisitorElement<Integer>> head);
+    @Override
+    public String getMethodName() {
+        return METHOD_NAME;
+    }
 
     /**
      * Checks the requirements after each test.
