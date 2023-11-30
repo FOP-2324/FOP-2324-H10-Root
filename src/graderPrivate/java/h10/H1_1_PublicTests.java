@@ -2,6 +2,7 @@ package h10;
 
 import h10.utils.Links;
 import h10.utils.visitor.VisitorElement;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DisplayName;
 import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
 
@@ -25,9 +26,9 @@ public class H1_1_PublicTests extends H1_PublicTests {
 
     @Override
     public void checkRequirements() {
-        assert validateInput != null;
-        assert validateOutput != null;
-        assert validateContext != null;
+        Assumptions.assumeTrue(validateInput != null);
+        Assumptions.assumeTrue(validateOutput != null);
+        Assumptions.assumeTrue(validateContext != null);
         AssertionUtils.assertAsCopy(validateInput, validateOutput, validateContext);
     }
 }

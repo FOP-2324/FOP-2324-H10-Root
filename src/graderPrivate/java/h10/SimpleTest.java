@@ -4,9 +4,7 @@ import h10.utils.Links;
 import h10.utils.visitor.VisitorElement;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
-import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
 
@@ -16,17 +14,6 @@ import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
  * @author Nhan Huynh
  */
 public abstract class SimpleTest extends AbstractTest {
-
-
-    /**
-     * The input to validate where we check if the requirements are met.
-     */
-    protected @Nullable MySet<VisitorElement<Integer>> validateInput;
-
-    /**
-     * The output to validate where we check if the requirements are met.
-     */
-    protected @Nullable MySet<VisitorElement<Integer>> validateOutput;
 
     /**
      * The context to validate where we check if the requirements are met.
@@ -62,19 +49,14 @@ public abstract class SimpleTest extends AbstractTest {
      */
     @AfterEach
     public void tearDown() {
-        Assumptions.assumeTrue(validateInput != null);
-        Assumptions.assumeTrue(validateContext != null);
-        Assumptions.assumeTrue(validateOutput != null);
-        // Check visit count
-        for (ListItem<VisitorElement<Integer>> current = validateInput.head; current != null; current = current.next) {
-            Assertions2.assertEquals(
-                1, current.key.getVisited(),
-                validateContext.add("Node was visited more than once", current.key).build(),
-                r -> "Node was visited more than once"
-            );
-        }
+        checkVisitCount();
         checkRequirements();
     }
+
+    /**
+     * Checks the visit count.
+     */
+    public abstract void checkVisitCount();
 
     /**
      * Checks the requirements.

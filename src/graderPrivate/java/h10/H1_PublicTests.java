@@ -4,7 +4,7 @@ import h10.utils.RubricOrder;
 import h10.utils.converter.IntPredicateConverter;
 import h10.utils.converter.ListItemConverter;
 import h10.utils.visitor.VisitorElement;
-import org.junit.jupiter.api.AfterEach;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,6 +33,16 @@ public abstract class H1_PublicTests extends SimpleTest {
     private static final String METHOD_NAME = "subset";
 
     /**
+     * The input to validate where we check if the requirements are met.
+     */
+    protected @Nullable MySet<VisitorElement<Integer>> validateInput;
+
+    /**
+     * The output to validate where we check if the requirements are met.
+     */
+    protected @Nullable MySet<VisitorElement<Integer>> validateOutput;
+
+    /**
      * Returns the type of the set to test.
      *
      * @return the type of the set to test.
@@ -44,14 +54,10 @@ public abstract class H1_PublicTests extends SimpleTest {
         return METHOD_NAME;
     }
 
-    /**
-     * Checks the requirements after each test.
-     */
-    @AfterEach
-    public void tearDown() {
+    @Override
+    public void checkVisitCount() {
         Assumptions.assumeTrue(validateInput != null);
         Assumptions.assumeTrue(validateContext != null);
-        Assumptions.assumeTrue(validateOutput != null);
         // Check visit count
         for (ListItem<VisitorElement<Integer>> current = validateInput.head; current != null; current = current.next) {
             Assertions2.assertEquals(
@@ -60,7 +66,6 @@ public abstract class H1_PublicTests extends SimpleTest {
                 r -> "Node was visited more than once"
             );
         }
-        checkRequirements();
     }
 
     /**
