@@ -47,7 +47,8 @@ public class H1_1_PublicTests extends AsCopyTest {
         for (ListItem<VisitorElement<Integer>> current = validateInput.head; current != null; current = current.next) {
             Assertions2.assertEquals(
                 1, current.key.getVisited(),
-                validateContext.add("Visited node more than 1", current.key).build(), r -> "Node was visited more than once"
+                validateContext.add("Node was visited more than once", current.key).build(),
+                r -> "Node was visited more than once"
             );
         }
 
@@ -61,7 +62,7 @@ public class H1_1_PublicTests extends AsCopyTest {
                     validateContext.add("Node before subset", currentHash)
                         .add("Node after subset", otherHash)
                         .build(),
-                    r -> "Node was the same"
+                    r -> "Node %s was not copied, got %s".formatted(currentHash, otherHash)
                 );
             }
         }
