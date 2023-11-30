@@ -1,6 +1,10 @@
 package h10.utils;
 
+import java.util.Map;
+
 public @interface RubricOrder {
 
-    int value();
+    Class<?>[] types();
+
+    int[] orders();
 }

@@ -27,12 +27,6 @@ public abstract class AbstractTest {
         return Assertions2.contextBuilder().subject(method);
     }
 
-    public void reset(MySet<VisitorElement<Integer>> set) {
-        for (ListItem<VisitorElement<Integer>> current = set.head; current != null; current = current.next) {
-            current.key.reset();
-        }
-    }
-
     public String toString(ListItem<?> item) {
         return item.getClass().getName() + "@" + System.identityHashCode(item);
     }
