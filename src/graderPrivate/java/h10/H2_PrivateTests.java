@@ -3,10 +3,8 @@ package h10;
 import h10.utils.Links;
 import h10.utils.RubricOrder;
 import h10.utils.converter.ListItemConverter;
+import h10.utils.converter.ListItemTupleConverter;
 import h10.utils.visitor.VisitorElement;
-import org.jetbrains.annotations.Nullable;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,21 +30,6 @@ public abstract class H2_PrivateTests extends AbstractTest {
      */
     private static final String METHOD_NAME = "cartesianProduct";
 
-    /**
-     * The input to validate where we check if the requirements are met.
-     */
-    protected @Nullable MySet<VisitorElement<Integer>> validateInput;
-
-    /**
-     * The output to validate where we check if the requirements are met.
-     */
-    protected @Nullable MySet<VisitorElement<Integer>> validateOutput;
-
-    /**
-     * The context to validate where we check if the requirements are met.
-     */
-    protected @Nullable Context.Builder<?> validateContext;
-
     @BeforeAll
     @Override
     public void globalSetup() {
@@ -70,52 +53,68 @@ public abstract class H2_PrivateTests extends AbstractTest {
     public abstract MySet<VisitorElement<Integer>> create(ListItem<VisitorElement<Integer>> head);
 
     /**
-     * Checks the requirements after each test.
+     * Tests if the cartesian product of the given sets is correct.
+     *
+     * @param head      the head of the first set
+     * @param otherHead the head of the second set
+     * @param expected  the expected cartesian product
      */
-    @AfterEach
-    public void tearDown() {
-        Assumptions.assumeTrue(validateInput != null);
-        Assumptions.assumeTrue(validateContext != null);
-        Assumptions.assumeTrue(validateOutput != null);
-        // Check visit count
-        for (ListItem<VisitorElement<Integer>> current = validateInput.head; current != null; current = current.next) {
-            Assertions2.assertEquals(
-                1, current.key.getVisited(),
-                validateContext.add("Node was visited more than once", current.key).build(),
-                r -> "Node was visited more than once"
-            );
+    private void test(
+        ListItem<VisitorElement<Integer>> head,
+        ListItem<VisitorElement<Integer>> otherHead,
+        ListItem<ListItem<VisitorElement<Integer>>> expected
+    ) {
+        MySet<VisitorElement<Integer>> source = create(head);
+        MySet<VisitorElement<Integer>> other = create(otherHead);
+        Context.Builder<?> builder = defaultBuilder().add("Source", source.toString()).add("Other", other.toString());
+        MySet<ListItem<VisitorElement<Integer>>> result = source.cartesianProduct(other);
+        builder.add("Result", result.toString());
+
+        for (ListItem<ListItem<VisitorElement<Integer>>> current = expected; current != null; current = current.next) {
+            boolean found = false;
+            for (ListItem<ListItem<VisitorElement<Integer>>> actual = result.head; actual != null; actual = actual.next) {
+                if (current.key.equals(actual.key)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                continue;
+            }
+            ListItem<ListItem<VisitorElement<Integer>>> element = current;
+            Assertions2.fail(builder.build(), r -> "Expected tuple %s, but found none".formatted(element.key));
         }
-        checkRequirements();
     }
 
-    /**
-     * Checks the requirements.
-     */
-    public abstract void checkRequirements();
-
-    @RubricOrder(types = {MySetAsCopy.class, MySetInPlace.class}, orders = {1, 3})
+    @RubricOrder(types = {MySetAsCopy.class, MySetInPlace.class}, orders = {5, 9})
     @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
     @ParameterizedTest(name = "Source = {0}, Other {1}")
     @JsonClasspathSource({
+        TEST_RESOURCE_PATH + "criterion1_testcase1.json",
+        TEST_RESOURCE_PATH + "criterion1_testcase2.json",
     })
     public void testSimple(
         @ConvertWith(ListItemConverter.VisitorNode.class) @Property("head") ListItem<VisitorElement<Integer>> head,
-        @ConvertWith(ListItemConverter.VisitorNode.class) @Property("otherHead") ListItem<VisitorElement<Integer>> otherHead
+        @ConvertWith(ListItemConverter.VisitorNode.class) @Property("otherHead") ListItem<VisitorElement<Integer>> otherHead,
+        @ConvertWith(ListItemTupleConverter.VisitorNode.class) @Property("expected") ListItem<ListItem<VisitorElement<Integer>>> expected
     ) {
-        MySet<VisitorElement<Integer>> source = create(head);
-        MySet<VisitorElement<Integer>> other = create(otherHead);
+        test(head, otherHead, expected);
     }
 
-    @RubricOrder(types = {MySetAsCopy.class, MySetInPlace.class}, orders = {1, 3})
+    @RubricOrder(types = {MySetAsCopy.class, MySetInPlace.class}, orders = {6, 10})
     @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.")
     @ParameterizedTest(name = "Source = {0}, Other {1}")
     @JsonClasspathSource({
+        TEST_RESOURCE_PATH + "criterion2_testcase1.json",
+        TEST_RESOURCE_PATH + "criterion2_testcase2.json",
+        TEST_RESOURCE_PATH + "criterion2_testcase3.json",
+        TEST_RESOURCE_PATH + "criterion2_testcase4.json",
     })
     public void testComplex(
         @ConvertWith(ListItemConverter.VisitorNode.class) @Property("head") ListItem<VisitorElement<Integer>> head,
-        @ConvertWith(ListItemConverter.VisitorNode.class) @Property("otherHead") ListItem<VisitorElement<Integer>> otherHead
+        @ConvertWith(ListItemConverter.VisitorNode.class) @Property("otherHead") ListItem<VisitorElement<Integer>> otherHead,
+        @ConvertWith(ListItemTupleConverter.VisitorNode.class) @Property("expected") ListItem<ListItem<VisitorElement<Integer>>> expected
     ) {
-        MySet<VisitorElement<Integer>> source = create(head);
-        MySet<VisitorElement<Integer>> other = create(otherHead);
+        test(head, otherHead, expected);
     }
 }

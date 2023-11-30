@@ -57,11 +57,12 @@ public class AssertionUtils {
                     break;
                 }
             }
-            if (!found) {
-                String hash = toString(other);
-                int currentIndex = index;
-                Assertions2.fail(context.build(), r -> "Node %s at %s was copied".formatted(hash, currentIndex));
+            if (found) {
+                continue;
             }
+            String hash = toString(other);
+            int currentIndex = index;
+            Assertions2.fail(context.build(), r -> "Node %s at %s was copied".formatted(hash, currentIndex));
         }
     }
 
