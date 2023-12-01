@@ -86,7 +86,7 @@ public abstract class H2_PrivateTests extends AbstractTest {
         }
     }
 
-    @RubricOrder(types = {MySetAsCopy.class, MySetInPlace.class}, orders = {5, 9})
+    @RubricOrder(criteria = {5, 9})
     @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
     @ParameterizedTest(name = "Source = {0}, Other {1}")
     @JsonClasspathSource({
@@ -101,7 +101,7 @@ public abstract class H2_PrivateTests extends AbstractTest {
         test(head, otherHead, expected);
     }
 
-    @RubricOrder(types = {MySetAsCopy.class, MySetInPlace.class}, orders = {6, 10})
+    @RubricOrder(criteria = {6, 10})
     @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.")
     @ParameterizedTest(name = "Source = {0}, Other {1}")
     @JsonClasspathSource({

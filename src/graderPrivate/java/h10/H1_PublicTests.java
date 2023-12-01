@@ -73,7 +73,7 @@ public abstract class H1_PublicTests extends SimpleTest {
      */
     public abstract void checkRequirements();
 
-    @RubricOrder(types = {MySetAsCopy.class, MySetInPlace.class}, orders = {1, 3})
+    @RubricOrder(criteria = {1, 3})
     @DisplayName("Die Methode subset(MySet) ninmmt Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht " +
         "erfüllt wird.")
     @ParameterizedTest(name = "Elements = {0}")
@@ -99,7 +99,7 @@ public abstract class H1_PublicTests extends SimpleTest {
         validateOutput = result;
     }
 
-    @RubricOrder(types = {MySetAsCopy.class, MySetInPlace.class}, orders = {2, 3})
+    @RubricOrder(criteria = {2, 3})
     @DisplayName("Die Methode subset(MySet) gibt das korrekte Ergebnis für eine komplexe Eingabe zurück.")
     @ParameterizedTest(name = "Elements = {0}")
     @JsonClasspathSource({

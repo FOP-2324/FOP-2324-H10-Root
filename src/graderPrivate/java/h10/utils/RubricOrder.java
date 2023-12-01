@@ -1,5 +1,8 @@
 package h10.utils;
 
+import h10.MySetAsCopy;
+import h10.MySetInPlace;
+
 /**
  * This annotation can be used to specify the order of the rubric items.
  *
@@ -12,12 +15,12 @@ public @interface RubricOrder {
      *
      * @return the types of the rubric items to grade
      */
-    Class<?>[] types();
+    Class<?>[] types() default {MySetAsCopy.class, MySetInPlace.class};
 
     /**
-     * The order of the rubric items to grade.
+     * The criteria number of the rubric items to grade.
      *
-     * @return the order of the rubric items to grade
+     * @return criteria number of the rubric items to grade
      */
-    int[] orders();
+    int[] criteria();
 }
