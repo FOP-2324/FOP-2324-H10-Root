@@ -8,6 +8,22 @@ import java.util.stream.Stream;
 
 public class ListItems {
 
+    @SafeVarargs
+    public static <T> ListItem<T> of(T... elements) {
+        ListItem<T> head = null;
+        ListItem<T> tail = null;
+        for (T element : elements) {
+            ListItem<T> item = new ListItem<>(element);
+            if (head == null) {
+                head = item;
+            } else {
+                tail.next = item;
+            }
+            tail = item;
+        }
+        return head;
+    }
+
     public static <T> Iterator<T> iterator(ListItem<T> head) {
         return new Iterator<T>() {
             private ListItem<T> current = head;
@@ -29,29 +45,11 @@ public class ListItems {
         };
     }
 
-    public static <T> Iterator<ListItem<VisitorElement<T>>> visitorIterator(ListItem<VisitorElement<T>> head) {
-        return new Iterator<>() {
-
-            ListItem<VisitorElement<T>> current = head;
-
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
-
-            @Override
-            public ListItem<VisitorElement<T>> next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-                ListItem<VisitorElement<T>> tmp = current;
-                current = current.next;
-                return tmp;
-            }
-        };
+    public static <T> Stream<T> stream(ListItem<T> head) {
+        return Streams.stream(() -> iterator(head));
     }
 
-    public static <T> Iterator<T> rawVisitorIterator(ListItem<VisitorElement<T>> head) {
+    public static <T> Iterator<T> rawVIterator(ListItem<VisitorElement<T>> head) {
         return new Iterator<>() {
             private ListItem<VisitorElement<T>> current = head;
 
@@ -72,15 +70,32 @@ public class ListItems {
         };
     }
 
-    public static <T> Stream<T> stream(ListItem<T> head) {
-        return Streams.stream(() -> iterator(head));
+    public static <T> Stream<T> rawStream(ListItem<VisitorElement<T>> head) {
+        return Streams.stream(() -> rawVIterator(head));
     }
 
-    public static <T> Stream<ListItem<VisitorElement<T>>> visitorStream(ListItem<VisitorElement<T>> head) {
-        return Streams.stream(() -> visitorIterator(head));
+    public static <T> Iterator<ListItem<T>> itemsIterator(ListItem<T> head) {
+        return new Iterator<>() {
+            private ListItem<T> current = head;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public ListItem<T> next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                ListItem<T> element = current;
+                current = current.next;
+                return element;
+            }
+        };
     }
 
-    public static <T> Stream<T> rawVisitorStream(ListItem<VisitorElement<T>> head) {
-        return Streams.stream(() -> rawVisitorIterator(head));
+    public static <T> Stream<ListItem<VisitorElement<T>>> itemsStream(ListItem<VisitorElement<T>> head) {
+        return Streams.stream(() -> itemsIterator(head));
     }
 }

@@ -10,14 +10,12 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class VisitorMySet<T> extends MySet<VisitorElement<T>> implements Iterable<VisitorElement<T>> {
+public class VisitorMySet<T> extends DelegateMySet<VisitorElement<T>> implements Iterable<VisitorElement<T>> {
 
-    private final MySet<VisitorElement<T>> underlying;
 
     public VisitorMySet(MySet<VisitorElement<T>> underlying) {
-        super(underlying.head, underlying.cmp);
+        super(underlying);
         stream().forEach(VisitorElement::reset);
-        this.underlying = underlying;
     }
 
     public VisitorMySet(
@@ -87,23 +85,23 @@ public class VisitorMySet<T> extends MySet<VisitorElement<T>> implements Iterabl
         return MySets.iterator(this);
     }
 
-    public @NotNull Iterator<ListItem<VisitorElement<T>>> visitorIterator() {
-        return MySets.visitorIterator(this);
-    }
-
-    public @NotNull Iterator<T> rawIterator() {
+    public Iterator<T> rawIterator() {
         return MySets.rawVisitorIterator(this);
     }
 
-    public @NotNull Stream<VisitorElement<T>> stream() {
-        return Streams.stream(this);
+    public Stream<VisitorElement<T>> stream() {
+        return MySets.stream(this);
     }
 
-    public @NotNull Stream<ListItem<VisitorElement<T>>> visitorStream() {
-        return MySets.visitorStream(this);
-    }
-
-    public @NotNull Stream<T> rawStream() {
+    public Stream<T> rawStream() {
         return MySets.rawVisitorStream(this);
+    }
+
+    public Iterator<ListItem<VisitorElement<T>>> itemsIterator() {
+        return MySets.itemsIterator(this);
+    }
+
+    public Stream<ListItem<VisitorElement<T>>> itemStream() {
+        return MySets.itemsStream(this);
     }
 }

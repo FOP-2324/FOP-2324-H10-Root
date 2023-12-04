@@ -32,6 +32,21 @@ public abstract class H2_Tests extends AbstractTest {
         return METHOD_NAME;
     }
 
+    protected <T> ListItem<VisitorElement<T>> of(T... values) {
+        ListItem<VisitorElement<T>> head = null;
+        ListItem<VisitorElement<T>> tail = null;
+        for (T value : values) {
+            ListItem<VisitorElement<T>> node = new ListItem<>(new VisitorElement<>(value));
+            if (head == null) {
+                head = node;
+            } else {
+                tail.next = node;
+            }
+            tail = node;
+        }
+        return head;
+    }
+
     private void assertTuples(
         ListItem<Integer> head,
         ListItem<Integer> otherHead,
@@ -91,5 +106,4 @@ public abstract class H2_Tests extends AbstractTest {
     ) {
         assertTuples(head, otherHead, expected);
     }
-
 }

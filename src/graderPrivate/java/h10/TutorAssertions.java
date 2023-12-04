@@ -20,8 +20,8 @@ public class TutorAssertions {
     }
 
     public static void assertAsCopy(VisitorMySet<?> input, VisitorMySet<?> output, Context.Builder<?> context) {
-        List<String> otherIdentityHashCodes = output.visitorStream().map(TutorAssertions::identityHashCode).toList();
-        input.visitorStream()
+        List<String> otherIdentityHashCodes = output.itemStream().map(TutorAssertions::identityHashCode).toList();
+        input.itemStream()
             .map(TutorAssertions::identityHashCode)
             .forEach(current -> otherIdentityHashCodes.forEach(other ->
                     Assertions2.assertNotEquals(
@@ -36,7 +36,7 @@ public class TutorAssertions {
     }
 
     public static void assertInPlace(VisitorMySet<?> input, VisitorMySet<?> output, Context.Builder<?> context) {
-        List<String> otherIdentityHashCodes = output.visitorStream().map(TutorAssertions::identityHashCode).toList();
+        List<String> otherIdentityHashCodes = output.itemStream().map(TutorAssertions::identityHashCode).toList();
         input.stream()
             .map(TutorAssertions::identityHashCode)
             .forEach(current -> {
