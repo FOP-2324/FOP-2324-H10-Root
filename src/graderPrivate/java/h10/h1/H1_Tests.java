@@ -2,10 +2,10 @@ package h10.h1;
 
 import h10.AbstractTest;
 import h10.ListItem;
+import h10.ListItems;
 import h10.VisitorElement;
 import h10.VisitorMySet;
 import h10.utils.ListItemConverter;
-import h10.utils.ListItems;
 import h10.utils.PredicateConverter;
 import h10.utils.RubricOrder;
 import org.jetbrains.annotations.Nullable;

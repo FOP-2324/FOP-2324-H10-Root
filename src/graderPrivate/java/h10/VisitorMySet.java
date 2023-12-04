@@ -1,12 +1,10 @@
 package h10;
 
 import com.google.common.collect.Streams;
-import h10.utils.ListItems;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -86,46 +84,15 @@ public class VisitorMySet<T> extends MySet<VisitorElement<T>> implements Iterabl
 
     @Override
     public @NotNull Iterator<VisitorElement<T>> iterator() {
-        return ListItems.iterator(head);
+        return MySets.iterator(this);
     }
 
     public @NotNull Iterator<ListItem<VisitorElement<T>>> visitorIterator() {
-        return new Iterator<>() {
-
-            ListItem<VisitorElement<T>> current = null;
-
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
-
-            @Override
-            public ListItem<VisitorElement<T>> next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-                ListItem<VisitorElement<T>> tmp = current;
-                current = current.next;
-                return tmp;
-            }
-        };
+        return MySets.visitorIterator(this);
     }
 
     public @NotNull Iterator<T> rawIterator() {
-        return new Iterator<>() {
-
-            private final Iterator<VisitorElement<T>> underlying = iterator();
-
-            @Override
-            public boolean hasNext() {
-                return underlying.hasNext();
-            }
-
-            @Override
-            public T next() {
-                return underlying.next().peek();
-            }
-        };
+        return MySets.rawVisitorIterator(this);
     }
 
     public @NotNull Stream<VisitorElement<T>> stream() {
@@ -133,10 +100,10 @@ public class VisitorMySet<T> extends MySet<VisitorElement<T>> implements Iterabl
     }
 
     public @NotNull Stream<ListItem<VisitorElement<T>>> visitorStream() {
-        return Streams.stream(this::visitorIterator);
+        return MySets.visitorStream(this);
     }
 
     public @NotNull Stream<T> rawStream() {
-        return Streams.stream(this::rawIterator);
+        return MySets.rawVisitorStream(this);
     }
 }
