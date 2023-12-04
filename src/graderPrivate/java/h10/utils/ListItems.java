@@ -1,27 +1,30 @@
 package h10.utils;
 
 import h10.ListItem;
-import h10.utils.visitor.VisitorElement;
 
-import java.util.List;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class ListItems {
 
-    private ListItems() {
-    }
+    public static <T> Iterator<T> iterator(ListItem<T> head) {
+        return new Iterator<T>() {
+            private ListItem<T> current = head;
 
-    public static ListItem<VisitorElement<Integer>> toListItem(List<Integer> elements) {
-        ListItem<VisitorElement<Integer>> head = null;
-        ListItem<VisitorElement<Integer>> tail = null;
-        for (Integer element : elements) {
-            ListItem<VisitorElement<Integer>> item = new ListItem<>(new VisitorElement<>(element));
-            if (head == null) {
-                head = item;
-            } else {
-                tail.next = item;
+            @Override
+            public boolean hasNext() {
+                return current != null;
             }
-            tail = item;
-        }
-        return head;
+
+            @Override
+            public T next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                T element = current.key;
+                current = current.next;
+                return element;
+            }
+        };
     }
 }
