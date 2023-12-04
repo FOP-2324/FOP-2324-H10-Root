@@ -127,17 +127,6 @@ public class MySetAsCopy<T> extends MySet<T> {
             tail = item;
             current = current.next;
         }
-        while (otherCurrent != null) {
-            // Case 4: If this set is empty, add all remaining elements of the other set to the new set
-            ListItem<T> item = new ListItem<>(otherCurrent.key);
-            if (newHead == null) {
-                newHead = item;
-            } else {
-                tail.next = item;
-            }
-            tail = item;
-            otherCurrent = otherCurrent.next;
-        }
         return new MySetAsCopy<>(newHead, cmp);
     }
 

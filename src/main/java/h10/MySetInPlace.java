@@ -149,21 +149,6 @@ public class MySetInPlace<T> extends MySet<T> {
         }
 
         // If there are remaining elements in the current set, keep them
-        while (current != null) {
-            previous = current;
-            current = current.next;
-        }
-
-        // If there are remaining elements in the other set, remove them
-        if (otherCurrent != null) {
-            if (previous == null) {
-                // This set was empty
-                head = otherCurrent;
-            } else {
-                previous.next = otherCurrent;
-            }
-        }
-
         return this;
     }
 
