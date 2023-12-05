@@ -1,0 +1,94 @@
+[
+  {
+    "title": "H1 | subset(Predicate)",
+    "criteria": [
+      {
+        "order": 1,
+        "title": "Die Methode subset(MySet) ninmmt Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht erfüllt wird.",
+        "class": "as-copy",
+        "type": "public"
+      },
+      {
+        "order": 2,
+        "title": "Die Methode subset(MySet) gibt das korrekte Ergebnis für eine komplexe Eingabe zurück.",
+        "class": "as-copy",
+        "type": "public"
+      },
+      {
+        "order": 3,
+        "title": "Die Methode subset(MySet) ninmmt Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht erfüllt wird.",
+        "class": "in-place",
+        "type": "public"
+      },
+      {
+        "order": 4,
+        "title": "Die Methode subset(MySet) gibt das korrekte Ergebnis für eine komplexe Eingabe zurück.",
+        "class": "in-place",
+        "type": "public"
+      }
+    ]
+  },
+  {
+    "title": "H2 | cartesianProduct(MySet)",
+    "criteria": [
+      {
+        "order": 5,
+        "title": "Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.",
+        "class": "as-copy",
+        "type": "public"
+      },
+      {
+        "order": 6,
+        "title": "Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.",
+        "class": "as-copy",
+        "type": "private"
+      },
+      {
+        "order": 7,
+        "title": "Die Methode cartesianProduct(MySet) definiert den Comparator für ein Tupel korrekt.",
+        "class": "in-place",
+        "type": "private"
+      },
+      {
+        "order": 8,
+        "title": "Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.",
+        "class": "in-place",
+        "type": "public"
+      },
+      {
+        "order": 9,
+        "title": "Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.",
+        "class": "in-place",
+        "type": "private"
+      },
+      {
+        "order": 10,
+        "title": "Die Methode cartesianProduct(MySet) entkoppelt die Elemente korrekt.",
+        "class": "in-place",
+        "type": "private"
+      }
+    ]
+  },
+  {
+    "title": "H3 | difference(MySet)",
+    "criteria": [
+      {
+        "order": 11,
+        "title": "Die Methode difference(MySet) nimmt ein Element nicht auf, falls ein Element sowohl in M als auch in N ist.",
+        "class": "as-copy",
+        "type": "public"
+      },
+      {
+        "order": 12,
+        "title": "Die Methode difference(MySet) setzt die Laufvariable von der Menge M korrekt auf das nächste Element, falls x < y gilt für x in M und y in N.",
+        "class": "as-copy",
+        "type": "public"
+      }
+    ]
+  },
+  {
+    "title": "H4 | intersectionListItems(ListItem)",
+    "criteria": [
+    ]
+  }
+]

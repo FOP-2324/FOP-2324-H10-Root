@@ -19,7 +19,7 @@ import java.util.List;
 public class H2_1_Tests extends H2_Tests {
 
     @Override
-    protected Class<?> getClassType() {
+    public Class<?> getClassType() {
         return MySetAsCopy.class;
     }
 
@@ -29,9 +29,8 @@ public class H2_1_Tests extends H2_Tests {
     }
 
 
-
     @RubricOrder(classes = {MySetAsCopy.class}, criteria = {7})
-    @DisplayName("Der Comparator ist korrekt definiert.")
+    @DisplayName("Die Methode cartesianProduct(MySet) definiert den Comparator für ein Tupel korrekt.")
     @Test
     public void testComparator() {
         MySet<VisitorElement<Integer>> source = create(ListItems.of(1, 2));

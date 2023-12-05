@@ -16,6 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
 import org.junitpioneer.jupiter.json.JsonClasspathSource;
 import org.junitpioneer.jupiter.json.Property;
+import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
@@ -23,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
+@TestForSubmission
 @DisplayName("H1 | subset(MySet)")
 public abstract class H1_Tests extends AbstractTest {
 
@@ -37,7 +39,7 @@ public abstract class H1_Tests extends AbstractTest {
     protected @Nullable Context.Builder<?> context;
 
     @Override
-    protected String getMethodName() {
+    public String getMethodName() {
         return METHOD_NAME;
     }
 
@@ -70,8 +72,8 @@ public abstract class H1_Tests extends AbstractTest {
     public abstract void assertRequirement();
 
     @RubricOrder(criteria = {1, 3})
-    @DisplayName("Die Methode subset(MySet) ninmmt Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht " +
-        "erfüllt wird.")
+    @DisplayName("Die Methode subset(MySet) ninmmt Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht "
+        + "erfüllt wird.")
     @ParameterizedTest(name = "Elements = {0}")
     @JsonClasspathSource({
         TEST_RESOURCE_PATH + "criterion1_testcase1.json",
@@ -161,8 +163,10 @@ public abstract class H1_Tests extends AbstractTest {
         }
 
         // Expected size must be equal to actual size
-        Assertions2.assertFalse(expectedIt.hasNext(), context.build(), r -> "Expected list contains more element than actual list");
-        Assertions2.assertFalse(actualIt.hasNext(), context.build(), r -> "Actual list contains more element than expected list");
+        Assertions2.assertFalse(expectedIt.hasNext(), context.build(),
+            r -> "Expected list contains more element than actual list");
+        Assertions2.assertFalse(actualIt.hasNext(), context.build(),
+            r -> "Actual list contains more element than expected list");
 
         // After test actions
         set(source, result, context);

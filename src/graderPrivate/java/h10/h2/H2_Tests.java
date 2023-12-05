@@ -18,7 +18,6 @@ import org.junitpioneer.jupiter.json.Property;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
-import java.util.List;
 import java.util.Objects;
 
 public abstract class H2_Tests extends AbstractTest {
@@ -32,7 +31,8 @@ public abstract class H2_Tests extends AbstractTest {
         return METHOD_NAME;
     }
 
-    protected <T> ListItem<VisitorElement<T>> of(T... values) {
+    @SafeVarargs
+    protected final <T> ListItem<VisitorElement<T>> of(T... values) {
         ListItem<VisitorElement<T>> head = null;
         ListItem<VisitorElement<T>> tail = null;
         for (T value : values) {
@@ -59,8 +59,6 @@ public abstract class H2_Tests extends AbstractTest {
             .add("Other", other.toString());
         MySet<ListItem<VisitorElement<Integer>>> result = source.cartesianProduct(other);
         builder.add("Result", result.toString());
-
-        List<ListItem<VisitorElement<Integer>>> l = MySets.stream(result).toList();
 
         ListItems.stream(expected).forEach(tuple -> {
             if (MySets.stream(result)

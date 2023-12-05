@@ -25,7 +25,7 @@ public class ListItems {
     }
 
     public static <T> Iterator<T> iterator(ListItem<T> head) {
-        return new Iterator<T>() {
+        return new Iterator<>() {
             private ListItem<T> current = head;
 
             @Override

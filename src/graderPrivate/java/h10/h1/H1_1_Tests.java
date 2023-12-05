@@ -2,16 +2,18 @@ package h10.h1;
 
 import h10.ListItem;
 import h10.MySetAsCopy;
-import h10.TutorAssertions;
 import h10.VisitorMySet;
+import h10.utils.TutorAssertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DisplayName;
+import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 
+@TestForSubmission
 @DisplayName("H1.1 | As-Copy")
 public class H1_1_Tests extends H1_Tests {
 
     @Override
-    protected Class<?> getClassType() {
+    public Class<?> getClassType() {
         return MySetAsCopy.class;
     }
 

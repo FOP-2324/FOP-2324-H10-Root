@@ -15,7 +15,7 @@ import org.tudalgo.algoutils.tutor.general.assertions.Context;
 public class H2_2_Tests extends H2_Tests {
 
     @Override
-    protected Class<?> getClassType() {
+    public Class<?> getClassType() {
         return MySetInPlace.class;
     }
 
@@ -25,7 +25,7 @@ public class H2_2_Tests extends H2_Tests {
     }
 
     @RubricOrder(classes = {MySetInPlace.class}, criteria = {8})
-    @DisplayName("Die Elemente werden korrekt entkoppelt.")
+    @DisplayName("Die Methode cartesianProduct(MySet) entkoppelt die Elemente korrekt.")
     @Test
     public void testDecouple() {
         VisitorMySet<Integer> source = create(ListItems.of(1, 2));

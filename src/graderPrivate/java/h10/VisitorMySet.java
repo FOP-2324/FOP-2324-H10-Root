@@ -53,33 +53,6 @@ public class VisitorMySet<T> extends DelegateMySet<VisitorElement<T>> implements
         return mapper.apply(visitorHead, visitorCmp);
     }
 
-    private <R> MySet<R> delegate(Function<MySet<VisitorElement<T>>, MySet<R>> f) {
-        MySet<R> result = f.apply(underlying);
-        head = underlying.head;
-        return result;
-    }
-
-    @Override
-    public MySet<VisitorElement<T>> subset(Predicate<? super VisitorElement<T>> pred) {
-        return delegate(set -> set.subset(pred));
-    }
-
-    @Override
-    public MySet<ListItem<VisitorElement<T>>> cartesianProduct(MySet<VisitorElement<T>> other) {
-        return delegate(set -> set.cartesianProduct(other));
-    }
-
-
-    @Override
-    public MySet<VisitorElement<T>> difference(MySet<VisitorElement<T>> other) {
-        return delegate(set -> set.difference(other));
-    }
-
-    @Override
-    protected MySet<VisitorElement<T>> intersectionListItems(ListItem<ListItem<VisitorElement<T>>> heads) {
-        return delegate(set -> set.intersectionListItems(heads));
-    }
-
     @Override
     public @NotNull Iterator<VisitorElement<T>> iterator() {
         return MySets.iterator(this);

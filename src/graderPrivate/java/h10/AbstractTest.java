@@ -15,7 +15,7 @@ import java.util.List;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class AbstractTest {
 
-    public static final Comparator<Integer> DEFAULT_COMPARATOR = new Comparator<Integer>() {
+    public static final Comparator<Integer> DEFAULT_COMPARATOR = new Comparator<>() {
         @Override
         public int compare(Integer o1, Integer o2) {
             return o1.compareTo(o2);
@@ -38,9 +38,9 @@ public abstract class AbstractTest {
         method = Links.getMethodLink(type, getMethodName());
     }
 
-    protected abstract Class<?> getClassType();
+    public abstract Class<?> getClassType();
 
-    protected abstract String getMethodName();
+    public abstract String getMethodName();
 
     public TypeLink getType() {
         if (type == null) {

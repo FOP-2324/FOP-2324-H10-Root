@@ -1,5 +1,8 @@
-package h10;
+package h10.utils;
 
+import h10.ListItem;
+import h10.VisitorElement;
+import h10.VisitorMySet;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
@@ -40,14 +43,13 @@ public class TutorAssertions {
         input.stream()
             .map(TutorAssertions::identityHashCode)
             .forEach(current -> {
-                    if (otherIdentityHashCodes.stream().anyMatch(current::equals)) {
-                        Assertions2.fail(
-                            context.add("Node before operation", current)
-                                .add("Node after operation", "Not found")
-                                .build(),
-                            r -> "Cannot find the same node after the operation. Node was probably copied.");
-                    }
+                if (otherIdentityHashCodes.stream().anyMatch(current::equals)) {
+                    Assertions2.fail(
+                        context.add("Node before operation", current)
+                            .add("Node after operation", "Not found")
+                            .build(),
+                        r -> "Cannot find the same node after the operation. Node was probably copied.");
                 }
-            );
+            });
     }
 }
