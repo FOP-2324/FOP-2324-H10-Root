@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 
 public abstract class PredicateConverter<T> implements ArgumentConverter {
 
-
     @Override
     public Predicate<T> convert(Object o, ParameterContext parameterContext) throws ArgumentConversionException {
         if (!(o instanceof String string)) {

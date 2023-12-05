@@ -7,11 +7,13 @@ import h10.VisitorElement;
 import h10.VisitorMySet;
 import h10.utils.ListItemConverter;
 import h10.utils.PredicateConverter;
-import h10.utils.RubricOrder;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
 import org.junitpioneer.jupiter.json.JsonClasspathSource;
@@ -26,6 +28,7 @@ import java.util.function.Predicate;
 
 @TestForSubmission
 @DisplayName("H1 | subset(MySet)")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public abstract class H1_Tests extends AbstractTest {
 
     protected static final String TEST_RESOURCE_PATH = "h1/";
@@ -71,9 +74,9 @@ public abstract class H1_Tests extends AbstractTest {
 
     public abstract void assertRequirement();
 
-    @RubricOrder(criteria = {1, 3})
+    @Order(0)
     @DisplayName("Die Methode subset(MySet) ninmmt Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht "
-        + "erfüllt wird.")
+        +"erfüllt wird.")
     @ParameterizedTest(name = "Elements = {0}")
     @JsonClasspathSource({
         TEST_RESOURCE_PATH + "criterion1_testcase1.json",
@@ -88,7 +91,7 @@ public abstract class H1_Tests extends AbstractTest {
         Predicate<? super VisitorElement<Integer>> predicate = new Predicate<>() {
             @Override
             public boolean test(VisitorElement<Integer> element) {
-                // Explicitly call this in order to mark the node as visited
+                // Explicitly call this to mark the node as visited
                 element.visit();
                 return false;
             }
@@ -116,7 +119,7 @@ public abstract class H1_Tests extends AbstractTest {
         set(source, result, context);
     }
 
-    @RubricOrder(criteria = {2, 3})
+    @Order(1)
     @DisplayName("Die Methode subset(MySet) gibt das korrekte Ergebnis für eine komplexe Eingabe zurück.")
     @ParameterizedTest(name = "Elements = {0}")
     @JsonClasspathSource({

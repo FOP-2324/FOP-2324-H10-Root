@@ -3,7 +3,7 @@ package h10;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
-public class MySets {
+public final class MySets {
 
     public static <T> Iterator<T> iterator(MySet<T> set) {
         return ListItems.iterator(set.head);

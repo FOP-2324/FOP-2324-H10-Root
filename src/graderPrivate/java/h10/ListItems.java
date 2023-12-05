@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
-public class ListItems {
+public final class ListItems {
 
     @SafeVarargs
     public static <T> ListItem<T> of(T... elements) {

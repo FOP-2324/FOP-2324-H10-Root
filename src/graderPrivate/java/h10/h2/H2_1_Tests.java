@@ -7,15 +7,18 @@ import h10.MySet;
 import h10.MySetAsCopy;
 import h10.VisitorElement;
 import h10.VisitorMySet;
-import h10.utils.RubricOrder;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
 import java.util.Comparator;
 import java.util.List;
 
+@TestForSubmission
+@DisplayName("H2.1 | As-Copy")
 public class H2_1_Tests extends H2_Tests {
 
     @Override
@@ -29,7 +32,7 @@ public class H2_1_Tests extends H2_Tests {
     }
 
 
-    @RubricOrder(classes = {MySetAsCopy.class}, criteria = {7})
+    @Order(2)
     @DisplayName("Die Methode cartesianProduct(MySet) definiert den Comparator für ein Tupel korrekt.")
     @Test
     public void testComparator() {

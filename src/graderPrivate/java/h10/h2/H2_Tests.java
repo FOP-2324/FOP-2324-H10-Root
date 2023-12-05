@@ -9,17 +9,23 @@ import h10.VisitorElement;
 import h10.VisitorMySet;
 import h10.utils.ListItemConverter;
 import h10.utils.ListItemInListItemConverter;
-import h10.utils.RubricOrder;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
 import org.junitpioneer.jupiter.json.JsonClasspathSource;
 import org.junitpioneer.jupiter.json.Property;
+import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
 import java.util.Objects;
 
+@TestForSubmission
+@DisplayName("H2 | cartesianProduct(MySet)")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public abstract class H2_Tests extends AbstractTest {
 
     protected static final String TEST_RESOURCE_PATH = "h2/";
@@ -73,8 +79,8 @@ public abstract class H2_Tests extends AbstractTest {
         });
     }
 
-    @RubricOrder(criteria = {5, 9})
-    @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
+    @Order(0)
+    @DisplayName( "Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
     @ParameterizedTest(name = "Source = {0}, Other {1}")
     @JsonClasspathSource({
         TEST_RESOURCE_PATH + "criterion1_testcase1.json",
@@ -88,7 +94,7 @@ public abstract class H2_Tests extends AbstractTest {
         assertTuples(head, otherHead, expected);
     }
 
-    @RubricOrder(criteria = {6, 10})
+    @Order(1)
     @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.")
     @ParameterizedTest(name = "Source = {0}, Other {1}")
     @JsonClasspathSource({

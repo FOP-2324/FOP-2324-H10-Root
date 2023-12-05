@@ -8,7 +8,7 @@ import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
 import java.util.List;
 
-public class TutorAssertions {
+public final class TutorAssertions {
 
     private TutorAssertions() {
 

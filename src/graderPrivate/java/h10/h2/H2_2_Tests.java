@@ -6,12 +6,14 @@ import h10.MySet;
 import h10.MySetInPlace;
 import h10.VisitorElement;
 import h10.VisitorMySet;
-import h10.utils.RubricOrder;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
-
+@TestForSubmission
+@DisplayName("H2.1 | In-Place")
 public class H2_2_Tests extends H2_Tests {
 
     @Override
@@ -24,8 +26,8 @@ public class H2_2_Tests extends H2_Tests {
         return new VisitorMySet<>(head, DEFAULT_COMPARATOR, MySetInPlace::new);
     }
 
-    @RubricOrder(classes = {MySetInPlace.class}, criteria = {8})
-    @DisplayName("Die Methode cartesianProduct(MySet) entkoppelt die Elemente korrekt.")
+    @Order(2)
+    @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
     @Test
     public void testDecouple() {
         VisitorMySet<Integer> source = create(ListItems.of(1, 2));
