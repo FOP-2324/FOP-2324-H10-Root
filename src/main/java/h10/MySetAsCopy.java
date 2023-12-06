@@ -113,6 +113,8 @@ public class MySetAsCopy<T> extends MySet<T> {
                 // element in this set
                 // E.g. this set: 1, 2, 3, 4, 5 and other set: 0, 1, 2, 3, 4
                 // Since 0 < 1, move the pointer of the other set to the next element
+                // Also move the current set pointer since we already added the element to the new set
+                current = current.next;
                 otherCurrent = otherCurrent.next;
             }
         }
