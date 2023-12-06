@@ -31,7 +31,6 @@ public class H2_1_Tests extends H2_Tests {
         return new VisitorMySet<>(head, DEFAULT_COMPARATOR, MySetAsCopy::new);
     }
 
-
     @Order(2)
     @DisplayName("Die Methode cartesianProduct(MySet) definiert den Comparator für ein Tupel korrekt.")
     @Test
