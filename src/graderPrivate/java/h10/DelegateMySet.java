@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -61,5 +62,23 @@ public class DelegateMySet<T> extends MySet<T> implements Iterable<T> {
 
     public Stream<T> stream() {
         return ListItems.stream(head);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) return false;
+        DelegateMySet<?> that = (DelegateMySet<?>) o;
+        return Objects.equals(underlying, that.underlying);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(underlying);
     }
 }
