@@ -86,13 +86,23 @@ public class MySetAsCopy<T> extends MySet<T> {
 
         while (current != null && otherCurrent != null) {
             int compare = cmp.compare(current.key, otherCurrent.key);
-            if (compare == 0) {
-                // Case 1: Skip both elements on both sets if they are equal
+            if (compare > 0) {
+                // Case 1: Since the element in the other set is smaller than the element in this set,
+                // we need to check the next element in the other set if it is equal, smaller or greater to the current
+                // element in this set
+                // E.g. this set: 1, 2, 3, 4, 5 and other set: 0, 1, 2, 3, 4
+                // Since 0 < 1, move the pointer of the other set to the next element
+                // Also move the current set pointer since we already added the element to the new set
+                otherCurrent = otherCurrent.next;
+                continue;
+            } else if (compare == 0) {
+                // Case 2: Skip both elements on both sets if they are equal
                 current = current.next;
                 otherCurrent = otherCurrent.next;
                 continue;
             }
-            // Case 2: If they are not equal, always add the element to the new set
+
+            // Case 3: If they are not equal, always add the element to the new set
             ListItem<T> item = new ListItem<>(current.key);
             if (newHead == null) {
                 newHead = item;
@@ -100,23 +110,13 @@ public class MySetAsCopy<T> extends MySet<T> {
                 tail.next = item;
             }
             tail = item;
-            if (compare < 0) {
-                // Case 2.1: Since the element in the other set is greater than the element in this set,
-                // we need to check the next element in this set if it is equal, smaller or greater to the current
-                // element in the other set
-                // E.g. this set: 1, 2, 3, 4, 5 and other set: 2, 3, 4, 5, 6
-                // Since 1 < 2, move the pointer of this set to the next element
-                current = current.next;
-            } else {
-                // Case 2.2: Since the element in the other set is smaller than the element in this set,
-                // we need to check the next element in the other set if it is equal, smaller or greater to the current
-                // element in this set
-                // E.g. this set: 1, 2, 3, 4, 5 and other set: 0, 1, 2, 3, 4
-                // Since 0 < 1, move the pointer of the other set to the next element
-                // Also move the current set pointer since we already added the element to the new set
-                current = current.next;
-                otherCurrent = otherCurrent.next;
-            }
+
+            // Since the element in the other set is greater than the element in this set,
+            // we need to check the next element in this set if it is equal, smaller or greater to the current
+            // element in the other set
+            // E.g. this set: 1, 2, 3, 4, 5 and other set: 2, 3, 4, 5, 6
+            // Since 1 < 2, move the pointer of this set to the next element
+            current = current.next;
         }
         while (current != null) {
             // Case 3: If the other set is empty, add all remaining elements of this set to the new set
