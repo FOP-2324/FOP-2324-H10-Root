@@ -1,5 +1,7 @@
 package h10;
 
+import h10.utils.ListItems;
+import h10.utils.Streamable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
@@ -9,17 +11,36 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class DelegateMySet<T> extends MySet<T> implements Iterable<T> {
+public class DecoratorSet<T> extends MySet<T> implements Iterable<T>, Streamable<T> {
 
     protected final MySet<T> underlying;
 
-    public DelegateMySet(MySet<T> underlying) {
+    public DecoratorSet(MySet<T> underlying) {
         super(underlying.head, underlying.cmp);
         this.underlying = underlying;
     }
 
+    public DecoratorSet(MySet<T> underlying, Comparator<? super T> cmp) {
+        super(underlying.head, cmp);
+        this.underlying = underlying;
+    }
+
+    @Override
+    protected boolean isPairwiseDifferent(ListItem<T> head, Comparator<? super T> cmp) {
+        // Do not check since underlying must fulfill the properties anyway
+        return true;
+    }
+
+    @Override
+    protected boolean isOrdered(ListItem<T> head, Comparator<? super T> cmp) {
+        // Do not check since underlying must fulfill the properties anyway
+        return true;
+    }
+
     protected <R> MySet<R> delegate(Function<MySet<T>, MySet<R>> f) {
         MySet<R> result = f.apply(underlying);
+
+        // In-Place override head
         if (result instanceof MySetInPlace<R>) {
             head = underlying.head;
         }
@@ -46,8 +67,8 @@ public class DelegateMySet<T> extends MySet<T> implements Iterable<T> {
         return delegate(s -> s.intersectionListItems(heads));
     }
 
-    public Comparator<? super T> getComparator() {
-        return underlying.cmp;
+    public ListItem<T> getHead() {
+        return underlying.head;
     }
 
     public void setHead(ListItem<T> head) {
@@ -55,13 +76,8 @@ public class DelegateMySet<T> extends MySet<T> implements Iterable<T> {
         this.underlying.head = head;
     }
 
-    @Override
-    public @NotNull Iterator<T> iterator() {
-        return ListItems.iterator(head);
-    }
-
-    public Stream<T> stream() {
-        return ListItems.stream(head);
+    public Comparator<? super T> getCmp() {
+        return cmp;
     }
 
     @Override
@@ -73,12 +89,23 @@ public class DelegateMySet<T> extends MySet<T> implements Iterable<T> {
             return false;
         }
         if (!super.equals(o)) return false;
-        DelegateMySet<?> that = (DelegateMySet<?>) o;
+        DecoratorSet<?> that = (DecoratorSet<?>) o;
         return Objects.equals(underlying, that.underlying);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(underlying);
+    }
+
+    @NotNull
+    @Override
+    public Iterator<T> iterator() {
+        return ListItems.iterator(head);
+    }
+
+    @Override
+    public Stream<T> stream() {
+        return ListItems.stream(head);
     }
 }

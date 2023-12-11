@@ -1,12 +1,11 @@
 package h10.h2;
 
-import h10.DelegateMySet;
+import h10.DecoratorSet;
 import h10.ListItem;
-import h10.ListItems;
+import h10.utils.ListItems;
 import h10.MySet;
 import h10.MySetAsCopy;
-import h10.VisitorElement;
-import h10.VisitorMySet;
+import h10.visitor.VisitorElement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -16,6 +15,7 @@ import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.BiFunction;
 
 @TestForSubmission
 @DisplayName("H2.1 | As-Copy")
@@ -27,8 +27,8 @@ public class H2_1_Tests extends H2_Tests {
     }
 
     @Override
-    public VisitorMySet<Integer> create(ListItem<Integer> head) {
-        return new VisitorMySet<>(head, DEFAULT_COMPARATOR, MySetAsCopy::new);
+    protected BiFunction<ListItem<VisitorElement<Integer>>, Comparator<? super VisitorElement<Integer>>, MySet<VisitorElement<Integer>>> mapper() {
+        return MySetAsCopy::new;
     }
 
     @Order(2)
@@ -40,9 +40,9 @@ public class H2_1_Tests extends H2_Tests {
         Context.Builder<?> builder = defaultBuilder()
             .add("Source", source.toString())
             .add("Other", other.toString());
-        DelegateMySet<ListItem<VisitorElement<Integer>>> result = new DelegateMySet<>(source.cartesianProduct(other));
+        DecoratorSet<ListItem<VisitorElement<Integer>>> result = new DecoratorSet<>(source.cartesianProduct(other));
         builder.add("Result", result.toString());
-        Comparator<? super ListItem<VisitorElement<Integer>>> cmp = result.getComparator();
+        Comparator<? super ListItem<VisitorElement<Integer>>> cmp = result.getCmp();
 
         ListItem<VisitorElement<Integer>> data1 = of(1, 5);
         ListItem<VisitorElement<Integer>> data2 = of(1, 6);

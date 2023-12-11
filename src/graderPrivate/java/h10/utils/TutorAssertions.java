@@ -1,8 +1,8 @@
 package h10.utils;
 
 import h10.ListItem;
-import h10.VisitorElement;
-import h10.VisitorMySet;
+import h10.visitor.Visitable;
+import h10.visitor.VisitorElement;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
@@ -22,9 +22,9 @@ public final class TutorAssertions {
         return item.getClass().getName() + "@" + System.identityHashCode(item);
     }
 
-    public static void assertAsCopy(VisitorMySet<?> input, VisitorMySet<?> output, Context.Builder<?> context) {
-        List<String> otherIdentityHashCodes = output.itemStream().map(TutorAssertions::identityHashCode).toList();
-        input.itemStream()
+    public static void assertAsCopy(Visitable<?> input, Visitable<?> output, Context.Builder<?> context) {
+        List<String> otherIdentityHashCodes = output.underlyingStream().map(TutorAssertions::identityHashCode).toList();
+        input.underlyingStream()
             .map(TutorAssertions::identityHashCode)
             .forEach(current -> otherIdentityHashCodes.forEach(other ->
                     Assertions2.assertNotEquals(
@@ -38,8 +38,8 @@ public final class TutorAssertions {
             );
     }
 
-    public static void assertInPlace(VisitorMySet<?> input, VisitorMySet<?> output, Context.Builder<?> context) {
-        List<String> otherIdentityHashCodes = output.itemStream().map(TutorAssertions::identityHashCode).toList();
+    public static void assertInPlace(Visitable<?> input, Visitable<?> output, Context.Builder<?> context) {
+        List<String> otherIdentityHashCodes = output.underlyingStream().map(TutorAssertions::identityHashCode).toList();
         input.stream()
             .map(TutorAssertions::identityHashCode)
             .forEach(current -> {

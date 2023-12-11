@@ -2,11 +2,11 @@ package h10.h1;
 
 import h10.AbstractTest;
 import h10.ListItem;
-import h10.ListItems;
-import h10.VisitorElement;
-import h10.VisitorMySet;
-import h10.utils.ListItemConverter;
-import h10.utils.PredicateConverter;
+import h10.VisitorSet;
+import h10.utils.ListItems;
+import h10.utils.converter.ListItemConverter;
+import h10.utils.converter.PredicateConverter;
+import h10.visitor.VisitorElement;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assumptions;
@@ -35,9 +35,9 @@ public abstract class H1_Tests extends AbstractTest {
 
     protected static final String METHOD_NAME = "subset";
 
-    protected @Nullable VisitorMySet<Integer> source;
+    protected @Nullable VisitorSet<Integer> source;
 
-    protected @Nullable VisitorMySet<Integer> result;
+    protected @Nullable VisitorSet<Integer> result;
 
     protected @Nullable Context.Builder<?> context;
 
@@ -52,7 +52,7 @@ public abstract class H1_Tests extends AbstractTest {
         assertRequirement();
     }
 
-    private void set(VisitorMySet<Integer> source, VisitorMySet<Integer> result, Context.Builder<?> context) {
+    private void set(VisitorSet<Integer> source, VisitorSet<Integer> result, Context.Builder<?> context) {
         this.source = source;
         this.result = result;
         this.context = context;
@@ -61,9 +61,10 @@ public abstract class H1_Tests extends AbstractTest {
     public void assertVisitation() {
         Assumptions.assumeTrue(source != null);
         Assumptions.assumeTrue(context != null);
+
         // Nodes must be visited only once
         List<VisitorElement<Integer>> failed = source.stream()
-            .filter(element -> element.getVisited() > 1)
+            .filter(element -> element.visited() > 1)
             .toList();
         Assertions2.assertTrue(
             failed.isEmpty(),
@@ -76,7 +77,7 @@ public abstract class H1_Tests extends AbstractTest {
 
     @Order(0)
     @DisplayName("Die Methode subset(MySet) ninmmt Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht "
-        +"erfüllt wird.")
+        + "erfüllt wird.")
     @ParameterizedTest(name = "Elements = {0}")
     @JsonClasspathSource({
         TEST_RESOURCE_PATH + "criterion1_testcase1.json",
@@ -86,7 +87,7 @@ public abstract class H1_Tests extends AbstractTest {
     public void testPredicateFalse(
         @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> head
     ) {
-        VisitorMySet<Integer> source = create(head);
+        VisitorSet<Integer> source = create(head);
         // Drop all elements
         Predicate<? super VisitorElement<Integer>> predicate = new Predicate<>() {
             @Override
@@ -105,7 +106,7 @@ public abstract class H1_Tests extends AbstractTest {
             .add("Comparator", DEFAULT_COMPARATOR)
             .add("Predicate", predicate)
             .add("Source", source.toString());
-        VisitorMySet<Integer> result = new VisitorMySet<>(source.subset(predicate));
+        VisitorSet<Integer> result = new VisitorSet<>(source.subset(predicate), mapper());
         context.add("Result", result.toString());
 
         // Since we the predicate drop all elements, the head of the set must be null
@@ -132,7 +133,7 @@ public abstract class H1_Tests extends AbstractTest {
         @ConvertWith(PredicateConverter.BasicIntMath.class) @Property("predicate") Predicate<Integer> predicate,
         @ConvertWith(ListItemConverter.Int.class) @Property("expected") ListItem<Integer> expected
     ) {
-        VisitorMySet<Integer> source = create(head);
+        VisitorSet<Integer> source = create(head);
         Predicate<VisitorElement<Integer>> test = new Predicate<>() {
             @Override
             public boolean test(VisitorElement<Integer> x) {
@@ -149,11 +150,11 @@ public abstract class H1_Tests extends AbstractTest {
             .add("Comparator", DEFAULT_COMPARATOR)
             .add("Predicate", test)
             .add("Source", source.toString());
-        VisitorMySet<Integer> result = new VisitorMySet<>(source.subset(test));
+        VisitorSet<Integer> result = create(source.subset(test));
         context.add("Result", result.toString());
 
         Iterator<Integer> expectedIt = ListItems.iterator(expected);
-        Iterator<Integer> actualIt = result.rawIterator();
+        Iterator<Integer> actualIt = result.peekIterator();
 
         while (expectedIt.hasNext() && actualIt.hasNext()) {
             int e = expectedIt.next();

@@ -1,4 +1,4 @@
-package h10;
+package h10.visitor;
 
 import java.util.Objects;
 
@@ -11,7 +11,6 @@ public class VisitorElement<T> {
     public VisitorElement(T element) {
         this.element = element;
     }
-
 
     public T peek() {
         return element;
@@ -26,8 +25,12 @@ public class VisitorElement<T> {
         visited++;
     }
 
-    public int getVisited() {
+    public int visited() {
         return visited;
+    }
+
+    public void reduce(int count) {
+        visited -= count;
     }
 
     public void reset() {
@@ -48,7 +51,7 @@ public class VisitorElement<T> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(element, getVisited());
+        return Objects.hash(element, visited);
     }
 
     @Override

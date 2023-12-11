@@ -2,13 +2,13 @@ package h10.h2;
 
 import h10.AbstractTest;
 import h10.ListItem;
-import h10.ListItems;
 import h10.MySet;
-import h10.MySets;
-import h10.VisitorElement;
-import h10.VisitorMySet;
-import h10.utils.ListItemConverter;
-import h10.utils.ListItemInListItemConverter;
+import h10.Sets;
+import h10.VisitorSet;
+import h10.utils.ListItems;
+import h10.utils.converter.ListItemConverter;
+import h10.utils.converter.ListItemInListItemConverter;
+import h10.visitor.VisitorElement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -58,8 +58,8 @@ public abstract class H2_Tests extends AbstractTest {
         ListItem<Integer> otherHead,
         ListItem<ListItem<Integer>> expected
     ) {
-        VisitorMySet<Integer> source = create(head);
-        VisitorMySet<Integer> other = create(otherHead);
+        VisitorSet<Integer> source = create(head);
+        VisitorSet<Integer> other = create(otherHead);
         Context.Builder<?> builder = defaultBuilder()
             .add("Source", source.toString())
             .add("Other", other.toString());
@@ -67,7 +67,7 @@ public abstract class H2_Tests extends AbstractTest {
         builder.add("Result", result.toString());
 
         ListItems.stream(expected).forEach(tuple -> {
-            if (MySets.stream(result)
+            if (Sets.stream(result)
                 .noneMatch(actual -> Objects.equals(tuple.key, actual.key.peek())
                     && tuple.next != null && actual.next != null
                     && Objects.equals(tuple.next.key, actual.next.key.peek()))) {
@@ -80,7 +80,7 @@ public abstract class H2_Tests extends AbstractTest {
     }
 
     @Order(0)
-    @DisplayName( "Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
+    @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
     @ParameterizedTest(name = "Source = {0}, Other {1}")
     @JsonClasspathSource({
         TEST_RESOURCE_PATH + "criterion1_testcase1.json",
