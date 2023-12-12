@@ -14,7 +14,7 @@ public class VisitorSet<T> extends DecoratorSet<VisitorElement<T>> implements Vi
 
     protected BiFunction<ListItem<VisitorElement<T>>, Comparator<? super VisitorElement<T>>, MySet<VisitorElement<T>>> converter;
 
-    public VisitorSet(
+    protected VisitorSet(
         MySet<VisitorElement<T>> underlying,
         BiFunction<ListItem<VisitorElement<T>>, Comparator<? super VisitorElement<T>>, MySet<VisitorElement<T>>> converter
     ) {
@@ -22,7 +22,7 @@ public class VisitorSet<T> extends DecoratorSet<VisitorElement<T>> implements Vi
         this.converter = converter;
     }
 
-    public VisitorSet(
+    protected VisitorSet(
         ListItem<T> head,
         Comparator<? super T> cmp,
         BiFunction<ListItem<VisitorElement<T>>, Comparator<? super VisitorElement<T>>, MySet<VisitorElement<T>>> converter
@@ -31,10 +31,34 @@ public class VisitorSet<T> extends DecoratorSet<VisitorElement<T>> implements Vi
     }
 
     public static <T> VisitorSet<T> of(
+        MySet<VisitorElement<T>> underlying,
+        BiFunction<ListItem<VisitorElement<T>>, Comparator<? super VisitorElement<T>>, MySet<VisitorElement<T>>> converter
+    ) {
+        VisitorSet<T> wrapped = new VisitorSet<>(underlying, converter);
+        VisitorFix<T> visitorFix = new VisitorFix<>(wrapped);
+        visitorFix.apply();
+        return wrapped;
+    }
+
+    public static <T> VisitorSet<T> of(
+        ListItem<T> head,
+        Comparator<? super T> cmp,
+        BiFunction<ListItem<VisitorElement<T>>, Comparator<? super VisitorElement<T>>, MySet<VisitorElement<T>>> converter
+    ) {
+        VisitorSet<T> wrapped = new VisitorSet<>(head, cmp, converter);
+        VisitorFix<T> visitorFix = new VisitorFix<>(wrapped);
+        visitorFix.apply();
+        return wrapped;
+    }
+
+    public static <T> VisitorSet<T> convert(
         MySet<T> underlying,
         BiFunction<ListItem<VisitorElement<T>>, Comparator<? super VisitorElement<T>>, MySet<VisitorElement<T>>> converter
     ) {
-        return new VisitorSet<>(underlying.head, underlying.cmp, converter);
+        VisitorSet<T> wrapped = new VisitorSet<>(underlying.head, underlying.cmp, converter);
+        VisitorFix<T> visitorFix = new VisitorFix<>(wrapped);
+        visitorFix.apply();
+        return wrapped;
     }
 
     @Override
@@ -55,5 +79,32 @@ public class VisitorSet<T> extends DecoratorSet<VisitorElement<T>> implements Vi
     @Override
     public Stream<ListItem<VisitorElement<T>>> underlyingStream() {
         return VisitorSets.underlyingStream(this);
+    }
+
+    private static class VisitorFix<T> extends VisitorSet<T> {
+
+        private VisitorSet<T> toFix;
+
+        public VisitorFix(VisitorSet<T> toFix) {
+            super(
+                toFix.converter.apply(
+                    ListItems.map(toFix.head, element -> new VisitorElement<>(element.peek())), toFix.cmp),
+                toFix.converter
+            );
+            this.toFix = toFix;
+        }
+
+        public void apply() {
+            if (toFix == null) {
+                return;
+            }
+            for (ListItem<VisitorElement<T>> current = toFix.head,
+                 other = head; current != null && other != null;
+                 current = current.next, other = other.next
+            ) {
+                current.key.reduce(other.key.visited());
+            }
+            toFix = null;
+        }
     }
 }

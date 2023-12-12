@@ -1,4 +1,4 @@
-package h10.h2;
+package h10.rubric.h2;
 
 import h10.DecoratorSet;
 import h10.ListItem;

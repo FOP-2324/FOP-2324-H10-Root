@@ -1,4 +1,4 @@
-package h10.h2;
+package h10.rubric.h2;
 
 import h10.AbstractTest;
 import h10.ListItem;
@@ -6,8 +6,8 @@ import h10.MySet;
 import h10.Sets;
 import h10.VisitorSet;
 import h10.utils.ListItems;
-import h10.utils.converter.ListItemConverter;
-import h10.utils.converter.ListItemInListItemConverter;
+import h10.converter.ListItemConverter;
+import h10.converter.ListItemInListItemConverter;
 import h10.visitor.VisitorElement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;

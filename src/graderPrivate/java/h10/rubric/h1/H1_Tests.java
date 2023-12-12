@@ -1,11 +1,11 @@
-package h10.h1;
+package h10.rubric.h1;
 
 import h10.AbstractTest;
 import h10.ListItem;
 import h10.VisitorSet;
 import h10.utils.ListItems;
-import h10.utils.converter.ListItemConverter;
-import h10.utils.converter.PredicateConverter;
+import h10.converter.ListItemConverter;
+import h10.converter.PredicateConverter;
 import h10.visitor.VisitorElement;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
@@ -106,7 +106,7 @@ public abstract class H1_Tests extends AbstractTest {
             .add("Comparator", DEFAULT_COMPARATOR)
             .add("Predicate", predicate)
             .add("Source", source.toString());
-        VisitorSet<Integer> result = new VisitorSet<>(source.subset(predicate), mapper());
+        VisitorSet<Integer> result = VisitorSet.of(source.subset(predicate), mapper());
         context.add("Result", result.toString());
 
         // Since we the predicate drop all elements, the head of the set must be null

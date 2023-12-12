@@ -60,15 +60,11 @@ public abstract class AbstractTest {
     protected abstract BiFunction<ListItem<VisitorElement<Integer>>, Comparator<? super VisitorElement<Integer>>, MySet<VisitorElement<Integer>>> mapper();
 
     public VisitorSet<Integer> create(ListItem<Integer> head) {
-        VisitorSet<Integer> set = new VisitorSet<>(head, DEFAULT_COMPARATOR, mapper());
-        Tracker.fix(set);
-        return set;
+        return VisitorSet.of(head, DEFAULT_COMPARATOR, mapper());
     }
 
     public VisitorSet<Integer> create(MySet<VisitorElement<Integer>> set) {
-        VisitorSet<Integer> result = new VisitorSet<>(set, mapper());
-        Tracker.fix(result);
-        return result;
+        return VisitorSet.of(set, mapper());
     }
 
     public Context.Builder<?> defaultBuilder() {

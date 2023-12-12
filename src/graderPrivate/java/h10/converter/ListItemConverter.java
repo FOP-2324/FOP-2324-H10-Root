@@ -1,4 +1,4 @@
-package h10.utils.converter;
+package h10.converter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
