@@ -1,13 +1,13 @@
 package h10.rubric.h2;
 
-import h10.rubric.AbstractTest;
 import h10.ListItem;
 import h10.MySet;
 import h10.Sets;
 import h10.VisitorSet;
-import h10.utils.ListItems;
 import h10.converter.ListItemConverter;
 import h10.converter.ListItemInListItemConverter;
+import h10.rubric.AbstractTest;
+import h10.utils.ListItems;
 import h10.visitor.VisitorElement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -53,6 +53,21 @@ public abstract class H2_Tests extends AbstractTest {
         return head;
     }
 
+    @Order(0)
+    @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
+    @ParameterizedTest(name = "Source = {0}, Other {1}")
+    @JsonClasspathSource({
+        TEST_RESOURCE_PATH + "criterion1_testcase1.json",
+        TEST_RESOURCE_PATH + "criterion1_testcase2.json",
+    })
+    public void testSimple(
+        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> head,
+        @ConvertWith(ListItemConverter.Int.class) @Property("otherHead") ListItem<Integer> otherHead,
+        @ConvertWith(ListItemInListItemConverter.Int.class) @Property("expected") ListItem<ListItem<Integer>> expected
+    ) {
+        assertTuples(head, otherHead, expected);
+    }
+
     private void assertTuples(
         ListItem<Integer> head,
         ListItem<Integer> otherHead,
@@ -77,21 +92,6 @@ public abstract class H2_Tests extends AbstractTest {
                 );
             }
         });
-    }
-
-    @Order(0)
-    @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
-    @ParameterizedTest(name = "Source = {0}, Other {1}")
-    @JsonClasspathSource({
-        TEST_RESOURCE_PATH + "criterion1_testcase1.json",
-        TEST_RESOURCE_PATH + "criterion1_testcase2.json",
-    })
-    public void testSimple(
-        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> head,
-        @ConvertWith(ListItemConverter.Int.class) @Property("otherHead") ListItem<Integer> otherHead,
-        @ConvertWith(ListItemInListItemConverter.Int.class) @Property("expected") ListItem<ListItem<Integer>> expected
-    ) {
-        assertTuples(head, otherHead, expected);
     }
 
     @Order(1)

@@ -19,8 +19,6 @@ import java.util.function.BiFunction;
 
 public abstract class AbstractComplexTest extends AbstractTest {
 
-    protected abstract BiFunction<VisitorSet<Integer>, VisitorSet<Integer>, MySet<VisitorElement<Integer>>> operation();
-
     public void testNotAddElements(
         @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> sourceHead,
         @ConvertWith(ListItemConverter.Int.class) @Property("other") ListItem<Integer> otherHead,
@@ -37,6 +35,17 @@ public abstract class AbstractComplexTest extends AbstractTest {
         builder.add("Result", result.toString());
         Assertions2.assertEquals(expected, result, builder.build(),
             r -> "Expected set %s, but given %s".formatted(expected, result));
+    }
+
+    protected abstract BiFunction<VisitorSet<Integer>, VisitorSet<Integer>, MySet<VisitorElement<Integer>>> operation();
+
+    public void testXSmallerY(
+        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> sourceHead,
+        @ConvertWith(ListItemConverter.Int.class) @Property("other") ListItem<Integer> otherHead,
+        @ConvertWith(ArrayConverter.Auto.class) @Property("sourceVisitation") Integer[] sourceVisitation,
+        @ConvertWith(ArrayConverter.Auto.class) @Property("otherVisitation") Integer[] otherVisitation
+    ) {
+        assertPointers(sourceHead, otherHead, sourceVisitation, otherVisitation);
     }
 
     protected void assertPointers(
@@ -82,15 +91,6 @@ public abstract class AbstractComplexTest extends AbstractTest {
                     r -> "Expected %s not to be visited, but was visited".formatted(element));
             }
         }
-    }
-
-    public void testXSmallerY(
-        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> sourceHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("other") ListItem<Integer> otherHead,
-        @ConvertWith(ArrayConverter.Auto.class) @Property("sourceVisitation") Integer[] sourceVisitation,
-        @ConvertWith(ArrayConverter.Auto.class) @Property("otherVisitation") Integer[] otherVisitation
-    ) {
-        assertPointers(sourceHead, otherHead, sourceVisitation, otherVisitation);
     }
 
     public void testXGreaterY(

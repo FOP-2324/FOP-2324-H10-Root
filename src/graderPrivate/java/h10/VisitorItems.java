@@ -12,14 +12,13 @@ public final class VisitorItems {
     private VisitorItems() {
     }
 
+    public static <T> Stream<T> peekStream(ListItem<VisitorElement<T>> head) {
+        return Streams.stream(() -> peekIterator(head));
+    }
+
     public static <T> Iterator<T> peekIterator(ListItem<VisitorElement<T>> head) {
         return new Iterator<>() {
             private ListItem<VisitorElement<T>> current = head;
-
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
 
             @Override
             public T next() {
@@ -30,21 +29,21 @@ public final class VisitorItems {
                 current = current.next;
                 return element;
             }
-        };
-    }
-
-    public static <T> Stream<T> peekStream(ListItem<VisitorElement<T>> head) {
-        return Streams.stream(() -> peekIterator(head));
-    }
-
-    public static <T> Iterator<ListItem<T>> underlyingIterator(ListItem<T> head) {
-        return new Iterator<>() {
-            private ListItem<T> current = head;
 
             @Override
             public boolean hasNext() {
                 return current != null;
             }
+        };
+    }
+
+    public static <T> Stream<ListItem<VisitorElement<T>>> underlyingStream(ListItem<VisitorElement<T>> head) {
+        return Streams.stream(() -> underlyingIterator(head));
+    }
+
+    public static <T> Iterator<ListItem<T>> underlyingIterator(ListItem<T> head) {
+        return new Iterator<>() {
+            private ListItem<T> current = head;
 
             @Override
             public ListItem<T> next() {
@@ -55,10 +54,11 @@ public final class VisitorItems {
                 current = current.next;
                 return element;
             }
-        };
-    }
 
-    public static <T> Stream<ListItem<VisitorElement<T>>> underlyingStream(ListItem<VisitorElement<T>> head) {
-        return Streams.stream(() -> underlyingIterator(head));
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+        };
     }
 }

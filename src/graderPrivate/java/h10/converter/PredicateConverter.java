@@ -72,18 +72,6 @@ public abstract class PredicateConverter<T> implements ArgumentConverter {
             return predicate;
         }
 
-        private String toString(int y, String op) {
-            return switch (op) {
-                case "==" -> " == " + y;
-                case "!=" -> " != " + y;
-                case "<=" -> " <= " + y;
-                case ">=" -> " >= " + y;
-                case "<" -> " < " + y;
-                case ">" -> " > " + y;
-                default -> throw new IllegalArgumentException("Unexpected value: " + op);
-            };
-        }
-
         private boolean evaluate(int x, int y, String op) {
             return switch (op) {
                 case "==" -> x == y;
@@ -92,6 +80,18 @@ public abstract class PredicateConverter<T> implements ArgumentConverter {
                 case ">=" -> x >= y;
                 case "<" -> x < y;
                 case ">" -> x > y;
+                default -> throw new IllegalArgumentException("Unexpected value: " + op);
+            };
+        }
+
+        private String toString(int y, String op) {
+            return switch (op) {
+                case "==" -> " == " + y;
+                case "!=" -> " != " + y;
+                case "<=" -> " <= " + y;
+                case ">=" -> " >= " + y;
+                case "<" -> " < " + y;
+                case ">" -> " > " + y;
                 default -> throw new IllegalArgumentException("Unexpected value: " + op);
             };
         }

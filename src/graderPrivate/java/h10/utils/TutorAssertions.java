@@ -14,13 +14,14 @@ public final class TutorAssertions {
 
     }
 
+    public static String identityHashCode(ListItem<?> item) {
+        return item.getClass().getName() + "@" + System.identityHashCode(item);
+    }
+
     public static String identityHashCode(VisitorElement<?> element) {
         return element.peek().getClass() + "@" + System.identityHashCode(element.peek());
     }
 
-    public static String identityHashCode(ListItem<?> item) {
-        return item.getClass().getName() + "@" + System.identityHashCode(item);
-    }
 
     public static void assertAsCopy(Visitable<?> input, Visitable<?> output, Context.Builder<?> context) {
         List<String> otherIdentityHashCodes = output.underlyingStream().map(TutorAssertions::identityHashCode).toList();

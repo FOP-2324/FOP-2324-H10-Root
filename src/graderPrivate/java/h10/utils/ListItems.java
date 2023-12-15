@@ -31,14 +31,13 @@ public final class ListItems {
         return head;
     }
 
+    public static <T> Stream<T> stream(ListItem<T> head) {
+        return Streams.stream(() -> iterator(head));
+    }
+
     public static <T> Iterator<T> iterator(ListItem<T> head) {
         return new Iterator<>() {
             private ListItem<T> current = head;
-
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
 
             @Override
             public T next() {
@@ -49,11 +48,12 @@ public final class ListItems {
                 current = current.next;
                 return element;
             }
-        };
-    }
 
-    public static <T> Stream<T> stream(ListItem<T> head) {
-        return Streams.stream(() -> iterator(head));
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+        };
     }
 
     public static <T, R> ListItem<R> map(ListItem<T> head, Function<? super T, ? extends R> mapper) {

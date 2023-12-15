@@ -12,14 +12,13 @@ public final class VisitorSets {
     private VisitorSets() {
     }
 
+    public static <T> Stream<T> peekStream(VisitorSet<T> set) {
+        return Streams.stream(() -> peekIterator(set));
+    }
+
     public static <T> Iterator<T> peekIterator(MySet<VisitorElement<T>> set) {
         return new Iterator<>() {
             private ListItem<VisitorElement<T>> current = set.head;
-
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
 
             @Override
             public T next() {
@@ -30,21 +29,21 @@ public final class VisitorSets {
                 current = current.next;
                 return element;
             }
-        };
-    }
-
-    public static <T> Stream<T> peekStream(VisitorSet<T> set) {
-        return Streams.stream(() -> peekIterator(set));
-    }
-
-    public static <T> Iterator<ListItem<VisitorElement<T>>> underlyingIterator(MySet<VisitorElement<T>> set) {
-        return new Iterator<>() {
-            private ListItem<VisitorElement<T>> current = set.head;
 
             @Override
             public boolean hasNext() {
                 return current != null;
             }
+        };
+    }
+
+    public static <T> Stream<ListItem<VisitorElement<T>>> underlyingStream(MySet<VisitorElement<T>> set) {
+        return Streams.stream(() -> underlyingIterator(set));
+    }
+
+    public static <T> Iterator<ListItem<VisitorElement<T>>> underlyingIterator(MySet<VisitorElement<T>> set) {
+        return new Iterator<>() {
+            private ListItem<VisitorElement<T>> current = set.head;
 
             @Override
             public ListItem<VisitorElement<T>> next() {
@@ -55,10 +54,11 @@ public final class VisitorSets {
                 current = current.next;
                 return element;
             }
-        };
-    }
 
-    public static <T> Stream<ListItem<VisitorElement<T>>> underlyingStream(MySet<VisitorElement<T>> set) {
-        return Streams.stream(() -> underlyingIterator(set));
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+        };
     }
 }

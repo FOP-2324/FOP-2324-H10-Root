@@ -53,14 +53,11 @@ public abstract class AbstractTest {
         return type;
     }
 
-    public MethodLink getMethod() {
-        if (method == null) {
-            throw new IllegalStateException("Method not initialized");
-        }
-        return method;
-    }
-
-    protected abstract BiFunction<ListItem<VisitorElement<Integer>>, Comparator<? super VisitorElement<Integer>>, MySet<VisitorElement<Integer>>> converter();
+    protected abstract BiFunction<
+        ListItem<VisitorElement<Integer>>,
+        Comparator<? super VisitorElement<Integer>>,
+        MySet<VisitorElement<Integer>>
+        > converter();
 
     public VisitorSet<Integer> visit(ListItem<Integer> head) {
         return VisitorSet.of(head, DEFAULT_COMPARATOR, converter());
@@ -72,5 +69,12 @@ public abstract class AbstractTest {
 
     public Context.Builder<?> defaultBuilder() {
         return Assertions2.contextBuilder().subject(getMethod());
+    }
+
+    public MethodLink getMethod() {
+        if (method == null) {
+            throw new IllegalStateException("Method not initialized");
+        }
+        return method;
     }
 }

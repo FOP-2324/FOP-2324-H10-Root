@@ -11,14 +11,13 @@ public final class Sets {
     private Sets() {
     }
 
+    public static <T> Stream<T> stream(MySet<T> set) {
+        return Streams.stream(() -> iterator(set));
+    }
+
     public static <T> Iterator<T> iterator(MySet<T> set) {
         return new Iterator<>() {
             private ListItem<T> current = set.head;
-
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
 
             @Override
             public T next() {
@@ -29,10 +28,11 @@ public final class Sets {
                 current = current.next;
                 return element;
             }
-        };
-    }
 
-    public static <T> Stream<T> stream(MySet<T> set) {
-        return Streams.stream(() -> iterator(set));
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+        };
     }
 }

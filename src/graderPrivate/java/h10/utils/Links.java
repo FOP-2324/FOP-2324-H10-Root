@@ -21,11 +21,9 @@ public final class Links {
 
     }
 
-    public static TypeLink getTypeLink(Class<?> clazz) {
-        return Assertions3.assertTypeExists(
-            PACKAGE_LINK,
-            STRING_MATCHER_FACTORY.matcher(clazz.getSimpleName())
-        );
+    @SafeVarargs
+    public static MethodLink getMethodLink(Class<?> clazz, String methodName, Matcher<MethodLink>... matchers) {
+        return getMethodLink(getTypeLink(clazz), methodName, matchers);
     }
 
     @SafeVarargs
@@ -36,8 +34,10 @@ public final class Links {
         );
     }
 
-    @SafeVarargs
-    public static MethodLink getMethodLink(Class<?> clazz, String methodName, Matcher<MethodLink>... matchers) {
-        return getMethodLink(getTypeLink(clazz), methodName, matchers);
+    public static TypeLink getTypeLink(Class<?> clazz) {
+        return Assertions3.assertTypeExists(
+            PACKAGE_LINK,
+            STRING_MATCHER_FACTORY.matcher(clazz.getSimpleName())
+        );
     }
 }

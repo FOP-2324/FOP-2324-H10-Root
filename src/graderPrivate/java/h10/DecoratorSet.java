@@ -37,6 +37,11 @@ public class DecoratorSet<T> extends MySet<T> implements Iterable<T>, Streamable
         return true;
     }
 
+    @Override
+    public MySet<T> subset(Predicate<? super T> pred) {
+        return delegate(s -> s.subset(pred));
+    }
+
     protected <R> MySet<R> delegate(Function<MySet<T>, MySet<R>> f) {
         MySet<R> result = f.apply(underlying);
 
@@ -45,11 +50,6 @@ public class DecoratorSet<T> extends MySet<T> implements Iterable<T>, Streamable
             head = underlying.head;
         }
         return result;
-    }
-
-    @Override
-    public MySet<T> subset(Predicate<? super T> pred) {
-        return delegate(s -> s.subset(pred));
     }
 
     @Override
@@ -88,7 +88,9 @@ public class DecoratorSet<T> extends MySet<T> implements Iterable<T>, Streamable
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (!super.equals(o)) return false;
+        if (!super.equals(o)) {
+            return false;
+        }
         DecoratorSet<?> that = (DecoratorSet<?>) o;
         return Objects.equals(underlying, that.underlying);
     }

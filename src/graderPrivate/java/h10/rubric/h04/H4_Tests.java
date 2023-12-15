@@ -47,7 +47,8 @@ public abstract class H4_Tests extends AbstractComplexTest {
     }
 
     @Order(2)
-    @DisplayName("Die Methode difference(MySet) setzt die Laufvariable von der Menge M korrekt auf das nächste Element, falls x < y gilt für x in M und y in N.")
+    @DisplayName("Die Methode difference(MySet) setzt die Laufvariable von der Menge M korrekt auf das nächste "
+        + "Element, falls x < y gilt für x in M und y in N.")
     //   @ParameterizedTest(name = "sourceHead={0}, otherHead={1}, sourceVisitation={2}, otherVisitation={3}")
     @JsonClasspathSource({
 
@@ -62,7 +63,8 @@ public abstract class H4_Tests extends AbstractComplexTest {
     }
 
     @Order(3)
-    @DisplayName("Die Methode difference(MySet) setzt die Laufvariable von der Menge M korrekt auf das nächste Element, falls x > y gilt für x in M und y in N.")
+    @DisplayName("Die Methode difference(MySet) setzt die Laufvariable von der Menge M korrekt auf das nächste "
+        + "Element, falls x > y gilt für x in M und y in N.")
     //@ParameterizedTest(name = "sourceHead={0}, otherHead={1}, sourceVisitation={2}, otherVisitation={3}")
     @JsonClasspathSource({
 

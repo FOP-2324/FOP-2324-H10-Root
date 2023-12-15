@@ -20,7 +20,11 @@ public class H4_2_Tests extends H4_Tests {
     }
 
     @Override
-    protected BiFunction<ListItem<VisitorElement<Integer>>, Comparator<? super VisitorElement<Integer>>, MySet<VisitorElement<Integer>>> converter() {
+    protected BiFunction<
+        ListItem<VisitorElement<Integer>>,
+        Comparator<? super VisitorElement<Integer>>,
+        MySet<VisitorElement<Integer>>
+        > converter() {
         return MySetInPlace::new;
     }
 }

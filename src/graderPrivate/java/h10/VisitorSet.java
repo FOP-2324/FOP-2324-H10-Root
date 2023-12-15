@@ -15,19 +15,19 @@ public class VisitorSet<T> extends DecoratorSet<VisitorElement<T>> implements Vi
     protected BiFunction<ListItem<VisitorElement<T>>, Comparator<? super VisitorElement<T>>, MySet<VisitorElement<T>>> converter;
 
     protected VisitorSet(
-        MySet<VisitorElement<T>> underlying,
-        BiFunction<ListItem<VisitorElement<T>>, Comparator<? super VisitorElement<T>>, MySet<VisitorElement<T>>> converter
-    ) {
-        super(underlying);
-        this.converter = converter;
-    }
-
-    protected VisitorSet(
         ListItem<T> head,
         Comparator<? super T> cmp,
         BiFunction<ListItem<VisitorElement<T>>, Comparator<? super VisitorElement<T>>, MySet<VisitorElement<T>>> converter
     ) {
         this(converter.apply(ListItems.map(head, VisitorElement::new), new VisitorComparator<>(cmp)), converter);
+    }
+
+    protected VisitorSet(
+        MySet<VisitorElement<T>> underlying,
+        BiFunction<ListItem<VisitorElement<T>>, Comparator<? super VisitorElement<T>>, MySet<VisitorElement<T>>> converter
+    ) {
+        super(underlying);
+        this.converter = converter;
     }
 
     public static <T> VisitorSet<T> of(

@@ -22,7 +22,11 @@ public class H1_1_Tests extends H1_Tests {
     }
 
     @Override
-    protected BiFunction<ListItem<VisitorElement<Integer>>, Comparator<? super VisitorElement<Integer>>, MySet<VisitorElement<Integer>>> converter() {
+    protected BiFunction<
+        ListItem<VisitorElement<Integer>>,
+        Comparator<? super VisitorElement<Integer>>,
+        MySet<VisitorElement<Integer>>
+        > converter() {
         return MySetAsCopy::new;
     }
 

@@ -1,11 +1,11 @@
 package h10.rubric.h1;
 
-import h10.rubric.AbstractTest;
 import h10.ListItem;
 import h10.VisitorSet;
-import h10.utils.ListItems;
 import h10.converter.ListItemConverter;
 import h10.converter.PredicateConverter;
+import h10.rubric.AbstractTest;
+import h10.utils.ListItems;
 import h10.visitor.VisitorElement;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
@@ -50,12 +50,6 @@ public abstract class H1_Tests extends AbstractTest {
     public void tearDown() {
         assertVisitation();
         assertRequirement();
-    }
-
-    private void set(VisitorSet<Integer> source, VisitorSet<Integer> result, Context.Builder<?> context) {
-        this.source = source;
-        this.result = result;
-        this.context = context;
     }
 
     public void assertVisitation() {
@@ -118,6 +112,12 @@ public abstract class H1_Tests extends AbstractTest {
 
         // After test actions
         set(source, result, context);
+    }
+
+    private void set(VisitorSet<Integer> source, VisitorSet<Integer> result, Context.Builder<?> context) {
+        this.source = source;
+        this.result = result;
+        this.context = context;
     }
 
     @Order(1)

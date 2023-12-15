@@ -2,9 +2,9 @@ package h10.rubric.h2;
 
 import h10.DecoratorSet;
 import h10.ListItem;
-import h10.utils.ListItems;
 import h10.MySet;
 import h10.MySetAsCopy;
+import h10.utils.ListItems;
 import h10.visitor.VisitorElement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -27,7 +27,11 @@ public class H2_1_Tests extends H2_Tests {
     }
 
     @Override
-    protected BiFunction<ListItem<VisitorElement<Integer>>, Comparator<? super VisitorElement<Integer>>, MySet<VisitorElement<Integer>>> converter() {
+    protected BiFunction<
+        ListItem<VisitorElement<Integer>>,
+        Comparator<? super VisitorElement<Integer>>,
+        MySet<VisitorElement<Integer>>
+        > converter() {
         return MySetAsCopy::new;
     }
 
