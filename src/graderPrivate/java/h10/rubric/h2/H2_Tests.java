@@ -1,6 +1,6 @@
 package h10.rubric.h2;
 
-import h10.AbstractTest;
+import h10.rubric.AbstractTest;
 import h10.ListItem;
 import h10.MySet;
 import h10.Sets;
@@ -58,8 +58,8 @@ public abstract class H2_Tests extends AbstractTest {
         ListItem<Integer> otherHead,
         ListItem<ListItem<Integer>> expected
     ) {
-        VisitorSet<Integer> source = create(head);
-        VisitorSet<Integer> other = create(otherHead);
+        VisitorSet<Integer> source = visit(head);
+        VisitorSet<Integer> other = visit(otherHead);
         Context.Builder<?> builder = defaultBuilder()
             .add("Source", source.toString())
             .add("Other", other.toString());

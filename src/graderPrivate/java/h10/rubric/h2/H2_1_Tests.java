@@ -27,7 +27,7 @@ public class H2_1_Tests extends H2_Tests {
     }
 
     @Override
-    protected BiFunction<ListItem<VisitorElement<Integer>>, Comparator<? super VisitorElement<Integer>>, MySet<VisitorElement<Integer>>> mapper() {
+    protected BiFunction<ListItem<VisitorElement<Integer>>, Comparator<? super VisitorElement<Integer>>, MySet<VisitorElement<Integer>>> converter() {
         return MySetAsCopy::new;
     }
 
@@ -35,8 +35,8 @@ public class H2_1_Tests extends H2_Tests {
     @DisplayName("Die Methode cartesianProduct(MySet) definiert den Comparator für ein Tupel korrekt.")
     @Test
     public void testComparator() {
-        MySet<VisitorElement<Integer>> source = create(ListItems.of(1, 2));
-        MySet<VisitorElement<Integer>> other = create(ListItems.of(3, 4));
+        MySet<VisitorElement<Integer>> source = visit(ListItems.of(1, 2));
+        MySet<VisitorElement<Integer>> other = visit(ListItems.of(3, 4));
         Context.Builder<?> builder = defaultBuilder()
             .add("Source", source.toString())
             .add("Other", other.toString());

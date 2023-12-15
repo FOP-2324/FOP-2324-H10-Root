@@ -17,7 +17,7 @@ import java.util.Comparator;
 import java.util.function.BiFunction;
 
 @TestForSubmission
-@DisplayName("H2.1 | In-Place")
+@DisplayName("H2.2 | In-Place")
 public class H2_2_Tests extends H2_Tests {
 
     @Override
@@ -26,7 +26,7 @@ public class H2_2_Tests extends H2_Tests {
     }
 
     @Override
-    protected BiFunction<ListItem<VisitorElement<Integer>>, Comparator<? super VisitorElement<Integer>>, MySet<VisitorElement<Integer>>> mapper() {
+    protected BiFunction<ListItem<VisitorElement<Integer>>, Comparator<? super VisitorElement<Integer>>, MySet<VisitorElement<Integer>>> converter() {
         return MySetInPlace::new;
     }
 
@@ -34,8 +34,8 @@ public class H2_2_Tests extends H2_Tests {
     @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
     @Test
     public void testDecouple() {
-        VisitorSet<Integer> source = create(ListItems.of(1, 2));
-        VisitorSet<Integer> other = create(ListItems.of(3, 4));
+        VisitorSet<Integer> source = visit(ListItems.of(1, 2));
+        VisitorSet<Integer> other = visit(ListItems.of(3, 4));
         Context.Builder<?> builder = defaultBuilder()
             .add("Source", source.toString())
             .add("Other", other.toString());

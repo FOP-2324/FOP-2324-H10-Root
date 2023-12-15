@@ -139,12 +139,12 @@
       },
       {
         "order": 25,
-        "title": "Die Methode difference(MySet) gibt das korrekte Ergebnis für Mengen mit unterschiedlicher Länge zurück.",
+        "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für Mengen mit unterschiedlicher Länge zurück.",
         "class": "h10.h4.H4_1_Tests"
       },
       {
         "order": 26,
-        "title": "Die Methode difference(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.",
+        "title": "Die Methode intersectionListItems(ListItem)gibt das korrekte Ergebnis für komplexe Eingaben zurück.",
         "class": "h10.h4.H4_1_Tests"
       },
       {
@@ -169,12 +169,12 @@
       },
       {
         "order": 31,
-        "title": "Die Methode difference(MySet) gibt das korrekte Ergebnis für Mengen mit unterschiedlicher Länge zurück.",
+        "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für Mengen mit unterschiedlicher Länge zurück.",
         "class": "h10.h4.H4_2_Tests"
       },
       {
         "order": 32,
-        "title": "Die Methode difference(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.",
+        "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für komplexe Eingaben zurück.",
         "class": "h10.h4.H4_2_Tests"
       }
     ]

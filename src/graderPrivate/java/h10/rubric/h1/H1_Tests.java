@@ -1,6 +1,6 @@
 package h10.rubric.h1;
 
-import h10.AbstractTest;
+import h10.rubric.AbstractTest;
 import h10.ListItem;
 import h10.VisitorSet;
 import h10.utils.ListItems;
@@ -87,7 +87,7 @@ public abstract class H1_Tests extends AbstractTest {
     public void testPredicateFalse(
         @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> head
     ) {
-        VisitorSet<Integer> source = create(head);
+        VisitorSet<Integer> source = visit(head);
         // Drop all elements
         Predicate<? super VisitorElement<Integer>> predicate = new Predicate<>() {
             @Override
@@ -106,7 +106,7 @@ public abstract class H1_Tests extends AbstractTest {
             .add("Comparator", DEFAULT_COMPARATOR)
             .add("Predicate", predicate)
             .add("Source", source.toString());
-        VisitorSet<Integer> result = VisitorSet.of(source.subset(predicate), mapper());
+        VisitorSet<Integer> result = visit(source.subset(predicate));
         context.add("Result", result.toString());
 
         // Since we the predicate drop all elements, the head of the set must be null
@@ -133,7 +133,7 @@ public abstract class H1_Tests extends AbstractTest {
         @ConvertWith(PredicateConverter.BasicIntMath.class) @Property("predicate") Predicate<Integer> predicate,
         @ConvertWith(ListItemConverter.Int.class) @Property("expected") ListItem<Integer> expected
     ) {
-        VisitorSet<Integer> source = create(head);
+        VisitorSet<Integer> source = visit(head);
         Predicate<VisitorElement<Integer>> test = new Predicate<>() {
             @Override
             public boolean test(VisitorElement<Integer> x) {
@@ -150,7 +150,7 @@ public abstract class H1_Tests extends AbstractTest {
             .add("Comparator", DEFAULT_COMPARATOR)
             .add("Predicate", test)
             .add("Source", source.toString());
-        VisitorSet<Integer> result = create(source.subset(test));
+        VisitorSet<Integer> result = visit(source.subset(test));
         context.add("Result", result.toString());
 
         Iterator<Integer> expectedIt = ListItems.iterator(expected);

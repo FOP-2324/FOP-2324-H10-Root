@@ -1,5 +1,8 @@
-package h10;
+package h10.rubric;
 
+import h10.ListItem;
+import h10.MySet;
+import h10.VisitorSet;
 import h10.utils.Links;
 import h10.visitor.VisitorElement;
 import org.jetbrains.annotations.Nullable;
@@ -57,14 +60,14 @@ public abstract class AbstractTest {
         return method;
     }
 
-    protected abstract BiFunction<ListItem<VisitorElement<Integer>>, Comparator<? super VisitorElement<Integer>>, MySet<VisitorElement<Integer>>> mapper();
+    protected abstract BiFunction<ListItem<VisitorElement<Integer>>, Comparator<? super VisitorElement<Integer>>, MySet<VisitorElement<Integer>>> converter();
 
-    public VisitorSet<Integer> create(ListItem<Integer> head) {
-        return VisitorSet.of(head, DEFAULT_COMPARATOR, mapper());
+    public VisitorSet<Integer> visit(ListItem<Integer> head) {
+        return VisitorSet.of(head, DEFAULT_COMPARATOR, converter());
     }
 
-    public VisitorSet<Integer> create(MySet<VisitorElement<Integer>> set) {
-        return VisitorSet.of(set, mapper());
+    public VisitorSet<Integer> visit(MySet<VisitorElement<Integer>> set) {
+        return VisitorSet.of(set, converter());
     }
 
     public Context.Builder<?> defaultBuilder() {
