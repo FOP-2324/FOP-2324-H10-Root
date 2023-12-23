@@ -109,17 +109,17 @@
                         "order": 15,
                         "title": "Die Methode difference(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.",
                         "class": "h10.rubric.h3.H3_1_Tests"
-                    },
-                    {
-                        "order": 16,
-                        "title": "Die Methode difference(MySet) nimmt ein Element nicht auf, falls ein Element sowohl in M als auch in N ist.",
-                        "class": "h10.rubric.h3.H3_1_Tests"
                     }
                 ]
             },
             {
                 "name": "H3.2 | difference(MySet) - InPlace",
                 "criteria": [
+                    {
+                        "order": 16,
+                        "title": "Die Methode difference(MySet) nimmt ein Element nicht auf, falls ein Element sowohl in M als auch in N ist.",
+                        "class": "h10.rubric.h3.H3_1_Tests"
+                    },
                     {
                         "order": 17,
                         "title": "Die Methode difference(MySet) setzt die Laufvariable von der Menge M korrekt auf das nächste Element, falls x < y gilt für x in M und y in N.",
