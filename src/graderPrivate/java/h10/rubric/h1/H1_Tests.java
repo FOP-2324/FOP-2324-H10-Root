@@ -37,7 +37,7 @@ public abstract class H1_Tests extends SimpleTest {
     }
 
     @Order(0)
-    @DisplayName("Die Methode subset(MySet) ninmmt Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht "
+    @DisplayName("Die Methode subset(MySet) nimmt  Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht "
         + "erfüllt wird.")
     @ParameterizedTest(name = "Elements = {0}")
     @JsonClasspathSource({
