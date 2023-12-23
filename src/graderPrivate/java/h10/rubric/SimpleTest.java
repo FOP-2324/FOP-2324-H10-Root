@@ -17,7 +17,7 @@ import java.util.Comparator;
 import java.util.function.BiFunction;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public abstract class AbstractTest {
+public abstract class SimpleTest {
 
     public static final Comparator<Integer> DEFAULT_COMPARATOR = new Comparator<>() {
         @Override
@@ -53,6 +53,13 @@ public abstract class AbstractTest {
         return type;
     }
 
+    public MethodLink getMethod() {
+        if (method == null) {
+            throw new IllegalStateException("Method not initialized");
+        }
+        return method;
+    }
+
     protected abstract BiFunction<
         ListItem<VisitorElement<Integer>>,
         Comparator<? super VisitorElement<Integer>>,
@@ -67,14 +74,7 @@ public abstract class AbstractTest {
         return VisitorSet.of(set, converter());
     }
 
-    public Context.Builder<?> defaultBuilder() {
+    public Context.Builder<?> contextBuilder() {
         return Assertions2.contextBuilder().subject(getMethod());
-    }
-
-    public MethodLink getMethod() {
-        if (method == null) {
-            throw new IllegalStateException("Method not initialized");
-        }
-        return method;
     }
 }

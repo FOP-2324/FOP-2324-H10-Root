@@ -4,12 +4,9 @@ import h10.ListItem;
 import h10.VisitorSet;
 import h10.converter.ListItemConverter;
 import h10.converter.PredicateConverter;
-import h10.rubric.AbstractTest;
+import h10.rubric.SimpleTest;
 import h10.utils.ListItems;
 import h10.visitor.VisitorElement;
-import org.jetbrains.annotations.Nullable;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -23,51 +20,21 @@ import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.function.Predicate;
 
 @TestForSubmission
 @DisplayName("H1 | subset(MySet)")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public abstract class H1_Tests extends AbstractTest {
+public abstract class H1_Tests extends SimpleTest {
 
     protected static final String TEST_RESOURCE_PATH = "h1/";
 
     protected static final String METHOD_NAME = "subset";
 
-    protected @Nullable VisitorSet<Integer> source;
-
-    protected @Nullable VisitorSet<Integer> result;
-
-    protected @Nullable Context.Builder<?> context;
-
     @Override
     public String getMethodName() {
         return METHOD_NAME;
     }
-
-    @AfterEach
-    public void tearDown() {
-        assertVisitation();
-        assertRequirement();
-    }
-
-    public void assertVisitation() {
-        Assumptions.assumeTrue(source != null);
-        Assumptions.assumeTrue(context != null);
-
-        // Nodes must be visited only once
-        List<VisitorElement<Integer>> failed = source.stream()
-            .filter(element -> element.visited() > 1)
-            .toList();
-        Assertions2.assertTrue(
-            failed.isEmpty(),
-            context.add("Nodes visited more than once", failed).build(),
-            r -> "Expected no visited node more than once, got %s.".formatted(failed)
-        );
-    }
-
-    public abstract void assertRequirement();
 
     @Order(0)
     @DisplayName("Die Methode subset(MySet) ninmmt Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht "
@@ -96,7 +63,7 @@ public abstract class H1_Tests extends AbstractTest {
                 return "Drop all";
             }
         };
-        Context.Builder<?> context = defaultBuilder()
+        Context.Builder<?> context = contextBuilder()
             .add("Comparator", DEFAULT_COMPARATOR)
             .add("Predicate", predicate)
             .add("Source", source.toString());
@@ -109,15 +76,6 @@ public abstract class H1_Tests extends AbstractTest {
             context.build(),
             r -> "Subset should be empty, but got %s.".formatted(result)
         );
-
-        // After test actions
-        set(source, result, context);
-    }
-
-    private void set(VisitorSet<Integer> source, VisitorSet<Integer> result, Context.Builder<?> context) {
-        this.source = source;
-        this.result = result;
-        this.context = context;
     }
 
     @Order(1)
@@ -146,10 +104,11 @@ public abstract class H1_Tests extends AbstractTest {
             }
         };
 
-        Context.Builder<?> context = defaultBuilder()
+        Context.Builder<?> context = contextBuilder()
             .add("Comparator", DEFAULT_COMPARATOR)
             .add("Predicate", test)
             .add("Source", source.toString());
+
         VisitorSet<Integer> result = visit(source.subset(test));
         context.add("Result", result.toString());
 
@@ -166,13 +125,10 @@ public abstract class H1_Tests extends AbstractTest {
             );
         }
 
-        // Expected size must be equal to actual size
+        // The expected size must be equal to actual size
         Assertions2.assertFalse(expectedIt.hasNext(), context.build(),
             r -> "Expected list contains more element than actual list");
         Assertions2.assertFalse(actualIt.hasNext(), context.build(),
             r -> "Actual list contains more element than expected list");
-
-        // After test actions
-        set(source, result, context);
     }
 }

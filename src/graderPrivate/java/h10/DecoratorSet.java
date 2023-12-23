@@ -2,7 +2,6 @@ package h10;
 
 import h10.utils.ListItems;
 import h10.utils.Streamable;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -100,7 +99,6 @@ public class DecoratorSet<T> extends MySet<T> implements Iterable<T>, Streamable
         return Objects.hash(underlying);
     }
 
-    @NotNull
     @Override
     public Iterator<T> iterator() {
         return ListItems.iterator(head);
