@@ -51,15 +51,37 @@ public class RubricDeserializer extends JsonDeserializer<Criterion[]> {
             throw new IOException("Missing title");
         }
         String title = node.get("title").asText();
+        if (!node.has("tasks")) {
+            throw new IOException("Missing tasks");
+        }
+        JsonNode tasks = node.get("tasks");
+        if (!(tasks instanceof ArrayNode tasksNode)) {
+            throw new IOException("Expected array of criteria");
+        }
+        CheckedFunction<JsonNode, Criterion> deserializer = this::deserializeTask;
+        return Criterion.builder()
+            .shortDescription(title)
+            .addChildCriteria(Streams.stream(tasksNode)
+                .map(deserializer)
+                .toArray(Criterion[]::new)
+            ).build();
+    }
+
+    private Criterion deserializeTask(JsonNode node) throws IOException {
+        if (!node.has("name")) {
+            throw new IOException("Missing name");
+        }
+        String name = node.get("name").asText();
         if (!node.has("criteria")) {
             throw new IOException("Missing criteria");
         }
-        if (!(node.get("criteria") instanceof ArrayNode criteriaNode)) {
+        JsonNode criteria = node.get("criteria");
+        if (!(criteria instanceof ArrayNode criteriaNode)) {
             throw new IOException("Expected array of criteria");
         }
         CheckedFunction<JsonNode, Map.Entry<Integer, Criterion>> deserializer = this::deserializeSubCriterion;
         return Criterion.builder()
-            .shortDescription(title)
+            .shortDescription(name)
             .addChildCriteria(Streams.stream(criteriaNode)
                 .map(deserializer)
                 .sorted(Map.Entry.comparingByKey())
@@ -67,6 +89,7 @@ public class RubricDeserializer extends JsonDeserializer<Criterion[]> {
                 .toArray(Criterion[]::new)
             ).build();
     }
+
 
     private List<Method> getMethods(Class<?> clazz) {
         List<Method> methods = new ArrayList<>(List.of(clazz.getDeclaredMethods()));
