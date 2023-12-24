@@ -67,8 +67,21 @@ public abstract class H1_TestsPublic extends SimpleTest {
 
     @AfterEach
     public void tearDown() {
-        assertVisitation();
         assertRequirement();
+        assertVisitation();
+    }
+
+    /**
+     * Sets the source set, result set, and context builder for the test to validate.
+     *
+     * @param source  the source set
+     * @param result  the result set
+     * @param context the context builder
+     */
+    protected void afterCheck(VisitorSet<Integer> source, VisitorSet<Integer> result, Context.Builder<?> context) {
+        this.source = source;
+        this.result = result;
+        this.context = context;
     }
 
     /**
@@ -93,19 +106,6 @@ public abstract class H1_TestsPublic extends SimpleTest {
      * Asserts the requirement of the test.
      */
     public abstract void assertRequirement();
-
-    /**
-     * Sets the source set, result set, and context builder for the test to validate.
-     *
-     * @param source  the source set
-     * @param result  the result set
-     * @param context the context builder
-     */
-    private void set(VisitorSet<Integer> source, VisitorSet<Integer> result, Context.Builder<?> context) {
-        this.source = source;
-        this.result = result;
-        this.context = context;
-    }
 
     @Order(0)
     @DisplayName("Die Methode subset(MySet) nimmt  Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht "
@@ -147,7 +147,7 @@ public abstract class H1_TestsPublic extends SimpleTest {
             context.build(),
             r -> "Subset should be empty, but got %s.".formatted(result)
         );
-        set(source, result, context);
+        afterCheck(source, result, context);
     }
 
     @Order(1)
@@ -203,6 +203,6 @@ public abstract class H1_TestsPublic extends SimpleTest {
         Assertions2.assertFalse(actualIt.hasNext(), context.build(),
             r -> "Actual list contains more element than expected list");
 
-        set(source, result, context);
+        afterCheck(source, result, context);
     }
 }

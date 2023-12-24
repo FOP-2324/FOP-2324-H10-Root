@@ -7,6 +7,8 @@ import h10.rubric.h3.H3_TestsPublic;
 import h10.rubric.h4.H4_TestsPublic;
 import h10.utils.ListItems;
 import h10.visitor.VisitorElement;
+import org.jetbrains.annotations.Nullable;
+import org.junit.jupiter.api.AfterEach;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
@@ -26,11 +28,49 @@ import java.util.function.BiFunction;
 public abstract class ComplexTestPrivate extends SimpleTest {
 
     /**
+     * The tested source set.
+     */
+    protected @Nullable VisitorSet<Integer> source;
+
+    /**
+     * The result of the method call.
+     */
+    protected @Nullable VisitorSet<Integer> result;
+
+    /**
+     * The context builder for the test.
+     */
+    protected @Nullable Context.Builder<?> context;
+
+    @AfterEach
+    public void tearDown() {
+        assertRequirement();
+    }
+
+    /**
      * Returns the operation to be tested.
      *
      * @return the operation to be tested
      */
     protected abstract BiFunction<VisitorSet<Integer>, VisitorSet<Integer>, MySet<VisitorElement<Integer>>> operation();
+
+    /**
+     * Asserts the requirement of the test.
+     */
+    public abstract void assertRequirement();
+
+    /**
+     * Sets the source set, result set, and context builder for the test to validate.
+     *
+     * @param source  the source set
+     * @param result  the result set
+     * @param context the context builder
+     */
+    protected void afterCheck(VisitorSet<Integer> source, VisitorSet<Integer> result, Context.Builder<?> context) {
+        this.source = source;
+        this.result = result;
+        this.context = context;
+    }
 
     /**
      * Tests whether the result of the operation is correct.
@@ -55,6 +95,7 @@ public abstract class ComplexTestPrivate extends SimpleTest {
         builder.add("Result", result.toString());
         Assertions2.assertEquals(expected, result, builder.build(),
             r -> "Expected set %s, but given %s".formatted(expected, result));
+        afterCheck(source, result, builder);
     }
 
     protected void assertPointers(
@@ -87,6 +128,7 @@ public abstract class ComplexTestPrivate extends SimpleTest {
             assertVisitation(sourceCopy, sourceVisitation, "Source", context);
             assertVisitation(otherCopy, otherVisitation, "Other", context);
         }
+        afterCheck(source, other, builder);
     }
 
     /**

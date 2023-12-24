@@ -5,7 +5,9 @@ import h10.MySet;
 import h10.MySetInPlace;
 import h10.converter.ListItemConverter;
 import h10.utils.TestConstants;
+import h10.utils.TutorAssertions;
 import h10.visitor.VisitorElement;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -45,6 +47,14 @@ public class H4_2_TestsPrivate extends H4_TestsPrivate {
         MySet<VisitorElement<Integer>>
         > converter() {
         return MySetInPlace::new;
+    }
+
+    @Override
+    public void assertRequirement() {
+        Assumptions.assumeTrue(source != null);
+        Assumptions.assumeTrue(result != null);
+        Assumptions.assumeTrue(context != null);
+        TutorAssertions.assertInPlace(source, result, context);
     }
 
     @Order(3)

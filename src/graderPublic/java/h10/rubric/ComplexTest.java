@@ -5,6 +5,8 @@ import h10.MySet;
 import h10.VisitorSet;
 import h10.utils.ListItems;
 import h10.visitor.VisitorElement;
+import org.jetbrains.annotations.Nullable;
+import org.junit.jupiter.api.AfterEach;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
@@ -29,6 +31,44 @@ public abstract class ComplexTest extends SimpleTest {
     protected abstract BiFunction<VisitorSet<Integer>, VisitorSet<Integer>, MySet<VisitorElement<Integer>>> operation();
 
     /**
+     * The tested source set.
+     */
+    protected @Nullable VisitorSet<Integer> source;
+
+    /**
+     * The result of the method call.
+     */
+    protected @Nullable VisitorSet<Integer> result;
+
+    /**
+     * The context builder for the test.
+     */
+    protected @Nullable Context.Builder<?> context;
+
+    @AfterEach
+    public void tearDown() {
+        assertRequirement();
+    }
+
+    /**
+     * Asserts the requirement of the test.
+     */
+    public abstract void assertRequirement();
+
+    /**
+     * Sets the source set, result set, and context builder for the test to validate.
+     *
+     * @param source  the source set
+     * @param result  the result set
+     * @param context the context builder
+     */
+    protected void afterCheck(VisitorSet<Integer> source, VisitorSet<Integer> result, Context.Builder<?> context) {
+        this.source = source;
+        this.result = result;
+        this.context = context;
+    }
+
+    /**
      * Tests whether the result of the operation is correct.
      *
      * @param sourceHead   the head of the source set
@@ -51,6 +91,8 @@ public abstract class ComplexTest extends SimpleTest {
         builder.add("Result", result.toString());
         Assertions2.assertEquals(expected, result, builder.build(),
             r -> "Expected set %s, but given %s".formatted(expected, result));
+
+        afterCheck(source, result, builder);
     }
 
     public void testNotAddElements(
@@ -100,6 +142,8 @@ public abstract class ComplexTest extends SimpleTest {
             assertVisitation(sourceCopy, sourceVisitation, "Source", context);
             assertVisitation(otherCopy, otherVisitation, "Other", context);
         }
+
+        afterCheck(source, other, builder);
     }
 
     /**
