@@ -35,10 +35,10 @@ public class H4_2_Tests extends H4_Tests {
         return MySetInPlace::new;
     }
 
-       @Order(0)
+  @Order(0)
     @DisplayName("Die Methode intersectionListItems(ListItem) nimmt ein Element auf, falls das Element in allen "
         + "Mengen enthalten ist.")
-    @ParameterizedTest(name = "Source = {0}, Other = {1}, Source Visitation = {2}, Other Visitation = {3}")
+    @ParameterizedTest(name = "Source = {0}, Other = {1}")
     @JsonClasspathSource({
         TEST_RESOURCE_PATH + "criterion1_testcase1.json",
         TEST_RESOURCE_PATH + "criterion1_testcase2.json",
@@ -56,7 +56,8 @@ public class H4_2_Tests extends H4_Tests {
         + "nächste Element, falls x < y gilt für x in M und y in N.")
     @ParameterizedTest(name = "Source = {0}, Other = {1}, Source Visitation = {2}, Other Visitation = {3}")
     @JsonClasspathSource({
-
+        TEST_RESOURCE_PATH + "criterion2_testcase1.json",
+        TEST_RESOURCE_PATH + "criterion2_testcase2.json",
     })
     public void testXSmallerY(
         @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> sourceHead,
@@ -72,7 +73,8 @@ public class H4_2_Tests extends H4_Tests {
         + "nächste Element, falls x > y gilt für x in M und y in N.")
     @ParameterizedTest(name = "Source = {0}, Other = {1}, Source Visitation = {2}, Other Visitation = {3}")
     @JsonClasspathSource({
-
+        TEST_RESOURCE_PATH + "criterion3_testcase1.json",
+        TEST_RESOURCE_PATH + "criterion3_testcase2.json",
     })
     public void testXGreaterY(
         @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> sourceHead,
@@ -81,5 +83,21 @@ public class H4_2_Tests extends H4_Tests {
         @ConvertWith(ArrayConverter.Auto.class) @Property("otherVisitation") Integer[] otherVisitation
     ) {
         super.testXGreaterY(sourceHead, otherHead, sourceVisitation, otherVisitation);
+    }
+
+    @Order(3)
+    @DisplayName("Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für eine leere Menge zurück.")
+    @ParameterizedTest(name = "Source = {0}, Other = {1}}")
+    @JsonClasspathSource({
+        TEST_RESOURCE_PATH + "criterion4_testcase1.json",
+        TEST_RESOURCE_PATH + "criterion4_testcase2.json",
+    })
+    @Override
+    public void testEmpty(
+        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> sourceHead,
+        @ConvertWith(ListItemConverter.Int.class) @Property("other") ListItem<Integer> otherHead,
+        @ConvertWith(ListItemConverter.Int.class) @Property("expected") ListItem<Integer> expectedHead
+    ) {
+        super.testEmpty(sourceHead, otherHead, expectedHead);
     }
 }

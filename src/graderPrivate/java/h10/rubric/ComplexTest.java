@@ -22,7 +22,7 @@ public abstract class ComplexTest extends SimpleTest {
 
     protected abstract BiFunction<VisitorSet<Integer>, VisitorSet<Integer>, MySet<VisitorElement<Integer>>> operation();
 
-    public void testNotAddElements(
+    protected void assertEqualElements(
         ListItem<Integer> sourceHead,
         ListItem<Integer> otherHead,
         ListItem<Integer> expectedHead
@@ -38,6 +38,14 @@ public abstract class ComplexTest extends SimpleTest {
         builder.add("Result", result.toString());
         Assertions2.assertEquals(expected, result, builder.build(),
             r -> "Expected set %s, but given %s".formatted(expected, result));
+    }
+
+    public void testNotAddElements(
+        ListItem<Integer> sourceHead,
+        ListItem<Integer> otherHead,
+        ListItem<Integer> expectedHead
+    ) {
+        assertEqualElements(sourceHead, otherHead, expectedHead);
     }
 
     public void testXSmallerY(
