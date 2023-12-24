@@ -7,23 +7,36 @@ import h10.VisitorSet;
 import h10.converter.ListItemConverter;
 import h10.converter.ListItemInListItemConverter;
 import h10.utils.ListItems;
+import h10.utils.TestConstants;
 import h10.visitor.VisitorElement;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
 import org.junitpioneer.jupiter.json.JsonClasspathSource;
 import org.junitpioneer.jupiter.json.Property;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
+import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
 import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 
 @TestForSubmission
 @DisplayName("H2.2 | In-Place")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Timeout(
+    value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
+    unit = TimeUnit.SECONDS,
+    threadMode = Timeout.ThreadMode.SEPARATE_THREAD
+)
+@SkipAfterFirstFailedTest(TestConstants.SKIP_AFTER_FIRST_FAILED_TEST)
 public class H2_2_TestsPrivate extends H2_TestsPrivate {
 
     @Override

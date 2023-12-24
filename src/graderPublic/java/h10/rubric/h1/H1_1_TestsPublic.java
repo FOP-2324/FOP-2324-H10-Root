@@ -5,23 +5,36 @@ import h10.MySet;
 import h10.MySetAsCopy;
 import h10.converter.ListItemConverter;
 import h10.converter.PredicateConverter;
+import h10.utils.TestConstants;
 import h10.utils.TutorAssertions;
 import h10.visitor.VisitorElement;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
 import org.junitpioneer.jupiter.json.JsonClasspathSource;
 import org.junitpioneer.jupiter.json.Property;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
+import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 
 import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 @TestForSubmission
 @DisplayName("H1.1 | As-Copy")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Timeout(
+    value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
+    unit = TimeUnit.SECONDS,
+    threadMode = Timeout.ThreadMode.SEPARATE_THREAD
+)
+@SkipAfterFirstFailedTest(TestConstants.SKIP_AFTER_FIRST_FAILED_TEST)
 public class H1_1_TestsPublic extends H1_TestsPublic {
 
     @Override
