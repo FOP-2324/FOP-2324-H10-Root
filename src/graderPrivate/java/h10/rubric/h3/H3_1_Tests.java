@@ -93,7 +93,7 @@ public class H3_1_Tests extends H3_Tests {
     @Order(3)
     @DisplayName("Die Methode difference(MySet) nimmt die verbleibenen Elemente von A auf, falls die Menge M mehr "
         + "Elemente enthält als die Menge N.")
-    @ParameterizedTest(name = "Source = {0}, Other = {1}, Source Visitation = {2}, Other Visitation = {3}")
+    @ParameterizedTest(name = "Source = {0}, Other = {1}")
     @JsonClasspathSource({
         TEST_RESOURCE_PATH + "criterion4_testcase1.json",
         TEST_RESOURCE_PATH + "criterion4_testcase2.json",
@@ -108,7 +108,7 @@ public class H3_1_Tests extends H3_Tests {
 
     @Order(4)
     @DisplayName("Die Methode difference(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.")
-    @ParameterizedTest(name = "Source = {0}, Other = {1}, Source Visitation = {2}, Other Visitation = {3}")
+    @ParameterizedTest(name = "Source = {0}, Other = {1}")
     @JsonClasspathSource({
         TEST_RESOURCE_PATH + "criterion5_testcase1.json",
         TEST_RESOURCE_PATH + "criterion5_testcase2.json",

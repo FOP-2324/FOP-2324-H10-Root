@@ -3,11 +3,9 @@ package h10.rubric;
 import h10.ListItem;
 import h10.MySet;
 import h10.VisitorSet;
-import h10.VisitorSets;
 import h10.converter.ListItemConverter;
 import h10.utils.ListItems;
 import h10.visitor.VisitorElement;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.params.converter.ConvertWith;
 import org.junitpioneer.jupiter.json.Property;
 import org.mockito.MockedConstruction;
@@ -64,7 +62,7 @@ public abstract class ComplexTest extends SimpleTest {
 
         // Used for in-place check
         VisitorSet<Integer> sourceCopy = visit(source.deepCopy());
-       VisitorSet<Integer> otherCopy = visit(other.deepCopy());
+        VisitorSet<Integer> otherCopy = visit(other.deepCopy());
 
         Context.Builder<?> builder = contextBuilder().add("Source before", source.toString())
             .add("Other before", other.toString());
