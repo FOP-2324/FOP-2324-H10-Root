@@ -3,6 +3,7 @@ package h10.rubric;
 import h10.ListItem;
 import h10.MySet;
 import h10.VisitorSet;
+import h10.VisitorSets;
 import h10.converter.ListItemConverter;
 import h10.utils.ListItems;
 import h10.visitor.VisitorElement;
@@ -60,6 +61,11 @@ public abstract class ComplexTest extends SimpleTest {
         source.setHead(ListItems.map(sourceHead, VisitorElement::new));
         VisitorSet<Integer> other = visit((ListItem<Integer>) null);
         other.setHead(ListItems.map(otherHead, VisitorElement::new));
+
+        // Used for in-place check
+        VisitorSet<Integer> sourceCopy = visit(source.deepCopy());
+       VisitorSet<Integer> otherCopy = visit(other.deepCopy());
+
         Context.Builder<?> builder = contextBuilder().add("Source before", source.toString())
             .add("Other before", other.toString());
 
@@ -72,8 +78,8 @@ public abstract class ComplexTest extends SimpleTest {
             builder.add("Source Visitation", List.of(sourceVisitation));
             builder.add("Other Visitation", List.of(otherVisitation));
             Context context = builder.build();
-            assertVisitation(source, sourceVisitation, "Source", context);
-            assertVisitation(other, otherVisitation, "Other", context);
+            assertVisitation(sourceCopy, sourceVisitation, "Source", context);
+            assertVisitation(otherCopy, otherVisitation, "Other", context);
         }
     }
 
@@ -83,7 +89,7 @@ public abstract class ComplexTest extends SimpleTest {
         String setName,
         Context context
     ) {
-        @NotNull Iterator<VisitorElement<Integer>> it = set.iterator();
+        Iterator<VisitorElement<Integer>> it = set.iterator();
         for (Integer expected : expectedVisitation) {
             if (!it.hasNext()) {
                 break;

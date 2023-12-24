@@ -8,6 +8,7 @@ import h10.visitor.VisitorElement;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class VisitorSet<T> extends DecoratorSet<VisitorElement<T>> implements Visitable<T> {
@@ -59,6 +60,11 @@ public class VisitorSet<T> extends DecoratorSet<VisitorElement<T>> implements Vi
         VisitorFix<T> visitorFix = new VisitorFix<>(wrapped);
         visitorFix.apply();
         return wrapped;
+    }
+
+    public MySet<VisitorElement<T>> deepCopy() {
+        ListItem<VisitorElement<T>> newHead = ListItems.map(head, Function.identity());
+        return converter.apply(newHead, cmp);
     }
 
     @Override

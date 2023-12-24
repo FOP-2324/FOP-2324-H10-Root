@@ -102,7 +102,7 @@
                     },
                     {
                         "order": 14,
-                        "title": "Die Methode difference(MySet) nimmt die verbleibenen Elemente von A auf, falls die Menge M mehr Elemente enthält als die Menge N.",
+                        "title": "Die Methode difference(MySet) nimmt die verbleibenen Elemente von M auf, falls die Menge M mehr Elemente enthält als die Menge N.",
                         "class": "h10.rubric.h3.H3_1_Tests"
                     },
                     {
@@ -132,7 +132,7 @@
                     },
                     {
                         "order": 19,
-                        "title": "Die Methode difference(MySet) nimmt die verbleibenen Elemente von A auf, falls die Menge M mehr Elemente enthält als die Menge N.",
+                        "title": "Die Methode difference(MySet) nimmt die verbleibenen Elemente von M auf, falls die Menge M mehr Elemente enthält als die Menge N.",
                         "class": "h10.rubric.h3.H3_2_Tests"
                     },
                     {

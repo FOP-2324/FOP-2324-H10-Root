@@ -30,7 +30,7 @@ public class VisitorElement<T> {
     }
 
     public void reduce(int count) {
-        visited -= count;
+        visited = Math.max(0, visited - count);
     }
 
     public void reset() {

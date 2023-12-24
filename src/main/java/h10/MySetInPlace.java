@@ -137,6 +137,7 @@ public class MySetInPlace<T> extends MySet<T> {
                 if (previous == null) {
                     // Case 3.1: Since previous is not set yet, this means we the head of the set should be decoupled
                     head = current.next;
+                    otherCurrent = otherCurrent.next;
                 } else {
                     // Case 3.1: Previous is set to the last element which is not decoupled from the set
                     // Since the previous element is the element which is not removed and the successor needs to be

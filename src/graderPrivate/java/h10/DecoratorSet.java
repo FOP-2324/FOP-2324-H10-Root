@@ -108,4 +108,5 @@ public class DecoratorSet<T> extends MySet<T> implements Iterable<T>, Streamable
     public Stream<T> stream() {
         return ListItems.stream(head);
     }
+
 }
