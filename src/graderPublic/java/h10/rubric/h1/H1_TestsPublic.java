@@ -29,7 +29,7 @@ import java.util.function.Predicate;
 @TestForSubmission
 @DisplayName("H1 | subset(MySet)")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public abstract class H1_Tests extends SimpleTest {
+public abstract class H1_TestsPublic extends SimpleTest {
 
     protected static final String TEST_RESOURCE_PATH = "h1/";
 

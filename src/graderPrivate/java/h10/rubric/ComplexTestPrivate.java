@@ -3,18 +3,14 @@ package h10.rubric;
 import h10.ListItem;
 import h10.MySet;
 import h10.VisitorSet;
-import h10.converter.ListItemConverter;
-import h10.rubric.h3.H3_Tests;
-import h10.rubric.h4.H4_Tests;
+import h10.rubric.h3.H3_TestsPublic;
+import h10.rubric.h4.H4_TestsPublic;
 import h10.utils.ListItems;
 import h10.visitor.VisitorElement;
-import org.junit.jupiter.params.converter.ConvertWith;
-import org.junitpioneer.jupiter.json.Property;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
-import org.tudalgo.algoutils.tutor.general.conversion.ArrayConverter;
 
 import java.util.Iterator;
 import java.util.List;
@@ -24,10 +20,10 @@ import java.util.function.BiFunction;
  * This class is used to test the complex method implementation of the {@link MySet} interface.
  *
  * @author Nhan Huynh
- * @see H3_Tests
- * @see H4_Tests
+ * @see H3_TestsPublic
+ * @see H4_TestsPublic
  */
-public abstract class ComplexTest extends SimpleTest {
+public abstract class ComplexTestPrivate extends SimpleTest {
 
     /**
      * Returns the operation to be tested.
@@ -59,23 +55,6 @@ public abstract class ComplexTest extends SimpleTest {
         builder.add("Result", result.toString());
         Assertions2.assertEquals(expected, result, builder.build(),
             r -> "Expected set %s, but given %s".formatted(expected, result));
-    }
-
-    public void testNotAddElements(
-        ListItem<Integer> sourceHead,
-        ListItem<Integer> otherHead,
-        ListItem<Integer> expectedHead
-    ) {
-        assertEqualElements(sourceHead, otherHead, expectedHead);
-    }
-
-    public void testXSmallerY(
-        ListItem<Integer> sourceHead,
-        ListItem<Integer> otherHead,
-        Integer[] sourceVisitation,
-        Integer[] otherVisitation
-    ) {
-        assertPointers(sourceHead, otherHead, sourceVisitation, otherVisitation);
     }
 
     protected void assertPointers(
@@ -138,14 +117,5 @@ public abstract class ComplexTest extends SimpleTest {
                     r -> "Expected %s (%s) not to be visited, but was visited".formatted(element, setName));
             }
         }
-    }
-
-    public void testXGreaterY(
-        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> sourceHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("other") ListItem<Integer> otherHead,
-        @ConvertWith(ArrayConverter.Auto.class) @Property("sourceVisitation") Integer[] sourceVisitation,
-        @ConvertWith(ArrayConverter.Auto.class) @Property("otherVisitation") Integer[] otherVisitation
-    ) {
-        assertPointers(sourceHead, otherHead, sourceVisitation, otherVisitation);
     }
 }

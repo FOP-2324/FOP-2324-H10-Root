@@ -22,7 +22,7 @@ import java.util.function.Predicate;
 
 @TestForSubmission
 @DisplayName("H1.1 | As-Copy")
-public class H1_1_Tests extends H1_Tests {
+public class H1_1_TestsPublic extends H1_TestsPublic {
 
     @Override
     public Class<?> getClassType() {

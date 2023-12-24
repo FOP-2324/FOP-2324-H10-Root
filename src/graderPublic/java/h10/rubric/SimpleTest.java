@@ -3,8 +3,6 @@ package h10.rubric;
 import h10.ListItem;
 import h10.MySet;
 import h10.VisitorSet;
-import h10.rubric.h1.H1_Tests;
-import h10.rubric.h2.H2_Tests;
 import h10.utils.Links;
 import h10.visitor.VisitorElement;
 import org.jetbrains.annotations.Nullable;
@@ -22,8 +20,6 @@ import java.util.function.BiFunction;
  * This class is used to test the simple method implementation of the {@link MySet} interface.
  *
  * @author Nhan Huynh
- * @see H1_Tests
- * @see H2_Tests
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class SimpleTest {

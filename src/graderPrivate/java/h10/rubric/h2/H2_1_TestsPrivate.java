@@ -25,7 +25,7 @@ import java.util.function.BiFunction;
 
 @TestForSubmission
 @DisplayName("H2.1 | As-Copy")
-public class H2_1_Tests extends H2_Tests {
+public class H2_1_TestsPrivate extends H2_TestsPrivate {
 
     @Override
     public Class<?> getClassType() {
@@ -41,22 +41,6 @@ public class H2_1_Tests extends H2_Tests {
         return MySetAsCopy::new;
     }
 
-    @Order(0)
-    @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
-    @ParameterizedTest(name = "Source = {0}, Other {1}")
-    @JsonClasspathSource({
-        TEST_RESOURCE_PATH + "criterion1_testcase1.json",
-        TEST_RESOURCE_PATH + "criterion1_testcase2.json",
-    })
-    @Override
-    public void testSimple(
-        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> head,
-        @ConvertWith(ListItemConverter.Int.class) @Property("otherHead") ListItem<Integer> otherHead,
-        @ConvertWith(ListItemInListItemConverter.Int.class) @Property("expected") ListItem<ListItem<Integer>> expected
-    ) {
-        super.testSimple(head, otherHead, expected);
-    }
-
     @Order(1)
     @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.")
     @ParameterizedTest(name = "Source = {0}, Other {1}")
@@ -66,7 +50,6 @@ public class H2_1_Tests extends H2_Tests {
         TEST_RESOURCE_PATH + "criterion2_testcase3.json",
         TEST_RESOURCE_PATH + "criterion2_testcase4.json",
     })
-    @Override
     public void testComplex(
         @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> head,
         @ConvertWith(ListItemConverter.Int.class) @Property("otherHead") ListItem<Integer> otherHead,

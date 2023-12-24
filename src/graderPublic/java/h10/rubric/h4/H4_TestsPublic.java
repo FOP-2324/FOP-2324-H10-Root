@@ -16,7 +16,8 @@ import org.tudalgo.algoutils.tutor.general.conversion.ArrayConverter;
 
 import java.util.function.BiFunction;
 
-public abstract class H4_Tests extends ComplexTest {
+public abstract class H4_TestsPublic extends ComplexTest {
+
     protected static final String TEST_RESOURCE_PATH = "h4/";
 
     protected static final String METHOD_NAME = "intersectionListItems";
@@ -78,57 +79,6 @@ public abstract class H4_Tests extends ComplexTest {
         @ConvertWith(ArrayConverter.Auto.class) @Property("sourceVisitation") Integer[] sourceVisitation,
         @ConvertWith(ArrayConverter.Auto.class) @Property("otherVisitation") Integer[] otherVisitation
     ) {
-        super.testXGreaterY(sourceHead, otherHead, sourceVisitation, otherVisitation);
-    }
-
-    @Order(3)
-    @DisplayName("Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für eine leere Menge zurück.")
-    @ParameterizedTest(name = "Source = {0}, Other = {1}}")
-    @JsonClasspathSource({
-        TEST_RESOURCE_PATH + "criterion4_testcase1.json",
-        TEST_RESOURCE_PATH + "criterion4_testcase2.json",
-    })
-    public void testEmpty(
-        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> sourceHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("other") ListItem<Integer> otherHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("expected") ListItem<Integer> expectedHead
-    ) {
-        assertEqualElements(sourceHead, otherHead, expectedHead);
-    }
-
-    @Order(4)
-    @DisplayName("Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für Mengen mit "
-        + "unterschiedlicher Länge zurück.")
-    @ParameterizedTest(name = "Source = {0}, Other = {1}")
-    @JsonClasspathSource({
-        TEST_RESOURCE_PATH + "criterion5_testcase1.json",
-        TEST_RESOURCE_PATH + "criterion5_testcase2.json",
-    })
-    public void testDifferentSize(
-        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> sourceHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("other") ListItem<Integer> otherHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("expected") ListItem<Integer> expectedHead
-    ) {
-        assertEqualElements(sourceHead, otherHead, expectedHead);
-    }
-
-    @Order(5)
-    @DisplayName("Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für komplexe Eingaben "
-        + "zurück.")
-    @ParameterizedTest(name = "Source = {0}, Other = {1}")
-    @JsonClasspathSource({
-        TEST_RESOURCE_PATH + "criterion6_testcase1.json",
-        TEST_RESOURCE_PATH + "criterion6_testcase2.json",
-        TEST_RESOURCE_PATH + "criterion6_testcase3.json",
-        TEST_RESOURCE_PATH + "criterion6_testcase4.json",
-        TEST_RESOURCE_PATH + "criterion6_testcase5.json",
-        TEST_RESOURCE_PATH + "criterion6_testcase6.json",
-    })
-    public void testComplex(
-        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> sourceHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("other") ListItem<Integer> otherHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("expected") ListItem<Integer> expectedHead
-    ) {
-        assertEqualElements(sourceHead, otherHead, expectedHead);
+        assertPointers(sourceHead, otherHead, sourceVisitation, otherVisitation);
     }
 }

@@ -26,7 +26,7 @@ import java.util.Objects;
 @TestForSubmission
 @DisplayName("H2 | cartesianProduct(MySet)")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public abstract class H2_Tests extends SimpleTest {
+public abstract class H2_TestsPublic extends SimpleTest {
 
     protected static final String TEST_RESOURCE_PATH = "h2/";
 
@@ -92,22 +92,5 @@ public abstract class H2_Tests extends SimpleTest {
                 );
             }
         });
-    }
-
-    @Order(1)
-    @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.")
-    @ParameterizedTest(name = "Source = {0}, Other {1}")
-    @JsonClasspathSource({
-        TEST_RESOURCE_PATH + "criterion2_testcase1.json",
-        TEST_RESOURCE_PATH + "criterion2_testcase2.json",
-        TEST_RESOURCE_PATH + "criterion2_testcase3.json",
-        TEST_RESOURCE_PATH + "criterion2_testcase4.json",
-    })
-    public void testComplex(
-        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> head,
-        @ConvertWith(ListItemConverter.Int.class) @Property("otherHead") ListItem<Integer> otherHead,
-        @ConvertWith(ListItemInListItemConverter.Int.class) @Property("expected") ListItem<ListItem<Integer>> expected
-    ) {
-        assertTuples(head, otherHead, expected);
     }
 }

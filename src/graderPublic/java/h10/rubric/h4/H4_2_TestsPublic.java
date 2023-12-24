@@ -19,7 +19,7 @@ import java.util.function.BiFunction;
 
 @TestForSubmission
 @DisplayName("H4.2 | In-Place")
-public class H4_2_Tests extends H4_Tests {
+public class H4_2_TestsPublic extends H4_TestsPublic {
 
     @Override
     public Class<?> getClassType() {
@@ -83,56 +83,5 @@ public class H4_2_Tests extends H4_Tests {
         @ConvertWith(ArrayConverter.Auto.class) @Property("otherVisitation") Integer[] otherVisitation
     ) {
         super.testXGreaterY(sourceHead, otherHead, sourceVisitation, otherVisitation);
-    }
-
-    @Order(3)
-    @DisplayName("Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für eine leere Menge zurück.")
-    @ParameterizedTest(name = "Source = {0}, Other = {1}}")
-    @JsonClasspathSource({
-        TEST_RESOURCE_PATH + "criterion4_testcase1.json",
-        TEST_RESOURCE_PATH + "criterion4_testcase2.json",
-    })
-    public void testEmpty(
-        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> sourceHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("other") ListItem<Integer> otherHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("expected") ListItem<Integer> expectedHead
-    ) {
-        super.testEmpty(sourceHead, otherHead, expectedHead);
-    }
-
-    @Order(4)
-    @DisplayName("Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für Mengen mit "
-        + "unterschiedlicher Länge zurück.")
-    @ParameterizedTest(name = "Source = {0}, Other = {1}")
-    @JsonClasspathSource({
-        TEST_RESOURCE_PATH + "criterion5_testcase1.json",
-        TEST_RESOURCE_PATH + "criterion5_testcase2.json",
-    })
-    public void testDifferentSize(
-        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> sourceHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("other") ListItem<Integer> otherHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("expected") ListItem<Integer> expectedHead
-    ) {
-        super.testDifferentSize(sourceHead, otherHead, expectedHead);
-    }
-
-    @Order(5)
-    @DisplayName("Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für komplexe Eingaben "
-        + "zurück.")
-    @ParameterizedTest(name = "Source = {0}, Other = {1}")
-    @JsonClasspathSource({
-        TEST_RESOURCE_PATH + "criterion6_testcase1.json",
-        TEST_RESOURCE_PATH + "criterion6_testcase2.json",
-        TEST_RESOURCE_PATH + "criterion6_testcase3.json",
-        TEST_RESOURCE_PATH + "criterion6_testcase4.json",
-        TEST_RESOURCE_PATH + "criterion6_testcase5.json",
-        TEST_RESOURCE_PATH + "criterion6_testcase6.json",
-    })
-    public void testComplex(
-        @ConvertWith(ListItemConverter.Int.class) @Property("head") ListItem<Integer> sourceHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("other") ListItem<Integer> otherHead,
-        @ConvertWith(ListItemConverter.Int.class) @Property("expected") ListItem<Integer> expectedHead
-    ) {
-        super.testComplex(sourceHead, otherHead, expectedHead);
     }
 }
