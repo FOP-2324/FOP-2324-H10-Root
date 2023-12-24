@@ -7,6 +7,12 @@ import h10.ListItem;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.converter.ArgumentConversionException;
 
+/**
+ * A {@link JsonNode} converter that converts an {@link ArrayNode} to a {@link ListItem}.
+ *
+ * @param <T> the type of the elements in the list
+ * @author Nhan Huynh
+ */
 public abstract class ListItemConverter<T> implements GenericArgumentConverter<T> {
 
     @Override
@@ -28,6 +34,9 @@ public abstract class ListItemConverter<T> implements GenericArgumentConverter<T
         return head;
     }
 
+    /**
+     * Maps a {@link JsonNode} to an int node.
+     */
     public static class Int extends ListItemConverter<Integer> {
 
         @Override

@@ -4,6 +4,8 @@ import h10.ListItem;
 import h10.MySet;
 import h10.VisitorSet;
 import h10.converter.ListItemConverter;
+import h10.rubric.h3.H3_Tests;
+import h10.rubric.h4.H4_Tests;
 import h10.utils.ListItems;
 import h10.visitor.VisitorElement;
 import org.junit.jupiter.params.converter.ConvertWith;
@@ -18,10 +20,29 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiFunction;
 
+/**
+ * This class is used to test the complex method implementation of the {@link MySet} interface.
+ *
+ * @author Nhan Huynh
+ * @see H3_Tests
+ * @see H4_Tests
+ */
 public abstract class ComplexTest extends SimpleTest {
 
+    /**
+     * Returns the operation to be tested.
+     *
+     * @return the operation to be tested
+     */
     protected abstract BiFunction<VisitorSet<Integer>, VisitorSet<Integer>, MySet<VisitorElement<Integer>>> operation();
 
+    /**
+     * Tests whether the result of the operation is correct.
+     *
+     * @param sourceHead   the head of the source set
+     * @param otherHead    the head of the other set
+     * @param expectedHead the head of the expected set
+     */
     protected void assertEqualElements(
         ListItem<Integer> sourceHead,
         ListItem<Integer> otherHead,
@@ -89,6 +110,14 @@ public abstract class ComplexTest extends SimpleTest {
         }
     }
 
+    /**
+     * Asserts whether the visitation of the given set is correct.
+     *
+     * @param set                the set to be checked
+     * @param expectedVisitation the expected visitation
+     * @param setName            the name of the set
+     * @param context            the context to be used
+     */
     protected void assertVisitation(
         VisitorSet<Integer> set,
         Integer[] expectedVisitation,

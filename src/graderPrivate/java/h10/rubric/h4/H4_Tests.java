@@ -98,7 +98,7 @@ public abstract class H4_Tests extends ComplexTest {
 
     @Order(4)
     @DisplayName("Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für Mengen mit "
-        + "unterschiedlicher Länge zurück")
+        + "unterschiedlicher Länge zurück.")
     @ParameterizedTest(name = "Source = {0}, Other = {1}")
     @JsonClasspathSource({
         TEST_RESOURCE_PATH + "criterion5_testcase1.json",

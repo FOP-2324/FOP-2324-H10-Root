@@ -6,10 +6,24 @@ import h10.ListItem;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.converter.ArgumentConversionException;
 
+/**
+ * A {@link JsonNode} converter that converts an {@link ArrayNode} to a nested {@link ListItem}.
+ *
+ * @param <T> the type of the elements in the list
+ * @author Nhan Huynh
+ */
 public abstract class ListItemInListItemConverter<T> implements GenericArgumentConverter<T> {
 
+    /**
+     * The converter to convert the inner list.
+     */
     protected final ListItemConverter<T> converter;
 
+    /**
+     * Creates a new {@link ListItemInListItemConverter} with the given converter.
+     *
+     * @param converter the converter to convert the inner list
+     */
     public ListItemInListItemConverter(ListItemConverter<T> converter) {
         this.converter = converter;
     }
@@ -41,6 +55,9 @@ public abstract class ListItemInListItemConverter<T> implements GenericArgumentC
         return converter.map(node);
     }
 
+    /**
+     * Maps a {@link JsonNode} to an int node.
+     */
     public static class Int extends ListItemInListItemConverter<Integer> {
 
         public Int() {

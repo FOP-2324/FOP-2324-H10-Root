@@ -5,7 +5,9 @@ import h10.MySet;
 import h10.MySetAsCopy;
 import h10.converter.ListItemConverter;
 import h10.converter.PredicateConverter;
+import h10.utils.TutorAssertions;
 import h10.visitor.VisitorElement;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,6 +36,14 @@ public class H1_1_Tests extends H1_Tests {
         MySet<VisitorElement<Integer>>
         > converter() {
         return MySetAsCopy::new;
+    }
+
+    @Override
+    public void assertRequirement() {
+        Assumptions.assumeTrue(source != null);
+        Assumptions.assumeTrue(result != null);
+        Assumptions.assumeTrue(context != null);
+        TutorAssertions.assertAsCopy(source, result, context);
     }
 
     @Order(0)

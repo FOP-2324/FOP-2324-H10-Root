@@ -7,6 +7,9 @@ import h10.converter.PredicateConverter;
 import h10.rubric.SimpleTest;
 import h10.utils.ListItems;
 import h10.visitor.VisitorElement;
+import org.jetbrains.annotations.Nullable;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -20,6 +23,7 @@ import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 
 @TestForSubmission
@@ -31,9 +35,66 @@ public abstract class H1_Tests extends SimpleTest {
 
     protected static final String METHOD_NAME = "subset";
 
+    /**
+     * The tested source set.
+     */
+    protected @Nullable VisitorSet<Integer> source;
+
+    /**
+     * The result of the method call.
+     */
+    protected @Nullable VisitorSet<Integer> result;
+
+    /**
+     * The context builder for the test.
+     */
+    protected @Nullable Context.Builder<?> context;
+
     @Override
     public String getMethodName() {
         return METHOD_NAME;
+    }
+
+    @AfterEach
+    public void tearDown() {
+        assertVisitation();
+        assertRequirement();
+    }
+
+    /**
+     * Asserts that each node in the source set is visited only once.
+     */
+    public void assertVisitation() {
+        Assumptions.assumeTrue(source != null);
+        Assumptions.assumeTrue(context != null);
+
+        // Nodes must be visited only once
+        List<VisitorElement<Integer>> failed = source.stream()
+            .filter(element -> element.visited() > 1)
+            .toList();
+        Assertions2.assertTrue(
+            failed.isEmpty(),
+            context.add("Nodes visited more than once", failed).build(),
+            r -> "Expected no visited node more than once, got %s.".formatted(failed)
+        );
+    }
+
+    /**
+     * Asserts the requirement of the test.
+     */
+    public abstract void assertRequirement();
+
+    /**
+     * Sets the source set, result set, and context builder for the test to validate.
+     *
+     * @param source  the source set
+     * @param result  the result set
+     * @param context the context builder
+     */
+    private void set(VisitorSet<Integer> source, VisitorSet<Integer> result, Context.Builder<?> context) {
+        this.source = source;
+        this.result = result;
+        this.context = context;
     }
 
     @Order(0)
@@ -76,6 +137,7 @@ public abstract class H1_Tests extends SimpleTest {
             context.build(),
             r -> "Subset should be empty, but got %s.".formatted(result)
         );
+        set(source, result, context);
     }
 
     @Order(1)
@@ -130,5 +192,7 @@ public abstract class H1_Tests extends SimpleTest {
             r -> "Expected list contains more element than actual list");
         Assertions2.assertFalse(actualIt.hasNext(), context.build(),
             r -> "Actual list contains more element than expected list");
+
+        set(source, result, context);
     }
 }

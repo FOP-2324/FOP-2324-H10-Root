@@ -10,6 +10,12 @@ import java.util.function.Predicate;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
+/**
+ * A {@link String} converter that converts a {@link String} to a {@link Predicate}.
+ *
+ * @param <T> the type of the predicate
+ * @author Nhan Huynh
+ */
 public abstract class PredicateConverter<T> implements ArgumentConverter {
 
     @Override
@@ -21,12 +27,38 @@ public abstract class PredicateConverter<T> implements ArgumentConverter {
         return parse(string);
     }
 
+    /**
+     * Parses the given string to a {@link Predicate}.
+     *
+     * @param string the string to parse
+     * @return the parsed predicate
+     */
     protected abstract Predicate<T> parse(String string);
 
+    /**
+     * A {@link PredicateConverter} that converts a {@link String} to a {@link Predicate} of {@link Integer}.
+     * This converter supports the following operators:
+     * <ul>
+     *     <li>{@code ==}</li>
+     *     <li>{@code !=}</li>
+     *     <li>{@code <=}</li>
+     *     <li>{@code >=}</li>
+     *     <li>{@code <}</li>
+     *     <li>{@code >}</li>
+     *     <li>{@code %}</li>
+     *     <li>Chained operations</li>
+     * </ul>
+     */
     public static class BasicIntMath extends PredicateConverter<Integer> {
 
+        /**
+         * The supported operators.
+         */
         public static final Pattern OPERATORS = Pattern.compile("==|!=|<=|>=|<|>|%");
 
+        /**
+         * The pattern to match an integer.
+         */
         private static final Pattern PATTERN_INT = Pattern.compile("-?\\d+");
 
         @Override
@@ -38,6 +70,8 @@ public abstract class PredicateConverter<T> implements ArgumentConverter {
             // Base
             String op = ops.next();
             int operand = operands.next();
+
+            // Overwrite the toString method to improve the readability of the test output
             Predicate<Integer> predicate = new Predicate<Integer>() {
                 @Override
                 public boolean test(Integer x) {
@@ -49,7 +83,6 @@ public abstract class PredicateConverter<T> implements ArgumentConverter {
                     return "x" + BasicIntMath.this.toString(operand, op);
                 }
             };
-
 
             // Chained operations
             while (ops.hasNext()) {
@@ -72,6 +105,14 @@ public abstract class PredicateConverter<T> implements ArgumentConverter {
             return predicate;
         }
 
+        /**
+         * Evaluates the given operation.
+         *
+         * @param x  the first operand
+         * @param y  the second operand
+         * @param op the operator
+         * @return the result of the operation
+         */
         private boolean evaluate(int x, int y, String op) {
             return switch (op) {
                 case "==" -> x == y;
@@ -84,6 +125,13 @@ public abstract class PredicateConverter<T> implements ArgumentConverter {
             };
         }
 
+        /**
+         * Returns a string representation of the given operation.
+         *
+         * @param y  the second operand
+         * @param op the operator
+         * @return a string representation of the given operation
+         */
         private String toString(int y, String op) {
             return switch (op) {
                 case "==" -> " == " + y;

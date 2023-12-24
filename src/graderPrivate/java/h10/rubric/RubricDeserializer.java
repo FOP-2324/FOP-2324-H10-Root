@@ -20,6 +20,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * A deserializer for {@link Criterion} objects.
+ *
+ * <p>This class is used to deserialize the JSON representation of a {@link Criterion} object.
+ *
+ * @author Nhan Huynh
+ */
 public class RubricDeserializer extends JsonDeserializer<Criterion[]> {
 
     @Override
@@ -32,6 +39,13 @@ public class RubricDeserializer extends JsonDeserializer<Criterion[]> {
         return Streams.stream(criteriaNode).map(deserializer).toArray(Criterion[]::new);
     }
 
+    /**
+     * A function that can throw an {@link Exception}.
+     * This is used to wrap the checked {@link IOException} into an unchecked {@link UncheckedIOException}.
+     *
+     * @param <T> the type of the input to the function
+     * @param <R> the type of the result of the function
+     */
     private interface CheckedFunction<T, R> extends Function<T, R> {
 
         @Override
@@ -46,6 +60,13 @@ public class RubricDeserializer extends JsonDeserializer<Criterion[]> {
         R applyChecked(T t) throws IOException;
     }
 
+    /**
+     * Deserializes a {@link Criterion} object from a {@link JsonNode}.
+     *
+     * @param node the node to deserialize from
+     * @return the deserialized {@link Criterion} object
+     * @throws IOException if the node is not a valid {@link Criterion} object
+     */
     private Criterion deserializeCriterion(JsonNode node) throws IOException {
         if (!node.has("title")) {
             throw new IOException("Missing title");
@@ -67,6 +88,13 @@ public class RubricDeserializer extends JsonDeserializer<Criterion[]> {
             ).build();
     }
 
+    /**
+     * Deserializes a {@link Criterion} object from a {@link JsonNode}.
+     *
+     * @param node the node to deserialize from
+     * @return the deserialized {@link Criterion} object
+     * @throws IOException if the node is not a valid {@link Criterion} object
+     */
     private Criterion deserializeTask(JsonNode node) throws IOException {
         if (!node.has("name")) {
             throw new IOException("Missing name");
@@ -90,7 +118,12 @@ public class RubricDeserializer extends JsonDeserializer<Criterion[]> {
             ).build();
     }
 
-
+    /**
+     * Returns all methods of the given class and its superclasses.
+     *
+     * @param clazz the class to get the methods from
+     * @return all methods of the given class and its superclasses
+     */
     private List<Method> getMethods(Class<?> clazz) {
         List<Method> methods = new ArrayList<>(List.of(clazz.getDeclaredMethods()));
         if (methods.isEmpty() || clazz.getSuperclass() == null) {
@@ -100,6 +133,13 @@ public class RubricDeserializer extends JsonDeserializer<Criterion[]> {
         return methods;
     }
 
+    /**
+     * Deserializes a {@link Criterion} object from a {@link JsonNode}.
+     *
+     * @param node the node to deserialize from
+     * @return the deserialized {@link Criterion} object
+     * @throws IOException if the node is not a valid {@link Criterion} object
+     */
     private Map.Entry<Integer, Criterion> deserializeSubCriterion(JsonNode node) throws IOException {
         if (!node.has("order")) {
             throw new IOException("Missing order");
