@@ -23,8 +23,8 @@ import java.util.function.Function;
  * A deserializer for {@link Criterion} objects.
  *
  * <p>This class is used to deserialize the JSON representation of a {@link Criterion} object.
- * <p>
- * The JSON representation of a {@link Criterion} object is as follows:
+ *
+ * <p>The JSON representation of a {@link Criterion} object is as follows:
  * <pre>{@code
  *     {
  *       "title": "The title of the criterion",

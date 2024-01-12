@@ -134,7 +134,7 @@ public abstract class MySet<T> {
         ListItem<ListItem<T>> heads = null;
         ListItem<ListItem<T>> tails = null;
 
-        // Retrieve pointers to head pointer from all sets
+        // Retrieve pointers to a head pointer from all sets
         if (head != null) {
             heads = new ListItem<>(head);
             tails = heads;
