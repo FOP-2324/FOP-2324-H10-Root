@@ -7,12 +7,6 @@ plugins {
 
 version = file("version").readLines().first()
 
-configurations.all {
-    resolutionStrategy {
-        force("org.junit-pioneer:junit-pioneer:1.7.1")
-    }
-}
-
 jagr {
     assignmentId.set("h10")
     submissions {
@@ -34,7 +28,7 @@ jagr {
         val graderPrivate by creating {
             parent(graderPublic)
             graderName.set("H10-Private")
-                rubricProviderName.set("h10.H10_RubricProviderPrivate")
+            rubricProviderName.set("h10.H10_RubricProviderPrivate")
         }
     }
 }
