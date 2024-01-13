@@ -10,7 +10,11 @@ configurations.all {
     resolutionStrategy {
         configurations.all {
             resolutionStrategy {
-                force(libs.algoutils.tutor, libs.junit.pioneer)
+                force(
+                      libs.algoutils.student,
+                    libs.algoutils.tutor,
+                    libs.junit.pioneer,
+                )
             }
         }
     }
