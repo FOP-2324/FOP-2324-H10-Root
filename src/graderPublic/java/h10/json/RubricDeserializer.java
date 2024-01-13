@@ -1,4 +1,4 @@
-package h10.rubric;
+package h10.json;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -51,11 +51,11 @@ public class RubricDeserializer extends JsonDeserializer<Criterion[]> {
     @Override
     public Criterion[] deserialize(JsonParser parser, DeserializationContext context) throws IOException {
         JsonNode node = parser.getCodec().readTree(parser);
-        if (!(node instanceof ArrayNode criteriaNode)) {
+        if (!node.isArray()) {
             throw new IOException("Expected array of criteria");
         }
         CheckedFunction<JsonNode, Criterion> deserializer = this::deserializeCriterion;
-        return Streams.stream(criteriaNode).map(deserializer).toArray(Criterion[]::new);
+        return Streams.stream(node).map(deserializer).toArray(Criterion[]::new);
     }
 
     /**
@@ -190,7 +190,10 @@ public class RubricDeserializer extends JsonDeserializer<Criterion[]> {
             clazz = Class.forName(className);
         } catch (ClassNotFoundException e) {
             // Private Tests
-            return Map.entry(order, Criterion.builder().grader(RubricUtils.graderPrivateOnly()).shortDescription(title).build());
+            return Map.entry(order, Criterion.builder()
+                .grader(RubricUtils.graderPrivateOnly())
+                .shortDescription(title)
+                .build());
         }
         List<Method> methods = getMethods(clazz);
         return methods.parallelStream()
@@ -198,7 +201,9 @@ public class RubricDeserializer extends JsonDeserializer<Criterion[]> {
                 && method.getAnnotation(DisplayName.class).value().equals(title))
             .map(method -> Map.entry(order, RubricUtils.criterion(title, JUnitTestRef.ofMethod(method))))
             .findFirst()
-            // Should not occur since we define all test cases in the rubric and test methods
-            .orElseThrow();
+            .orElse(Map.entry(order, Criterion.builder().grader(RubricUtils
+                    .graderPrivateOnly())
+                .shortDescription(title)
+                .build()));
     }
 }

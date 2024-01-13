@@ -1,4 +1,6 @@
-package h10.visit;
+package h10.util;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -9,7 +11,7 @@ import java.util.Objects;
  * @param <T> the type of the element
  * @author Nhan Huynh
  */
-public class VisitorElement<T> {
+public class VisitorElement<T extends Comparable<T>> implements Comparable<VisitorElement<T>> {
 
     /**
      * The wrapped element which can be visited.
@@ -65,8 +67,18 @@ public class VisitorElement<T> {
         return visited;
     }
 
+    /**
+     * Returns {@code true} if the wrapped element has been visited at least once, {@code false} otherwise.
+     *
+     * @return {@code true} if the wrapped element has been visited at least once, {@code false} otherwise
+     */
     public boolean isVisited() {
         return visited > 0;
+    }
+
+    @Override
+    public int compareTo(@NotNull VisitorElement<T> o) {
+        return get().compareTo(o.get());
     }
 
     @Override
