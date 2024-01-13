@@ -1,6 +1,10 @@
-package h10;
+package h10.rubric;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import h10.ListItem;
+import h10.MySet;
+import h10.MySetAsCopy;
+import h10.MySetInPlace;
 import h10.rubric.Links;
 import h10.util.JsonConverters;
 import org.jetbrains.annotations.Nullable;

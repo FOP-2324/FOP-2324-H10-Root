@@ -1,6 +1,6 @@
 package h10.rubric.h1;
 
-import h10.H10_Test;
+import h10.rubric.H10_Test;
 import h10.ListItem;
 import h10.MySet;
 import h10.MySetAsCopy;
