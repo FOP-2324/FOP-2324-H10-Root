@@ -118,11 +118,12 @@ public abstract class H1_TestsPublic extends H10_Test {
         ListItem<Integer> head = parameters.get("head");
         ListItem<VisitorElement<Integer>> visitableHead = ListItems.map(head, VisitorElement::new);
         MySet<VisitorElement<Integer>> source = createSet(visitableHead);
-        contextBuilder.add("Source set", source.toString());
+        contextBuilder.add("Source set (before operation)", source.toString());
 
         // Result
         MySet<VisitorElement<Integer>> result = source.subset(predicate);
         contextBuilder.add("Actual result set", result.toString());
+        contextBuilder.add("Source set (after operation)", source.toString());
 
         // Expected
         MySet<VisitorElement<Integer>> expected = createSet(null);
@@ -164,13 +165,15 @@ public abstract class H1_TestsPublic extends H10_Test {
         ListItem<Integer> head = parameters.get("head");
         ListItem<VisitorElement<Integer>> visitableHead = ListItems.map(head, VisitorElement::new);
         MySet<VisitorElement<Integer>> source = createSet(visitableHead);
-        contextBuilder.add("Source set", source.toString());
-        copyContextBuilder.add("Source set", source.toString());
+        contextBuilder.add("Source set (before operation)", source.toString());
+        copyContextBuilder.add("Source set (before operation)", source.toString());
 
         // Result
         MySet<VisitorElement<Integer>> result = source.subset(predicate);
         contextBuilder.add("Actual result set", result.toString());
         copyContextBuilder.add("Actual result set", result.toString());
+        contextBuilder.add("Source set (after operation)", source.toString());
+        copyContextBuilder.add("Source set (after operation)", source.toString());
 
         // Expected
         ListItem<Integer> expectedHead = parameters.get("expected");
