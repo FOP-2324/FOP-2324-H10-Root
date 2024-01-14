@@ -36,13 +36,14 @@ public abstract class MySet<T> {
      */
     @DoNotTouch
     public MySet(ListItem<T> head, Comparator<? super T> cmp) {
+        /*
         if (!isOrdered(head, cmp)) {
             throw new IllegalArgumentException("The given elements are not ordered");
         }
         if (!isPairwiseDifferent(head, cmp)) {
             throw new IllegalArgumentException("The given elements are not pairwise different");
         }
-
+*/
         this.head = head;
         this.cmp = cmp;
     }

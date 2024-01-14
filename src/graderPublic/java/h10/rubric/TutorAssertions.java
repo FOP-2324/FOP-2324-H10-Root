@@ -47,27 +47,30 @@ public final class TutorAssertions {
     /**
      * Asserts that the given input is copied to the given output.
      *
-     * @param input   the input of the operation to check
-     * @param output  the output of the operation to check
-     * @param context the context to report the result to
-     * @param <T>     the type of the elements in the set
+     * @param input          the input of the operation to check
+     * @param output         the output of the operation to check
+     * @param contextBuilder the context builder to report the result to
+     * @param <T>            the type of the elements in the set
      * @throws AssertionFailedError if the given input is not copied to the given output
      */
     public static <T extends Comparable<T>> void assertAsCopy(
         MySet<VisitorElement<T>> input,
         MySet<VisitorElement<T>> output,
-        Context.Builder<?> context
+        Context.Builder<?> contextBuilder
     ) {
         List<String> inputHashCode = Sets.itemsStream(input).map(TutorAssertions::identityHashCode).toList();
         List<String> otherIdentityHashCodes = Sets.itemsStream(output).map(TutorAssertions::identityHashCode).toList();
-        context.add("Input hashcodes", inputHashCode);
-        context.add("Output hashcodes", otherIdentityHashCodes);
+        Context hashContext = Assertions2.contextBuilder().subject("Hashcodes")
+            .add("Input", inputHashCode)
+            .add("Output", otherIdentityHashCodes)
+            .build();
+        contextBuilder.add("As-Copy", hashContext);
         Sets.itemsStream(output)
             .forEach(other -> inputHashCode.forEach(currentHashCode -> {
                         String otherHashCode = identityHashCode(other);
                         Assertions2.assertNotEquals(
                             otherHashCode, currentHashCode,
-                            context.build(),
+                            contextBuilder.build(),
                             result -> "Node %s (%s) was not copied, got %s"
                                 .formatted(other, otherHashCode, currentHashCode)
                         );
@@ -79,30 +82,32 @@ public final class TutorAssertions {
     /**
      * Asserts that the given input is not copied to the given output.
      *
-     * @param input   the input of the operation to check
-     * @param output  the output of the operation to check
-     * @param context the context to report the result to
-     * @param <T>     the type of the elements in the set
+     * @param input          the input of the operation to check
+     * @param output         the output of the operation to check
+     * @param contextBuilder the context builder to report the result to
+     * @param <T>            the type of the elements in the set
      * @throws AssertionFailedError if the given input is copied to the given output
      */
     public static <T extends Comparable<T>> void assertInPlace(
         MySet<VisitorElement<T>> input,
         MySet<VisitorElement<T>> output,
-        Context.Builder<?> context
+        Context.Builder<?> contextBuilder
     ) {
         List<String> inputHashCode = Sets.itemsStream(input).map(TutorAssertions::identityHashCode).toList();
         List<String> otherIdentityHashCodes = Sets.itemsStream(output).map(TutorAssertions::identityHashCode).toList();
-        context.add("Input hashcodes", inputHashCode);
-        context.add("Output hashcodes", otherIdentityHashCodes);
+        Context hashContext = Assertions2.contextBuilder().subject("In-Place")
+            .add("Input", inputHashCode)
+            .add("Output", otherIdentityHashCodes)
+            .build();
+        contextBuilder.add("Hashcodes", hashContext);
         Sets.itemsStream(output)
             .forEach(other -> {
                     String otherHashCode = identityHashCode(other);
                     Assertions2.assertTrue(inputHashCode.stream().anyMatch(otherHashCode::equals),
-                        context.build(),
+                        contextBuilder.build(),
                         result -> "Cannot find the same node (%s) after the operation. Node was probably copied."
                             .formatted(otherHashCode));
                 }
             );
     }
-
 }

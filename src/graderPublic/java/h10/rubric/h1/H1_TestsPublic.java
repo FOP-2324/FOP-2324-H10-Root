@@ -21,6 +21,7 @@ import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
@@ -91,6 +92,14 @@ public abstract class H1_TestsPublic extends H10_Test {
         this.<T>requirementCheck().accept(input, output, context);
     }
 
+    private Context getInputContext(Comparator<?> cmp, Predicate<?> predicate, MySet<?> input) {
+        return Assertions2.contextBuilder().subject("Input")
+            .add("Set", input)
+            .add("Comparator", cmp)
+            .add("Predicate", predicate)
+            .build();
+    }
+
     @Order(0)
     @DisplayName("Die Methode subset(MySet) ninmmt Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht "
         + "erfüllt wird.")
@@ -112,26 +121,27 @@ public abstract class H1_TestsPublic extends H10_Test {
                 return "Drop all";
             }
         };
-        contextBuilder.add("Predicate", predicate);
 
         // Source
         ListItem<Integer> head = parameters.get("head");
         ListItem<VisitorElement<Integer>> visitableHead = ListItems.map(head, VisitorElement::new);
         MySet<VisitorElement<Integer>> source = createSet(visitableHead);
-        contextBuilder.add("Source set (before operation)", source.toString());
+
+        contextBuilder.add("Source", getInputContext(getDefaultComparator(), predicate, source));
 
         // Result
         MySet<VisitorElement<Integer>> result = source.subset(predicate);
-        contextBuilder.add("Actual result set", result.toString());
-        contextBuilder.add("Source set (after operation)", source.toString());
-
-        // Expected
         MySet<VisitorElement<Integer>> expected = createSet(null);
-        contextBuilder.add("Expected result set", expected.toString());
+
+        Context.Builder<?> resultContext = Assertions2.contextBuilder().subject("Output");
+        resultContext.add("Source set afterwards", source.toString())
+            .add("Actual output set", result.toString())
+            .add("Expected output set", expected.toString());
+        contextBuilder.add("Result", resultContext.build());
 
         // Validation of the result
         Context context = contextBuilder.build();
-        Assertions2.assertFalse(Sets.iterator(result).hasNext(), context, r -> "The result set is not empty");
+        Assertions2.assertFalse(Sets.iterator(result).hasNext(), context, r -> "The output set is not empty");
         assertVisitation(source, context);
         assertRequirement(source, result, contextBuilder);
     }
@@ -143,7 +153,6 @@ public abstract class H1_TestsPublic extends H10_Test {
     @JsonParameterSetTest(value = "H1_Criteria_02.json", customConverters = CUSTOM_CONVERTERS)
     public void testComplex(JsonParameterSet parameters) {
         Context.Builder<?> contextBuilder = contextBuilder();
-        Context.Builder<?> copyContextBuilder = contextBuilder();
         Predicate<VisitorElement<Integer>> predicate = new Predicate<>() {
 
             private final Predicate<Integer> underlying = parameters.get("predicate");
@@ -158,41 +167,43 @@ public abstract class H1_TestsPublic extends H10_Test {
                 return underlying.toString();
             }
         };
-        contextBuilder.add("Predicate", predicate);
-        copyContextBuilder.add("Predicate", predicate);
 
         // Source
         ListItem<Integer> head = parameters.get("head");
         ListItem<VisitorElement<Integer>> visitableHead = ListItems.map(head, VisitorElement::new);
         MySet<VisitorElement<Integer>> source = createSet(visitableHead);
-        contextBuilder.add("Source set (before operation)", source.toString());
-        copyContextBuilder.add("Source set (before operation)", source.toString());
+
+        contextBuilder.add("Source", getInputContext(getDefaultComparator(), predicate, source));
 
         // Result
         MySet<VisitorElement<Integer>> result = source.subset(predicate);
-        contextBuilder.add("Actual result set", result.toString());
-        copyContextBuilder.add("Actual result set", result.toString());
-        contextBuilder.add("Source set (after operation)", source.toString());
-        copyContextBuilder.add("Source set (after operation)", source.toString());
-
         // Expected
         ListItem<Integer> expectedHead = parameters.get("expected");
         ListItem<VisitorElement<Integer>> expectedVisitableHead = ListItems.map(expectedHead, VisitorElement::new);
         MySet<VisitorElement<Integer>> expected = createSet(expectedVisitableHead);
-        contextBuilder.add("Expected result set", expected.toString());
-        copyContextBuilder.add("Expected result set", expected.toString());
+
+        Context.Builder<?> resultContext = Assertions2.contextBuilder().subject("Output");
+        resultContext.add("Source set afterwards", source.toString())
+            .add("Actual output set", result.toString())
+            .add("Expected output set", expected.toString());
+        contextBuilder.add("Result", resultContext.build());
 
         // Validation of the result
         Iterator<VisitorElement<Integer>> actualIt = Sets.iterator(result);
         Iterator<VisitorElement<Integer>> expectedIt = Sets.iterator(expected);
         Context context = contextBuilder.build();
+
         while (actualIt.hasNext() && expectedIt.hasNext()) {
             VisitorElement<Integer> a = actualIt.next();
             VisitorElement<Integer> e = expectedIt.next();
+            Context checkContext = Assertions2.contextBuilder()
+                .add("Expected node", e)
+                .add("Actual node", a)
+                .build();
             Assertions2.assertEquals(
                 e.peek(),
                 a.peek(),
-                contextBuilder.add("Expected node", e).add("Actual node", a).build(),
+                contextBuilder.add("Equality", checkContext).build(),
                 r -> "The result set contains the wrong elements"
             );
         }
@@ -203,6 +214,6 @@ public abstract class H1_TestsPublic extends H10_Test {
         Assertions2.assertFalse(actualIt.hasNext(), context,
             r -> "Actual list contains more element than expected list");
         assertVisitation(source, context);
-        assertRequirement(source, result, copyContextBuilder);
+        assertRequirement(source, result, contextBuilder);
     }
 }

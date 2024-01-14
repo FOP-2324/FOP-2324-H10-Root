@@ -133,8 +133,7 @@ public abstract class H10_Test {
      * @return a {@link Context.Builder} with the method to be tested as the subject
      */
     protected Context.Builder<?> contextBuilder() {
-        return Assertions2.contextBuilder().subject(getMethod())
-            .add("Comparator", getDefaultComparator());
+        return Assertions2.contextBuilder().subject(getMethod());
     }
 
     /**
