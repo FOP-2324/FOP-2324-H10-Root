@@ -1,13 +1,15 @@
 package h10.util;
 
-import com.google.common.collect.Streams;
 import h10.ListItem;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * A utility class for {@link ListItem}s which provides additional operations on lists.
@@ -58,6 +60,47 @@ public final class ListItems {
     }
 
     /**
+     * Returns an iterator over the list items in the given list, mapping each element using the given mapper function.
+     *
+     * @param head   the head of the list to iterate over
+     * @param mapper the mapper function
+     * @param <T>    the type of the elements in the given list
+     * @param <R>    the type of the elements in the mapped list
+     * @return an iterator over the list items in the given list, mapping each element using the given mapper function
+     */
+    public static <T, R> Iterator<ListItem<R>> itemIterator(ListItem<T> head, Function<ListItem<T>, ListItem<R>> mapper) {
+        return new Iterator<>() {
+            private ListItem<T> current = head;
+
+            @Override
+            public ListItem<R> next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                ListItem<R> item = mapper.apply(current);
+                current = current.next;
+                return item;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+        };
+    }
+
+    /**
+     * Returns an iterator over the list items in the given list.
+     *
+     * @param head the head of the list to iterate over
+     * @param <T>  the type of the elements in the given list
+     * @return an iterator over the list items in the given list
+     */
+    public static <T> Iterator<ListItem<T>> itemIterator(ListItem<T> head) {
+        return itemIterator(head, Function.identity());
+    }
+
+    /**
      * Returns an iterator over the elements in the given list, mapping each element using the given mapper function.
      *
      * @param head   the head of the list to iterate over
@@ -67,22 +110,17 @@ public final class ListItems {
      * @return an iterator over the elements in the given list, mapping each element using the given mapper function
      */
     public static <T, R> Iterator<R> iterator(ListItem<T> head, Function<T, R> mapper) {
-        return new Iterator<>() {
-            private ListItem<T> current = head;
-
-            @Override
-            public R next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-                R element = mapper.apply(current.key);
-                current = current.next;
-                return element;
-            }
+        return new Iterator<R>() {
+            private final Iterator<ListItem<T>> underlying = itemIterator(head);
 
             @Override
             public boolean hasNext() {
-                return current != null;
+                return underlying.hasNext();
+            }
+
+            @Override
+            public R next() {
+                return mapper.apply(underlying.next().key);
             }
         };
     }
@@ -99,6 +137,36 @@ public final class ListItems {
     }
 
     /**
+     * Returns a stream of the list items in the given list, mapping each element using the given mapper function.
+     *
+     * @param head   the head of the list to stream
+     * @param mapper the mapper function
+     * @param <T>    the type of the elements in the given list
+     * @param <R>    the type of the elements in the mapped list
+     * @return a stream of the list items in the given list, mapping each element using the given mapper function
+     */
+    public static <T, R> Stream<ListItem<R>> itemStream(ListItem<T> head, Function<ListItem<T>, ListItem<R>> mapper) {
+        return StreamSupport.stream(
+            Spliterators.spliteratorUnknownSize(itemIterator(head, mapper), Spliterator.ORDERED),
+            false
+        );
+    }
+
+    /**
+     * Returns a stream of the list items in the given list.
+     *
+     * @param head the head of the list to stream
+     * @param <T>  the type of the elements in the given list
+     * @return a stream of the list items in the given list
+     */
+    public static <T> Stream<ListItem<T>> itemStream(ListItem<T> head) {
+        return StreamSupport.stream(
+            Spliterators.spliteratorUnknownSize(itemIterator(head), Spliterator.ORDERED),
+            false
+        );
+    }
+
+    /**
      * Returns a stream of the elements in the given list, mapping each element using the given mapper function.
      *
      * @param head   the head of the list to stream
@@ -108,7 +176,10 @@ public final class ListItems {
      * @return a stream of the elements in the given list, mapping each element using the given mapper function
      */
     public static <T, R> Stream<R> stream(ListItem<T> head, Function<T, R> mapper) {
-        return Streams.stream(() -> iterator(head, mapper));
+        return StreamSupport.stream(
+            Spliterators.spliteratorUnknownSize(iterator(head, mapper), Spliterator.ORDERED),
+            false
+        );
     }
 
     /**
@@ -119,7 +190,10 @@ public final class ListItems {
      * @return a stream of the elements in the given list
      */
     public static <T> Stream<T> stream(ListItem<T> head) {
-        return stream(head, Function.identity());
+       return StreamSupport.stream(
+            Spliterators.spliteratorUnknownSize(iterator(head), Spliterator.ORDERED),
+            false
+        );
     }
 
     /**

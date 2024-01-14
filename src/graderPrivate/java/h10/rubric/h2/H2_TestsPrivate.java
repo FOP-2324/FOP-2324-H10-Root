@@ -1,7 +1,6 @@
 package h10.rubric.h2;
 
-import h10.ListItem;
-import h10.MySet;
+import h10.MySetAsCopy;
 import h10.MySetInPlace;
 import h10.rubric.TestConstants;
 import org.junit.jupiter.api.DisplayName;
@@ -15,17 +14,17 @@ import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
-import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
 
 /**
- * Defines public test cases for the H2.2 assignment.
+ * Defines a base class for testing a method for the H2 assignment (public tests). A subclass of this class needs
+ * to implement at least {@link #getClassType()} and {@link #setProvider()} since the criteria for {@link MySetAsCopy}
+ * and {@link MySetInPlace} are the same.
  *
  * @author Nhan Huynh
  */
 @TestForSubmission
-@DisplayName("H2.2 | In-Place")
+@DisplayName("H2 | cartesianProduct(MySet)")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Timeout(
     value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
@@ -33,23 +32,13 @@ import java.util.function.BiFunction;
     threadMode = Timeout.ThreadMode.SEPARATE_THREAD
 )
 @SkipAfterFirstFailedTest(TestConstants.SKIP_AFTER_FIRST_FAILED_TEST)
-public class H2_2_TestsPublic extends H2_TestsPublic {
-    @Override
-    public Class<?> getClassType() {
-        return MySetInPlace.class;
-    }
+public abstract class H2_TestsPrivate extends H2_Tests {
 
-    @Override
-    protected <T> BiFunction<ListItem<T>, Comparator<T>, MySet<T>> setProvider() {
-        return MySetInPlace::new;
-    }
-
-    @Order(0)
-    @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
+    @Order(1)
+    @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.")
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H2_Criteria_01.json", customConverters = CUSTOM_CONVERTERS)
-    @Override
-    public void testSimple(JsonParameterSet parameters) {
-        super.testSimple(parameters);
+    @JsonParameterSetTest(value = "H2_Criteria_02.json", customConverters = CUSTOM_CONVERTERS)
+    public void testComplex(JsonParameterSet parameters) {
+        assertTuples(parameters);
     }
 }

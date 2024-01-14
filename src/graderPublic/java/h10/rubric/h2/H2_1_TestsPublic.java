@@ -33,7 +33,7 @@ import java.util.function.BiFunction;
     threadMode = Timeout.ThreadMode.SEPARATE_THREAD
 )
 @SkipAfterFirstFailedTest(TestConstants.SKIP_AFTER_FIRST_FAILED_TEST)
-public class H2_1_TestsPublic extends H2_2_TestsPublic {
+public class H2_1_TestsPublic extends H2_TestsPublic {
     @Override
     public Class<?> getClassType() {
         return MySet.class;
@@ -48,6 +48,7 @@ public class H2_1_TestsPublic extends H2_2_TestsPublic {
     @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
     @ParameterizedTest
     @JsonParameterSetTest(value = "H2_Criteria_01.json", customConverters = CUSTOM_CONVERTERS)
+    @Override
     public void testSimple(JsonParameterSet parameters) {
         super.testSimple(parameters);
     }
