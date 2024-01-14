@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 
 /**
- * Defines public test cases for the H2.2 assignment.
+ * Defines private test cases for the H2.2 assignment.
  *
  * @author Nhan Huynh
  */
@@ -52,7 +52,7 @@ public class H2_2_TestsPrivate extends H2_TestsPrivate {
     @Order(1)
     @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.")
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H2_Criteria_02.json", customConverters = CUSTOM_CONVERTERS)
+    @JsonParameterSetTest(value = "H2_Criterion_02.json", customConverters = CUSTOM_CONVERTERS)
     @Override
     public void testComplex(JsonParameterSet parameters) {
         super.testComplex(parameters);

@@ -48,6 +48,7 @@ public abstract class H10_Test {
             "source", JsonConverters::toListItemInteger,
             "predicate", JsonConverters::toPredicateInteger,
             "expected", JsonConverters::toListItemInteger,
+            "inputs", JsonConverters::toListItemListItemInteger,
             "other", JsonConverters::toListItemInteger,
             "expected2D", JsonConverters::toListItemListItemInteger
         )

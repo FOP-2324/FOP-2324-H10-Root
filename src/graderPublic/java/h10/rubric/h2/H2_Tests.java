@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
     threadMode = Timeout.ThreadMode.SEPARATE_THREAD
 )
 public abstract class H2_Tests extends H10_Test {
+
     /**
      * The name of the method to be tested.
      */
@@ -57,7 +58,7 @@ public abstract class H2_Tests extends H10_Test {
      */
     protected Context getInputContext(Comparator<?> cmp, MySet<?> source, MySet<?> input) {
         return Assertions2.contextBuilder().subject("Input")
-            .add("Source set", input)
+            .add("Source set", source.toString())
             .add("Comparator", cmp)
             .add("Input set", input.toString())
             .build();

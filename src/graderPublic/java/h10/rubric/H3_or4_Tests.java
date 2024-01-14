@@ -1,0 +1,160 @@
+package h10.rubric;
+
+import h10.ListItem;
+import h10.MySet;
+import h10.MySetAsCopy;
+import h10.MySetInPlace;
+import h10.util.ListItems;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
+import org.opentest4j.AssertionFailedError;
+import org.sourcegrade.jagr.api.rubric.TestForSubmission;
+import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
+import org.tudalgo.algoutils.tutor.general.assertions.Context;
+import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+
+/**
+ * Defines a base class for testing a method for the H3 or H4 assignment. A subclass of this class needs
+ * to implement at least {@link #getClassType()} and {@link #setProvider()} since the criteria for {@link MySetAsCopy}
+ * and {@link MySetInPlace} are the same.
+ *
+ * @author Nhan Huynh
+ */
+@TestForSubmission
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Timeout(
+    value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
+    unit = TimeUnit.SECONDS,
+    threadMode = Timeout.ThreadMode.SEPARATE_THREAD
+)
+public abstract class H3_or4_Tests extends H10_Test {
+    /**
+     * The name of the method to be tested.
+     */
+    protected static final String METHOD_NAME = "difference";
+
+    @Override
+    public String getMethodName() {
+        return METHOD_NAME;
+    }
+
+    /**
+     * Returns the operation to be tested.
+     *
+     * @return the operation to be tested
+     */
+    protected abstract BiFunction<MySet<Integer>, MySet<Integer>[], MySet<Integer>> operation();
+
+    /**
+     * A {@link Consumer} that acceps four arguments.
+     *
+     * @param <A>    the first argument
+     * @param <B>    the second argument
+     * @param <C>    the third argument
+     * @param <D>the forth argument
+     */
+    protected interface QuadConsumer<A, B, C, D> {
+
+        /**
+         * Consumes the given arguments.
+         *
+         * @param a the first argument
+         * @param b the second argument
+         * @param c the third argument
+         * @param d the forth argument
+         */
+        void accept(A a, B b, C c, D d);
+    }
+
+    /**
+     * Returns a function that accepts an input and output set and a context and checks whether the given input and
+     * output satisfies the requirement of the method (as copy or in place).
+     *
+     * @param <T> the type of the elements in the input
+     * @return a function that accepts an input and output set and a context and checks whether the given input and
+     */
+    protected abstract <T extends Comparable<T>> QuadConsumer<
+        MySet<T>,
+        MySet<T>[],
+        MySet<T>,
+        Context.Builder<?>
+        > requirementCheck();
+
+    /**
+     * Checks whether the given input and output satisfies the requirement of the method (as copy or in place).
+     *
+     * @param <T>     the type of the elements in the input
+     * @param inputs  the inputs to check
+     * @param output  the output to check
+     * @param context the context to report the result to
+     * @throws AssertionFailedError if the input does not satisfy the requirement
+     */
+    protected <T extends Comparable<T>> void assertRequirement(
+        MySet<T> source,
+        MySet<T>[] inputs,
+        MySet<T> output,
+        Context.Builder<?> context
+    ) {
+        this.<T>requirementCheck().accept(source, inputs, output, context);
+    }
+
+    /**
+     * Returns the input context information of an operation.
+     *
+     * @param cmp    the comparator used to compare the elements in the set
+     * @param source the source set to execute the operation on
+     * @param inputs s the input sets which will be used in the operation
+     * @return the input context information of an operation
+     */
+    protected Context getInputContext(
+        Comparator<?> cmp,
+        MySet<?> source,
+        MySet<?>[] inputs
+    ) {
+        return Assertions2.contextBuilder().subject("Input")
+            .add("Comparator", cmp)
+            .add("Source", source.toString())
+            .add("Input(s)", Arrays.toString(inputs))
+            .build();
+    }
+
+    /**
+     * Checks whether the result of the operation matches the expected one.
+     *
+     * @param parameters the parameter set providing the test data
+     */
+    @SuppressWarnings("unchecked")
+    protected void assertEqualSet(JsonParameterSet parameters) {
+        Context.Builder<?> contextBuilder = contextBuilder();
+        // Inputs
+        ListItem<Integer> sourceHead = parameters.get("source");
+        MySet<Integer> source = createSet(sourceHead);
+        ListItem<ListItem<Integer>> inputsHead = parameters.get("inputs");
+        MySet<Integer>[] inputs = (MySet<Integer>[]) ListItems.stream(inputsHead)
+            .map(this::createSet)
+            .toArray(MySet<?>[]::new);
+        contextBuilder.add("Input", getInputContext(getDefaultComparator(), source, inputs));
+
+        // Result
+        MySet<Integer> result = operation().apply(source, inputs);
+        ListItem<Integer> expectedHead = parameters.get("expected");
+        MySet<Integer> expected = createSet(expectedHead);
+        Context resultContext = Assertions2.contextBuilder().subject("Output")
+            .add("Source set afterwards", source.toString())
+            .add("Input sets afterwards", Arrays.toString(inputs))
+            .add("Actual output set", result.toString())
+            .add("Expected output set", expected.toString())
+            .build();
+        contextBuilder.add("Output", resultContext);
+        Assertions2.assertEquals(expected, result, contextBuilder.build(),
+            r -> "Expected set %s, but given %s".formatted(expected, result));
+        assertRequirement(source, inputs, result, contextBuilder);
+    }
+}

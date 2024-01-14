@@ -8,6 +8,7 @@ import org.opentest4j.AssertionFailedError;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,69 +46,154 @@ public final class TutorAssertions {
     }
 
     /**
-     * Asserts that the given input is copied to the given output.
+     * Asserts that the given source is copied to the given output.
      *
-     * @param input          the input of the operation to check
+     * @param source         the source of the operation to check
      * @param output         the output of the operation to check
      * @param contextBuilder the context builder to report the result to
      * @param <T>            the type of the elements in the set
-     * @throws AssertionFailedError if the given input is not copied to the given output
+     * @throws AssertionFailedError if the given source is not copied to the given output
      */
     public static <T extends Comparable<T>> void assertAsCopy(
-        MySet<VisitorElement<T>> input,
-        MySet<VisitorElement<T>> output,
+        MySet<T> source,
+        MySet<T> output,
         Context.Builder<?> contextBuilder
     ) {
-        List<String> inputHashCode = Sets.itemsStream(input).map(TutorAssertions::identityHashCode).toList();
+        List<String> sourceHashCode = Sets.itemsStream(source).map(TutorAssertions::identityHashCode).toList();
         List<String> otherIdentityHashCodes = Sets.itemsStream(output).map(TutorAssertions::identityHashCode).toList();
         Context hashContext = Assertions2.contextBuilder().subject("Hashcodes")
-            .add("Input", inputHashCode)
+            .add("Source", sourceHashCode)
             .add("Output", otherIdentityHashCodes)
             .build();
         contextBuilder.add("As-Copy", hashContext);
+        Context context = contextBuilder.build();
         Sets.itemsStream(output)
-            .forEach(other -> inputHashCode.forEach(currentHashCode -> {
-                        String otherHashCode = identityHashCode(other);
-                        Assertions2.assertNotEquals(
-                            otherHashCode, currentHashCode,
-                            contextBuilder.build(),
-                            result -> "Node %s (%s) was not copied, got %s"
-                                .formatted(other, otherHashCode, currentHashCode)
-                        );
-                    }
-                )
-            );
+            .forEach(other -> {
+                String otherHashCode = identityHashCode(other);
+                sourceHashCode.forEach(currentHashCode -> Assertions2.assertNotEquals(
+                        otherHashCode, currentHashCode,
+                        context,
+                        result -> "Node %s (%s) was not copied, got %s"
+                            .formatted(other, otherHashCode, currentHashCode)
+                    )
+                );
+            });
     }
 
     /**
-     * Asserts that the given input is not copied to the given output.
+     * Asserts that the given source/inputs is copied to the given output.
      *
-     * @param input          the input of the operation to check
+     * @param source         the source of the operation to check
      * @param output         the output of the operation to check
      * @param contextBuilder the context builder to report the result to
      * @param <T>            the type of the elements in the set
-     * @throws AssertionFailedError if the given input is copied to the given output
+     * @throws AssertionFailedError if the given source/inputs is not copied to the given output
      */
-    public static <T extends Comparable<T>> void assertInPlace(
-        MySet<VisitorElement<T>> input,
-        MySet<VisitorElement<T>> output,
+    public static <T extends Comparable<T>> void assertAsCopy(
+        MySet<T> source,
+        MySet<T>[] inputs,
+        MySet<T> output,
         Context.Builder<?> contextBuilder
     ) {
-        List<String> inputHashCode = Sets.itemsStream(input).map(TutorAssertions::identityHashCode).toList();
+        List<String> sourceHashCode = Sets.itemsStream(source).map(TutorAssertions::identityHashCode).toList();
+        List<List<String>> inputsHashCode = Arrays.stream(inputs).map(input -> Sets.itemsStream(input)
+            .map(TutorAssertions::identityHashCode)
+            .toList()
+        ).toList();
+        List<String> otherIdentityHashCodes = Sets.itemsStream(output).map(TutorAssertions::identityHashCode).toList();
+        Context hashContext = Assertions2.contextBuilder().subject("Hashcodes")
+            .add("Source", sourceHashCode)
+            .add("Input(s)", inputsHashCode)
+            .add("Output", otherIdentityHashCodes)
+            .build();
+        contextBuilder.add("As-Copy", hashContext);
+        Context context = contextBuilder.build();
+        Sets.itemsStream(output).forEach(other -> {
+            String otherHashCode = identityHashCode(other);
+            sourceHashCode.forEach(sourceHash -> Assertions2.assertNotEquals(
+                otherHashCode, sourceHash,
+                context,
+                result -> "Node %s (%s) was not copied, got %s (Match found in source)"
+                    .formatted(other, otherHashCode, sourceHash)
+            ));
+            inputsHashCode.forEach(inputsHash -> inputsHash.forEach(inputHash -> Assertions2.assertNotEquals(
+                otherHashCode, inputsHash,
+                context,
+                result -> "Node %s (%s) was not copied, got %s (Match found in inputs)"
+                    .formatted(other, otherHashCode, inputsHash)
+            )));
+        });
+    }
+
+    /**
+     * Asserts that the given source is not copied to the given output.
+     *
+     * @param source         the source of the operation to check
+     * @param output         the output of the operation to check
+     * @param contextBuilder the context builder to report the result to
+     * @param <T>            the type of the elements in the set
+     * @throws AssertionFailedError if the given source is copied to the given output
+     */
+    public static <T extends Comparable<T>> void assertInPlace(
+        MySet<T> source,
+        MySet<T> output,
+        Context.Builder<?> contextBuilder
+    ) {
+        List<String> sourceHashCode = Sets.itemsStream(source).map(TutorAssertions::identityHashCode).toList();
         List<String> otherIdentityHashCodes = Sets.itemsStream(output).map(TutorAssertions::identityHashCode).toList();
         Context hashContext = Assertions2.contextBuilder().subject("In-Place")
-            .add("Input", inputHashCode)
+            .add("Source", sourceHashCode)
             .add("Output", otherIdentityHashCodes)
             .build();
         contextBuilder.add("Hashcodes", hashContext);
         Sets.itemsStream(output)
             .forEach(other -> {
                     String otherHashCode = identityHashCode(other);
-                    Assertions2.assertTrue(inputHashCode.stream().anyMatch(otherHashCode::equals),
+                    Assertions2.assertTrue(sourceHashCode.stream().anyMatch(otherHashCode::equals),
                         contextBuilder.build(),
                         result -> "Cannot find the same node (%s) after the operation. Node was probably copied."
                             .formatted(otherHashCode));
                 }
             );
+    }
+
+    /**
+     * Asserts that the given source/inputs is not copied to the given output.
+     *
+     * @param source         the source of the operation to check
+     * @param output         the output of the operation to check
+     * @param contextBuilder the context builder to report the result to
+     * @param <T>            the type of the elements in the set
+     * @throws AssertionFailedError if the given source/inputs is not copied to the given output
+     */
+    public static <T extends Comparable<T>> void assertInPlace(
+        MySet<T> source,
+        MySet<T>[] inputs,
+        MySet<T> output,
+        Context.Builder<?> contextBuilder
+    ) {
+        List<String> sourceHashCode = Sets.itemsStream(source).map(TutorAssertions::identityHashCode).toList();
+        List<List<String>> inputsHashCode = Arrays.stream(inputs).map(input -> Sets.itemsStream(input)
+            .map(TutorAssertions::identityHashCode)
+            .toList()
+        ).toList();
+        List<String> otherIdentityHashCodes = Sets.itemsStream(output).map(TutorAssertions::identityHashCode).toList();
+        Context hashContext = Assertions2.contextBuilder().subject("Hashcodes")
+            .add("Source", sourceHashCode)
+            .add("Input(s)", inputsHashCode)
+            .add("Output", otherIdentityHashCodes)
+            .build();
+        contextBuilder.add("As-Copy", hashContext);
+        Context context = contextBuilder.build();
+        Sets.itemsStream(output).forEach(other -> {
+            String otherHashCode = identityHashCode(other);
+            Assertions2.assertTrue(
+                sourceHashCode.stream().anyMatch(otherHashCode::equals)
+                    || inputsHashCode.stream().anyMatch(inputsHash -> inputsHash.stream()
+                    .anyMatch(otherHashCode::equals)),
+                context,
+                result -> "Cannot find the same node (%s) after the operation. Node was probably copied."
+                    .formatted(otherHashCode));
+        });
     }
 }

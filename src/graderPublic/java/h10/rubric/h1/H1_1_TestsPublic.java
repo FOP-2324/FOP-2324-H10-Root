@@ -5,7 +5,6 @@ import h10.MySet;
 import h10.MySetAsCopy;
 import h10.rubric.TestConstants;
 import h10.rubric.TutorAssertions;
-import h10.util.VisitorElement;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -51,11 +50,7 @@ public class H1_1_TestsPublic extends H1_TestsPublic {
     }
 
     @Override
-    protected <T extends Comparable<T>> TriConsumer<
-        MySet<VisitorElement<T>>,
-        MySet<VisitorElement<T>>,
-        Context.Builder<?>
-        > requirementCheck() {
+    protected <T extends Comparable<T>> TriConsumer<MySet<T>, MySet<T>, Context.Builder<?>> requirementCheck() {
         return TutorAssertions::assertAsCopy;
     }
 
@@ -64,7 +59,8 @@ public class H1_1_TestsPublic extends H1_TestsPublic {
         + "erfüllt wird.")
     @ExtendWith(JagrExecutionCondition.class)
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H1_Criteria_01.json", customConverters = CUSTOM_CONVERTERS)
+    @JsonParameterSetTest(value = "H1_Criterion_01.json", customConverters = CUSTOM_CONVERTERS)
+    @Override
     public void testDropAll(JsonParameterSet parameters) {
         super.testDropAll(parameters);
     }
@@ -73,7 +69,8 @@ public class H1_1_TestsPublic extends H1_TestsPublic {
     @DisplayName("Die Methode subset(MySet) gibt das korrekte Ergebnis für eine komplexe Eingabe zurück.")
     @ExtendWith(JagrExecutionCondition.class)
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H1_Criteria_02.json", customConverters = CUSTOM_CONVERTERS)
+    @JsonParameterSetTest(value = "H1_Criterion_02.json", customConverters = CUSTOM_CONVERTERS)
+    @Override
     public void testComplex(JsonParameterSet parameters) {
         super.testComplex(parameters);
     }

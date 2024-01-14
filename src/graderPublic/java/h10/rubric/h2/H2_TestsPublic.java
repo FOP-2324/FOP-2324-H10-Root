@@ -37,7 +37,7 @@ public abstract class H2_TestsPublic extends H2_Tests {
     @Order(0)
     @DisplayName("Die Methode cartesianProduct(MySet) gibt das korrekte Ergebnis für simple Eingaben zurück.")
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H2_Criteria_01.json", customConverters = CUSTOM_CONVERTERS)
+    @JsonParameterSetTest(value = "H2_Criterion_01.json", customConverters = CUSTOM_CONVERTERS)
     public void testSimple(JsonParameterSet parameters) {
         assertTuples(parameters);
     }

@@ -82,27 +82,23 @@ public abstract class H1_TestsPublic extends H10_Test {
      * @param <T> the type of the elements in the input
      * @return a function that accepts an input and output set and a context and checks whether the given input and
      */
-    protected abstract <T extends Comparable<T>> TriConsumer<
-        MySet<VisitorElement<T>>,
-        MySet<VisitorElement<T>>,
-        Context.Builder<?>
-        > requirementCheck();
+    protected abstract <T extends Comparable<T>> TriConsumer<MySet<T>, MySet<T>, Context.Builder<?>> requirementCheck();
 
     /**
-     * Checks whether the given input and output satisfies the requirement of the method (as copy or in place).
+     * Checks whether the given source and output satisfies the requirement of the method (as copy or in place).
      *
-     * @param <T>     the type of the elements in the input
-     * @param input   the input to check
+     * @param <T>     the type of the elements in the source
+     * @param source  the source to check
      * @param output  the output to check
      * @param context the context to report the result to
-     * @throws AssertionFailedError if the input does not satisfy the requirement
+     * @throws AssertionFailedError if the source does not satisfy the requirement
      */
     protected <T extends Comparable<T>> void assertRequirement(
-        MySet<VisitorElement<T>> input,
-        MySet<VisitorElement<T>> output,
+        MySet<T> source,
+        MySet<T> output,
         Context.Builder<?> context
     ) {
-        this.<T>requirementCheck().accept(input, output, context);
+        this.<T>requirementCheck().accept(source, output, context);
     }
 
     /**
@@ -126,7 +122,7 @@ public abstract class H1_TestsPublic extends H10_Test {
         + "erfüllt wird.")
     @ExtendWith(JagrExecutionCondition.class)
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H1_Criteria_01.json", customConverters = CUSTOM_CONVERTERS)
+    @JsonParameterSetTest(value = "H1_Criterion_01.json", customConverters = CUSTOM_CONVERTERS)
     public void testDropAll(JsonParameterSet parameters) {
         Context.Builder<?> contextBuilder = contextBuilder();
         Predicate<? super VisitorElement<Integer>> predicate = new Predicate<>() {
@@ -171,7 +167,7 @@ public abstract class H1_TestsPublic extends H10_Test {
     @DisplayName("Die Methode subset(MySet) gibt das korrekte Ergebnis für eine komplexe Eingabe zurück.")
     @ExtendWith(JagrExecutionCondition.class)
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H1_Criteria_02.json", customConverters = CUSTOM_CONVERTERS)
+    @JsonParameterSetTest(value = "H1_Criterion_02.json", customConverters = CUSTOM_CONVERTERS)
     public void testComplex(JsonParameterSet parameters) {
         Context.Builder<?> contextBuilder = contextBuilder();
         Predicate<VisitorElement<Integer>> predicate = new Predicate<>() {
