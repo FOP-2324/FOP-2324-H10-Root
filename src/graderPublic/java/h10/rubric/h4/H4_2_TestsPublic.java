@@ -59,8 +59,8 @@ public class H4_2_TestsPublic extends H4_TestsPublic {
     }
 
     @Order(0)
-    @DisplayName("Die Methode intersectionListItems(ListItem) nimmt ein Element auf, falls das Element in allen " +
-        "Mengen enthalten ist.")
+    @DisplayName("Die Methode intersectionListItems(ListItem) nimmt ein Element auf, falls das Element in allen "
+        + "Mengen enthalten ist.")
     @ParameterizedTest
     @JsonParameterSetTest(value = "H4_Criterion_01.json", customConverters = CUSTOM_CONVERTERS)
     @Override

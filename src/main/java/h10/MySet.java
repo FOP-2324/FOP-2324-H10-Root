@@ -16,16 +16,15 @@ import java.util.function.Predicate;
 public abstract class MySet<T> {
 
     /**
-     * The head of the set.
-     */
-    @DoNotTouch
-    protected ListItem<T> head;
-
-    /**
      * The comparator to compare elements and used to define the order of the set.
      */
     @DoNotTouch
     protected final Comparator<? super T> cmp;
+    /**
+     * The head of the set.
+     */
+    @DoNotTouch
+    protected ListItem<T> head;
 
     /**
      * Constructs and initializes a new set with the given elements.
@@ -116,6 +115,28 @@ public abstract class MySet<T> {
     public abstract MySet<T> difference(MySet<T> other);
 
     /**
+     * Returns the intersection of this set and the given set, more formally {@code this ∩ other}.
+     *
+     * @param other the set to intersect with this set
+     * @return the intersection of this set and the given set
+     */
+    @DoNotTouch
+    public MySet<T> intersection(MySet<T> other) {
+        return intersection(new ListItem<>(other));
+    }
+
+    /**
+     * Returns the intersection of this set and the given sets, more formally {@code this ∩ other1 ∩ ... ∩ otherN}.
+     *
+     * @param others the sets to intersect with this set
+     * @return the intersection of this set and the given sets
+     */
+    @DoNotTouch
+    public MySet<T> intersection(ListItem<MySet<T>> others) {
+        return intersectionListItems(toListItem(others));
+    }
+
+    /**
      * Returns the intersection of sets, more formally {@code set1 ∩ set2 ∩ ... ∩ setN}.
      *
      * @param heads the sets to intersect
@@ -143,28 +164,6 @@ public abstract class MySet<T> {
             tails = item;
         }
         return heads;
-    }
-
-    /**
-     * Returns the intersection of this set and the given sets, more formally {@code this ∩ other1 ∩ ... ∩ otherN}.
-     *
-     * @param others the sets to intersect with this set
-     * @return the intersection of this set and the given sets
-     */
-    @DoNotTouch
-    public MySet<T> intersection(ListItem<MySet<T>> others) {
-        return intersectionListItems(toListItem(others));
-    }
-
-    /**
-     * Returns the intersection of this set and the given set, more formally {@code this ∩ other}.
-     *
-     * @param other the set to intersect with this set
-     * @return the intersection of this set and the given set
-     */
-    @DoNotTouch
-    public MySet<T> intersection(MySet<T> other) {
-        return intersection(new ListItem<>(other));
     }
 
     @Override

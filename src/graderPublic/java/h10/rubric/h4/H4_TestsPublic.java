@@ -33,8 +33,8 @@ import java.util.concurrent.TimeUnit;
 public abstract class H4_TestsPublic extends H4_Tests {
 
     @Order(0)
-    @DisplayName("Die Methode intersectionListItems(ListItem) nimmt ein Element auf, falls das Element in allen " +
-        "Mengen enthalten ist.")
+    @DisplayName("Die Methode intersectionListItems(ListItem) nimmt ein Element auf, falls das Element in allen "
+        + "Mengen enthalten ist.")
     @ParameterizedTest
     @JsonParameterSetTest(value = "H4_Criterion_01.json", customConverters = CUSTOM_CONVERTERS)
     public void testAddElements(JsonParameterSet parameters) {

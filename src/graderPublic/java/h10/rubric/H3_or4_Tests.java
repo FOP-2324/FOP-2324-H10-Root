@@ -47,28 +47,6 @@ public abstract class H3_or4_Tests extends H10_Test {
     }
 
     /**
-     * A fallback set provider used if we need another isntance of the set (e.g., subclass). If this is not overriden
-     * the function behaves the same as {@link #setProvider()}
-     *
-     * @param <T> the type of the elements in the set
-     * @return the fallback provider
-     */
-    protected <T> BiFunction<ListItem<T>, Comparator<T>, MySet<T>> fallbackProvider() {
-        return setProvider();
-    }
-
-    /**
-     * Creates a fallback set from the given head and comparator.
-     *
-     * @param head the head of the list to create a set from
-     * @param <T>  the type of the elements in the set
-     * @return a set from the given head and comparator
-     */
-    public <T extends Comparable<? super T>> MySet<T> createFallbackSet(ListItem<T> head) {
-        return this.<T>fallbackProvider().apply(head, getDefaultComparator());
-    }
-
-    /**
      * Checks whether the result of the operation matches the expected one.
      *
      * @param parameters the parameter set providing the test data
@@ -120,6 +98,17 @@ public abstract class H3_or4_Tests extends H10_Test {
     }
 
     /**
+     * Creates a fallback set from the given head and comparator.
+     *
+     * @param head the head of the list to create a set from
+     * @param <T>  the type of the elements in the set
+     * @return a set from the given head and comparator
+     */
+    public <T extends Comparable<? super T>> MySet<T> createFallbackSet(ListItem<T> head) {
+        return this.<T>fallbackProvider().apply(head, getDefaultComparator());
+    }
+
+    /**
      * Returns the input context information of an operation.
      *
      * @param cmp    the comparator used to compare the elements in the set
@@ -168,6 +157,17 @@ public abstract class H3_or4_Tests extends H10_Test {
             output,
             context
         );
+    }
+
+    /**
+     * A fallback set provider used if we need another isntance of the set (e.g., subclass). If this is not overriden
+     * the function behaves the same as {@link #setProvider()}
+     *
+     * @param <T> the type of the elements in the set
+     * @return the fallback provider
+     */
+    protected <T> BiFunction<ListItem<T>, Comparator<T>, MySet<T>> fallbackProvider() {
+        return setProvider();
     }
 
     /**

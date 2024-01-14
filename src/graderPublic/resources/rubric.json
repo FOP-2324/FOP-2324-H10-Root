@@ -152,7 +152,7 @@
         "criteria": [
           {
             "order": 21,
-            "title":"Die Methode intersectionListItems(ListItem) nimmt ein Element auf, falls das Element in allen Mengen enthalten ist.",
+            "title": "Die Methode intersectionListItems(ListItem) nimmt ein Element auf, falls das Element in allen Mengen enthalten ist.",
             "class": "h10.rubric.h4.H4_1_TestsPublic"
           },
           {
@@ -173,7 +173,7 @@
           {
             "order": 25,
             "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für einfache Eingaben zurück.",
-            "class": "h10.rubric.h4.H4_1_TestsPublic"
+            "class": "h10.rubric.h4.H4_1_TestsPrivate"
           },
           {
             "order": 26,
@@ -208,7 +208,7 @@
           {
             "order": 31,
             "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für einfache Eingaben zurück.",
-            "class": "h10.rubric.h4.H4_2_TestsPublic"
+            "class": "h10.rubric.h4.H4_2_TestsPrivate"
           },
           {
             "order": 32,

@@ -26,6 +26,83 @@ public final class ListItems {
     }
 
     /**
+     * Returns an iterator over the list items in the given list, mapping each element using the given mapper function.
+     *
+     * @param head   the head of the list to iterate over
+     * @param mapper the mapper function
+     * @param <T>    the type of the elements in the given list
+     * @param <R>    the type of the elements in the mapped list
+     * @return an iterator over the list items in the given list, mapping each element using the given mapper function
+     */
+    public static <T, R> Iterator<ListItem<R>> itemIterator(ListItem<T> head, Function<ListItem<T>, ListItem<R>> mapper) {
+        return new Iterator<>() {
+            private ListItem<T> current = head;
+
+            @Override
+            public ListItem<R> next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                ListItem<R> item = mapper.apply(current);
+                current = current.next;
+                return item;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+        };
+    }
+
+    /**
+     * Returns an iterator over the list items in the given list.
+     *
+     * @param head the head of the list to iterate over
+     * @param <T>  the type of the elements in the given list
+     * @return an iterator over the list items in the given list
+     */
+    public static <T> Iterator<ListItem<T>> itemIterator(ListItem<T> head) {
+        return itemIterator(head, Function.identity());
+    }
+
+    /**
+     * Returns an iterator over the elements in the given list, mapping each element using the given mapper function.
+     *
+     * @param head   the head of the list to iterate over
+     * @param mapper the mapper function
+     * @param <T>    the type of the elements in the given list
+     * @param <R>    the type of the elements in the mapped list
+     * @return an iterator over the elements in the given list, mapping each element using the given mapper function
+     */
+    public static <T, R> Iterator<R> iterator(ListItem<T> head, Function<T, R> mapper) {
+        return new Iterator<R>() {
+            private final Iterator<ListItem<T>> underlying = itemIterator(head);
+
+            @Override
+            public boolean hasNext() {
+                return underlying.hasNext();
+            }
+
+            @Override
+            public R next() {
+                return mapper.apply(underlying.next().key);
+            }
+        };
+    }
+
+    /**
+     * Returns an iterator over the elements in the given list.
+     *
+     * @param head the head of the list to iterate over
+     * @param <T>  the type of the elements in the given list
+     * @return an iterator over the elements in the given list
+     */
+    public static <T> Iterator<T> iterator(ListItem<T> head) {
+        return iterator(head, Function.identity());
+    }
+
+    /**
      * Creates a list item sequence of the given elements.
      *
      * @param elements the elements to create a list item sequence of
@@ -118,84 +195,7 @@ public final class ListItems {
             false
         );
     }
-
-    /**
-     * Returns an iterator over the list items in the given list, mapping each element using the given mapper function.
-     *
-     * @param head   the head of the list to iterate over
-     * @param mapper the mapper function
-     * @param <T>    the type of the elements in the given list
-     * @param <R>    the type of the elements in the mapped list
-     * @return an iterator over the list items in the given list, mapping each element using the given mapper function
-     */
-    public static <T, R> Iterator<ListItem<R>> itemIterator(ListItem<T> head, Function<ListItem<T>, ListItem<R>> mapper) {
-        return new Iterator<>() {
-            private ListItem<T> current = head;
-
-            @Override
-            public ListItem<R> next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-                ListItem<R> item = mapper.apply(current);
-                current = current.next;
-                return item;
-            }
-
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
-        };
-    }
-
-    /**
-     * Returns an iterator over the list items in the given list.
-     *
-     * @param head the head of the list to iterate over
-     * @param <T>  the type of the elements in the given list
-     * @return an iterator over the list items in the given list
-     */
-    public static <T> Iterator<ListItem<T>> itemIterator(ListItem<T> head) {
-        return itemIterator(head, Function.identity());
-    }
-
-    /**
-     * Returns an iterator over the elements in the given list, mapping each element using the given mapper function.
-     *
-     * @param head   the head of the list to iterate over
-     * @param mapper the mapper function
-     * @param <T>    the type of the elements in the given list
-     * @param <R>    the type of the elements in the mapped list
-     * @return an iterator over the elements in the given list, mapping each element using the given mapper function
-     */
-    public static <T, R> Iterator<R> iterator(ListItem<T> head, Function<T, R> mapper) {
-        return new Iterator<R>() {
-            private final Iterator<ListItem<T>> underlying = itemIterator(head);
-
-            @Override
-            public boolean hasNext() {
-                return underlying.hasNext();
-            }
-
-            @Override
-            public R next() {
-                return mapper.apply(underlying.next().key);
-            }
-        };
-    }
-
-    /**
-     * Returns an iterator over the elements in the given list.
-     *
-     * @param head the head of the list to iterate over
-     * @param <T>  the type of the elements in the given list
-     * @return an iterator over the elements in the given list
-     */
-    public static <T> Iterator<T> iterator(ListItem<T> head) {
-        return iterator(head, Function.identity());
-    }
-
+    
     /**
      * Maps the elements of the given list using the given mapper function to another type.
      *
