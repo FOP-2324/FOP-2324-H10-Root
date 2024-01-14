@@ -59,34 +59,6 @@ public class RubricDeserializer extends JsonDeserializer<Criterion[]> {
     }
 
     /**
-     * A function that can throw an {@link Exception}.
-     * This is used to wrap the checked {@link IOException} into an unchecked {@link UncheckedIOException}.
-     *
-     * @param <T> the type of the input to the function
-     * @param <R> the type of the result of the function
-     */
-    private interface CheckedFunction<T, R> extends Function<T, R> {
-
-        /**
-         * {@inheritDoc}
-         *
-         * @param t the function argument
-         * @return the function result
-         * @throws UncheckedIOException if an {@link IOException} occurs
-         */
-        @Override
-        default R apply(T t) {
-            try {
-                return applyChecked(t);
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
-        }
-
-        R applyChecked(T t) throws IOException;
-    }
-
-    /**
      * Deserializes a {@link Criterion} object from a {@link JsonNode}. The JSON node contains the title and the tasks
      * of the criterion.
      *
@@ -205,5 +177,33 @@ public class RubricDeserializer extends JsonDeserializer<Criterion[]> {
                     .graderPrivateOnly())
                 .shortDescription(title)
                 .build()));
+    }
+
+    /**
+     * A function that can throw an {@link Exception}.
+     * This is used to wrap the checked {@link IOException} into an unchecked {@link UncheckedIOException}.
+     *
+     * @param <T> the type of the input to the function
+     * @param <R> the type of the result of the function
+     */
+    private interface CheckedFunction<T, R> extends Function<T, R> {
+
+        /**
+         * {@inheritDoc}
+         *
+         * @param t the function argument
+         * @return the function result
+         * @throws UncheckedIOException if an {@link IOException} occurs
+         */
+        @Override
+        default R apply(T t) {
+            try {
+                return applyChecked(t);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        }
+
+        R applyChecked(T t) throws IOException;
     }
 }

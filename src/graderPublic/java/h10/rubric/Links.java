@@ -36,19 +36,6 @@ public final class Links {
     }
 
     /**
-     * Returns the {@link TypeLink} to the class with the given name.
-     *
-     * @param clazz the name of the class
-     * @return the {@link TypeLink} to the class with the given name
-     */
-    public static TypeLink getType(Class<?> clazz) {
-        return Assertions3.assertTypeExists(
-            PACKAGE_LINK,
-            STRING_MATCHER_FACTORY.matcher(clazz.getSimpleName())
-        );
-    }
-
-    /**
      * Returns the {@link MethodLink} to the method with the given name in the given class.
      *
      * @param clazz      the class containing the method
@@ -74,6 +61,19 @@ public final class Links {
         return Assertions3.assertMethodExists(
             type,
             Arrays.stream(matchers).reduce(STRING_MATCHER_FACTORY.matcher(methodName), Matcher::and)
+        );
+    }
+
+    /**
+     * Returns the {@link TypeLink} to the class with the given name.
+     *
+     * @param clazz the name of the class
+     * @return the {@link TypeLink} to the class with the given name
+     */
+    public static TypeLink getType(Class<?> clazz) {
+        return Assertions3.assertTypeExists(
+            PACKAGE_LINK,
+            STRING_MATCHER_FACTORY.matcher(clazz.getSimpleName())
         );
     }
 }

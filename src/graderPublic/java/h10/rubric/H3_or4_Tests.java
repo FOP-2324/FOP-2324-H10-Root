@@ -46,86 +46,6 @@ public abstract class H3_or4_Tests extends H10_Test {
     }
 
     /**
-     * Returns the operation to be tested.
-     *
-     * @return the operation to be tested
-     */
-    protected abstract BiFunction<MySet<Integer>, MySet<Integer>[], MySet<Integer>> operation();
-
-    /**
-     * A {@link Consumer} that acceps four arguments.
-     *
-     * @param <A>    the first argument
-     * @param <B>    the second argument
-     * @param <C>    the third argument
-     * @param <D>the forth argument
-     */
-    protected interface QuadConsumer<A, B, C, D> {
-
-        /**
-         * Consumes the given arguments.
-         *
-         * @param a the first argument
-         * @param b the second argument
-         * @param c the third argument
-         * @param d the forth argument
-         */
-        void accept(A a, B b, C c, D d);
-    }
-
-    /**
-     * Returns a function that accepts an input and output set and a context and checks whether the given input and
-     * output satisfies the requirement of the method (as copy or in place).
-     *
-     * @param <T> the type of the elements in the input
-     * @return a function that accepts an input and output set and a context and checks whether the given input and
-     */
-    protected abstract <T extends Comparable<T>> QuadConsumer<
-        MySet<T>,
-        MySet<T>[],
-        MySet<T>,
-        Context.Builder<?>
-        > requirementCheck();
-
-    /**
-     * Checks whether the given input and output satisfies the requirement of the method (as copy or in place).
-     *
-     * @param <T>     the type of the elements in the input
-     * @param inputs  the inputs to check
-     * @param output  the output to check
-     * @param context the context to report the result to
-     * @throws AssertionFailedError if the input does not satisfy the requirement
-     */
-    protected <T extends Comparable<T>> void assertRequirement(
-        MySet<T> source,
-        MySet<T>[] inputs,
-        MySet<T> output,
-        Context.Builder<?> context
-    ) {
-        this.<T>requirementCheck().accept(source, inputs, output, context);
-    }
-
-    /**
-     * Returns the input context information of an operation.
-     *
-     * @param cmp    the comparator used to compare the elements in the set
-     * @param source the source set to execute the operation on
-     * @param inputs s the input sets which will be used in the operation
-     * @return the input context information of an operation
-     */
-    protected Context getInputContext(
-        Comparator<?> cmp,
-        MySet<?> source,
-        MySet<?>[] inputs
-    ) {
-        return Assertions2.contextBuilder().subject("Input")
-            .add("Comparator", cmp)
-            .add("Source", source.toString())
-            .add("Input(s)", Arrays.toString(inputs))
-            .build();
-    }
-
-    /**
      * Checks whether the result of the operation matches the expected one.
      *
      * @param parameters the parameter set providing the test data
@@ -156,5 +76,85 @@ public abstract class H3_or4_Tests extends H10_Test {
         Assertions2.assertEquals(expected, result, contextBuilder.build(),
             r -> "Expected set %s, but given %s".formatted(expected, result));
         assertRequirement(source, inputs, result, contextBuilder);
+    }
+
+    /**
+     * Returns the input context information of an operation.
+     *
+     * @param cmp    the comparator used to compare the elements in the set
+     * @param source the source set to execute the operation on
+     * @param inputs s the input sets which will be used in the operation
+     * @return the input context information of an operation
+     */
+    protected Context getInputContext(
+        Comparator<?> cmp,
+        MySet<?> source,
+        MySet<?>[] inputs
+    ) {
+        return Assertions2.contextBuilder().subject("Input")
+            .add("Comparator", cmp)
+            .add("Source", source.toString())
+            .add("Input(s)", Arrays.toString(inputs))
+            .build();
+    }
+
+    /**
+     * Returns the operation to be tested.
+     *
+     * @return the operation to be tested
+     */
+    protected abstract BiFunction<MySet<Integer>, MySet<Integer>[], MySet<Integer>> operation();
+
+    /**
+     * Checks whether the given input and output satisfies the requirement of the method (as copy or in place).
+     *
+     * @param <T>     the type of the elements in the input
+     * @param inputs  the inputs to check
+     * @param output  the output to check
+     * @param context the context to report the result to
+     * @throws AssertionFailedError if the input does not satisfy the requirement
+     */
+    protected <T extends Comparable<T>> void assertRequirement(
+        MySet<T> source,
+        MySet<T>[] inputs,
+        MySet<T> output,
+        Context.Builder<?> context
+    ) {
+        this.<T>requirementCheck().accept(source, inputs, output, context);
+    }
+
+    /**
+     * Returns a function that accepts an input and output set and a context and checks whether the given input and
+     * output satisfies the requirement of the method (as copy or in place).
+     *
+     * @param <T> the type of the elements in the input
+     * @return a function that accepts an input and output set and a context and checks whether the given input and
+     */
+    protected abstract <T extends Comparable<T>> QuadConsumer<
+        MySet<T>,
+        MySet<T>[],
+        MySet<T>,
+        Context.Builder<?>
+        > requirementCheck();
+
+    /**
+     * A {@link Consumer} that acceps four arguments.
+     *
+     * @param <A>    the first argument
+     * @param <B>    the second argument
+     * @param <C>    the third argument
+     * @param <D>the forth argument
+     */
+    protected interface QuadConsumer<A, B, C, D> {
+
+        /**
+         * Consumes the given arguments.
+         *
+         * @param a the first argument
+         * @param b the second argument
+         * @param c the third argument
+         * @param d the forth argument
+         */
+        void accept(A a, B b, C c, D d);
     }
 }

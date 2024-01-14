@@ -15,33 +15,29 @@ import org.sourcegrade.jagr.api.testing.RubricConfiguration;
 public abstract class H10_RubricProvider implements RubricProvider {
 
     /**
-     * The file containing the rubric for this assignment.
-     */
-    private static final String RUBRIC_FILE = "rubric.json";
-
-    /**
-     * The prefix for the title of this rubric.
-     */
-    private static final String RUBRIC_TITLE_PREFIX = "H10 | Verzeigerte Strukturen";
-
-    /**
-     * The rubric for this assignment.
-     */
-    private final Rubric rubric;
-
-    /**
-     * The type of this rubric (e.g., Public Tests or Private Tests).
-     */
-
-    private final String type;
-
-    /**
      * The rubric for this assignment.
      */
     public static final Rubric RUBRIC = Rubrics.read(
         "H10 | Verzeigerte Strukturen - Public Tests",
         "rubric.json"
     );
+    /**
+     * The file containing the rubric for this assignment.
+     */
+    private static final String RUBRIC_FILE = "rubric.json";
+    /**
+     * The prefix for the title of this rubric.
+     */
+    private static final String RUBRIC_TITLE_PREFIX = "H10 | Verzeigerte Strukturen";
+    /**
+     * The rubric for this assignment.
+     */
+    private final Rubric rubric;
+    /**
+     * The type of this rubric (e.g., Public Tests or Private Tests).
+     */
+
+    private final String type;
 
     /**
      * Creates a new rubric provider.

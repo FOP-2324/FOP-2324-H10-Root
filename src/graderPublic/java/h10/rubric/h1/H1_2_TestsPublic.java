@@ -60,7 +60,7 @@ public class H1_2_TestsPublic extends H1_TestsPublic {
     @ExtendWith(JagrExecutionCondition.class)
     @ParameterizedTest
     @JsonParameterSetTest(value = "H1_Criterion_01.json", customConverters = CUSTOM_CONVERTERS)
-       @Override
+    @Override
     public void testDropAll(JsonParameterSet parameters) {
         super.testDropAll(parameters);
     }
@@ -70,7 +70,7 @@ public class H1_2_TestsPublic extends H1_TestsPublic {
     @ExtendWith(JagrExecutionCondition.class)
     @ParameterizedTest
     @JsonParameterSetTest(value = "H1_Criterion_02.json", customConverters = CUSTOM_CONVERTERS)
-       @Override
+    @Override
     public void testComplex(JsonParameterSet parameters) {
         super.testComplex(parameters);
     }

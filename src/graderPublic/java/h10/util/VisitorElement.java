@@ -42,23 +42,6 @@ public class VisitorElement<T extends Comparable<T>> implements Comparable<Visit
     }
 
     /**
-     * Returns the wrapped element and visits it.
-     *
-     * @return the wrapped element
-     */
-    public T get() {
-        visit();
-        return element;
-    }
-
-    /**
-     * Visits the wrapped element.
-     */
-    public void visit() {
-        visited++;
-    }
-
-    /**
      * Returns the number of times the wrapped element has been visited.
      *
      * @return the number of times the wrapped element has been visited
@@ -79,6 +62,23 @@ public class VisitorElement<T extends Comparable<T>> implements Comparable<Visit
     @Override
     public int compareTo(@NotNull VisitorElement<T> o) {
         return get().compareTo(o.get());
+    }
+
+    /**
+     * Returns the wrapped element and visits it.
+     *
+     * @return the wrapped element
+     */
+    public T get() {
+        visit();
+        return element;
+    }
+
+    /**
+     * Visits the wrapped element.
+     */
+    public void visit() {
+        visited++;
     }
 
     @Override

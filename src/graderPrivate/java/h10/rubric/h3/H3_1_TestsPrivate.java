@@ -48,8 +48,7 @@ public class H3_1_TestsPrivate extends H3_TestsPrivate {
     }
 
     @Override
-    protected <T extends Comparable<T>> QuadConsumer<MySet<T>, MySet<T>[], MySet<T>, Context.Builder<?>>
-    requirementCheck() {
+    protected <T extends Comparable<T>> QuadConsumer<MySet<T>, MySet<T>[], MySet<T>, Context.Builder<?>> requirementCheck() {
         return TutorAssertions::assertAsCopy;
     }
 

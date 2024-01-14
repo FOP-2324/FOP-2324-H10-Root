@@ -59,64 +59,6 @@ public abstract class H1_TestsPublic extends H10_Test {
         return METHOD_NAME;
     }
 
-    /**
-     * Checks whether the given set is only visited once.
-     *
-     * @param set     the set to check
-     * @param context the context to report the result to
-     * @param <T>     the type of the elements in the set
-     * @throws AssertionFailedError if the set is visited more than once
-     */
-    protected <T extends Comparable<T>> void assertVisitation(MySet<VisitorElement<T>> set, Context context) {
-        Assertions2.assertTrue(
-            Sets.stream(set).noneMatch(element -> element.visited() > 1),
-            context,
-            result -> "Nodes were visited more than once"
-        );
-    }
-
-    /**
-     * Returns a function that accepts an input and output set and a context and checks whether the given input and
-     * output satisfies the requirement of the method (as copy or in place).
-     *
-     * @param <T> the type of the elements in the input
-     * @return a function that accepts an input and output set and a context and checks whether the given input and
-     */
-    protected abstract <T extends Comparable<T>> TriConsumer<MySet<T>, MySet<T>, Context.Builder<?>> requirementCheck();
-
-    /**
-     * Checks whether the given source and output satisfies the requirement of the method (as copy or in place).
-     *
-     * @param <T>     the type of the elements in the source
-     * @param source  the source to check
-     * @param output  the output to check
-     * @param context the context to report the result to
-     * @throws AssertionFailedError if the source does not satisfy the requirement
-     */
-    protected <T extends Comparable<T>> void assertRequirement(
-        MySet<T> source,
-        MySet<T> output,
-        Context.Builder<?> context
-    ) {
-        this.<T>requirementCheck().accept(source, output, context);
-    }
-
-    /**
-     * Returns the input context information of an operation.
-     *
-     * @param cmp       the comparator used to compare the elements in the set
-     * @param predicate the predicate to filter the element in the set
-     * @param input     the input set to filter the element from
-     * @return the input context information of an operation
-     */
-    protected Context getInputContext(Comparator<?> cmp, Predicate<?> predicate, MySet<?> input) {
-        return Assertions2.contextBuilder().subject("Input")
-            .add("Source set", input)
-            .add("Comparator", cmp)
-            .add("Predicate", predicate)
-            .build();
-    }
-
     @Order(0)
     @DisplayName("Die Methode subset(MySet) ninmmt Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht "
         + "erfüllt wird.")
@@ -162,6 +104,64 @@ public abstract class H1_TestsPublic extends H10_Test {
         assertVisitation(source, context);
         assertRequirement(source, result, contextBuilder);
     }
+
+    /**
+     * Returns the input context information of an operation.
+     *
+     * @param cmp       the comparator used to compare the elements in the set
+     * @param predicate the predicate to filter the element in the set
+     * @param input     the input set to filter the element from
+     * @return the input context information of an operation
+     */
+    protected Context getInputContext(Comparator<?> cmp, Predicate<?> predicate, MySet<?> input) {
+        return Assertions2.contextBuilder().subject("Input")
+            .add("Source set", input)
+            .add("Comparator", cmp)
+            .add("Predicate", predicate)
+            .build();
+    }
+
+    /**
+     * Checks whether the given set is only visited once.
+     *
+     * @param set     the set to check
+     * @param context the context to report the result to
+     * @param <T>     the type of the elements in the set
+     * @throws AssertionFailedError if the set is visited more than once
+     */
+    protected <T extends Comparable<T>> void assertVisitation(MySet<VisitorElement<T>> set, Context context) {
+        Assertions2.assertTrue(
+            Sets.stream(set).noneMatch(element -> element.visited() > 1),
+            context,
+            result -> "Nodes were visited more than once"
+        );
+    }
+
+    /**
+     * Checks whether the given source and output satisfies the requirement of the method (as copy or in place).
+     *
+     * @param <T>     the type of the elements in the source
+     * @param source  the source to check
+     * @param output  the output to check
+     * @param context the context to report the result to
+     * @throws AssertionFailedError if the source does not satisfy the requirement
+     */
+    protected <T extends Comparable<T>> void assertRequirement(
+        MySet<T> source,
+        MySet<T> output,
+        Context.Builder<?> context
+    ) {
+        this.<T>requirementCheck().accept(source, output, context);
+    }
+
+    /**
+     * Returns a function that accepts an input and output set and a context and checks whether the given input and
+     * output satisfies the requirement of the method (as copy or in place).
+     *
+     * @param <T> the type of the elements in the input
+     * @return a function that accepts an input and output set and a context and checks whether the given input and
+     */
+    protected abstract <T extends Comparable<T>> TriConsumer<MySet<T>, MySet<T>, Context.Builder<?>> requirementCheck();
 
     @Order(1)
     @DisplayName("Die Methode subset(MySet) gibt das korrekte Ergebnis für eine komplexe Eingabe zurück.")

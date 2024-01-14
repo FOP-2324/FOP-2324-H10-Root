@@ -65,27 +65,6 @@ public abstract class H10_Test {
     private @Nullable MethodLink method;
 
     /**
-     * Returns a comparator that compares elements using their natural order. This comparator provides a better error
-     * message than {@link Comparator#naturalOrder()} since we override the {@link Object#toString()} method.
-     *
-     * @param <T> the type of the elements to compare
-     * @return a comparator that compares elements using their natural order
-     */
-    protected static <T extends Comparable<? super T>> Comparator<T> getDefaultComparator() {
-        return new Comparator<>() {
-            @Override
-            public int compare(T o1, T o2) {
-                return o1.compareTo(o2);
-            }
-
-            @Override
-            public String toString() {
-                return "o1 <= o2";
-            }
-        };
-    }
-
-    /**
      * Initializes needed information for the testing before all tests.
      */
     @BeforeAll
@@ -121,6 +100,15 @@ public abstract class H10_Test {
     }
 
     /**
+     * Returns a {@link Context.Builder} with the method to be tested as the subject.
+     *
+     * @return a {@link Context.Builder} with the method to be tested as the subject
+     */
+    protected Context.Builder<?> contextBuilder() {
+        return Assertions2.contextBuilder().subject(getMethod());
+    }
+
+    /**
      * Returns the method to be tested.
      *
      * @return the method to be tested
@@ -133,12 +121,14 @@ public abstract class H10_Test {
     }
 
     /**
-     * Returns a {@link Context.Builder} with the method to be tested as the subject.
+     * Creates a set from the given head and comparator.
      *
-     * @return a {@link Context.Builder} with the method to be tested as the subject
+     * @param head the head of the list to create a set from
+     * @param <T>  the type of the elements in the set
+     * @return a set from the given head and comparator
      */
-    protected Context.Builder<?> contextBuilder() {
-        return Assertions2.contextBuilder().subject(getMethod());
+    public <T extends Comparable<? super T>> MySet<T> createSet(ListItem<T> head) {
+        return this.<T>setProvider().apply(head, getDefaultComparator());
     }
 
     /**
@@ -150,13 +140,23 @@ public abstract class H10_Test {
     protected abstract <T> BiFunction<ListItem<T>, Comparator<T>, MySet<T>> setProvider();
 
     /**
-     * Creates a set from the given head and comparator.
+     * Returns a comparator that compares elements using their natural order. This comparator provides a better error
+     * message than {@link Comparator#naturalOrder()} since we override the {@link Object#toString()} method.
      *
-     * @param head the head of the list to create a set from
-     * @param <T>  the type of the elements in the set
-     * @return a set from the given head and comparator
+     * @param <T> the type of the elements to compare
+     * @return a comparator that compares elements using their natural order
      */
-    public <T extends Comparable<? super T>> MySet<T> createSet(ListItem<T> head) {
-        return this.<T>setProvider().apply(head, getDefaultComparator());
+    protected static <T extends Comparable<? super T>> Comparator<T> getDefaultComparator() {
+        return new Comparator<>() {
+            @Override
+            public int compare(T o1, T o2) {
+                return o1.compareTo(o2);
+            }
+
+            @Override
+            public String toString() {
+                return "o1 <= o2";
+            }
+        };
     }
 }

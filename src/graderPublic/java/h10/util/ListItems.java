@@ -60,6 +60,66 @@ public final class ListItems {
     }
 
     /**
+     * Returns a stream of the list items in the given list, mapping each element using the given mapper function.
+     *
+     * @param head   the head of the list to stream
+     * @param mapper the mapper function
+     * @param <T>    the type of the elements in the given list
+     * @param <R>    the type of the elements in the mapped list
+     * @return a stream of the list items in the given list, mapping each element using the given mapper function
+     */
+    public static <T, R> Stream<ListItem<R>> itemStream(ListItem<T> head, Function<ListItem<T>, ListItem<R>> mapper) {
+        return StreamSupport.stream(
+            Spliterators.spliteratorUnknownSize(itemIterator(head, mapper), Spliterator.ORDERED),
+            false
+        );
+    }
+
+    /**
+     * Returns a stream of the list items in the given list.
+     *
+     * @param head the head of the list to stream
+     * @param <T>  the type of the elements in the given list
+     * @return a stream of the list items in the given list
+     */
+    public static <T> Stream<ListItem<T>> itemStream(ListItem<T> head) {
+        return StreamSupport.stream(
+            Spliterators.spliteratorUnknownSize(itemIterator(head), Spliterator.ORDERED),
+            false
+        );
+    }
+
+    /**
+     * Returns a stream of the elements in the given list, mapping each element using the given mapper function.
+     *
+     * @param head   the head of the list to stream
+     * @param mapper the mapper function
+     * @param <T>    the type of the elements in the given list
+     * @param <R>    the type of the elements in the mapped list
+     * @return a stream of the elements in the given list, mapping each element using the given mapper function
+     */
+    public static <T, R> Stream<R> stream(ListItem<T> head, Function<T, R> mapper) {
+        return StreamSupport.stream(
+            Spliterators.spliteratorUnknownSize(iterator(head, mapper), Spliterator.ORDERED),
+            false
+        );
+    }
+
+    /**
+     * Returns a stream of the elements in the given list.
+     *
+     * @param head the head of the list to stream
+     * @param <T>  the type of the elements in the given list
+     * @return a stream of the elements in the given list
+     */
+    public static <T> Stream<T> stream(ListItem<T> head) {
+        return StreamSupport.stream(
+            Spliterators.spliteratorUnknownSize(iterator(head), Spliterator.ORDERED),
+            false
+        );
+    }
+
+    /**
      * Returns an iterator over the list items in the given list, mapping each element using the given mapper function.
      *
      * @param head   the head of the list to iterate over
@@ -134,66 +194,6 @@ public final class ListItems {
      */
     public static <T> Iterator<T> iterator(ListItem<T> head) {
         return iterator(head, Function.identity());
-    }
-
-    /**
-     * Returns a stream of the list items in the given list, mapping each element using the given mapper function.
-     *
-     * @param head   the head of the list to stream
-     * @param mapper the mapper function
-     * @param <T>    the type of the elements in the given list
-     * @param <R>    the type of the elements in the mapped list
-     * @return a stream of the list items in the given list, mapping each element using the given mapper function
-     */
-    public static <T, R> Stream<ListItem<R>> itemStream(ListItem<T> head, Function<ListItem<T>, ListItem<R>> mapper) {
-        return StreamSupport.stream(
-            Spliterators.spliteratorUnknownSize(itemIterator(head, mapper), Spliterator.ORDERED),
-            false
-        );
-    }
-
-    /**
-     * Returns a stream of the list items in the given list.
-     *
-     * @param head the head of the list to stream
-     * @param <T>  the type of the elements in the given list
-     * @return a stream of the list items in the given list
-     */
-    public static <T> Stream<ListItem<T>> itemStream(ListItem<T> head) {
-        return StreamSupport.stream(
-            Spliterators.spliteratorUnknownSize(itemIterator(head), Spliterator.ORDERED),
-            false
-        );
-    }
-
-    /**
-     * Returns a stream of the elements in the given list, mapping each element using the given mapper function.
-     *
-     * @param head   the head of the list to stream
-     * @param mapper the mapper function
-     * @param <T>    the type of the elements in the given list
-     * @param <R>    the type of the elements in the mapped list
-     * @return a stream of the elements in the given list, mapping each element using the given mapper function
-     */
-    public static <T, R> Stream<R> stream(ListItem<T> head, Function<T, R> mapper) {
-        return StreamSupport.stream(
-            Spliterators.spliteratorUnknownSize(iterator(head, mapper), Spliterator.ORDERED),
-            false
-        );
-    }
-
-    /**
-     * Returns a stream of the elements in the given list.
-     *
-     * @param head the head of the list to stream
-     * @param <T>  the type of the elements in the given list
-     * @return a stream of the elements in the given list
-     */
-    public static <T> Stream<T> stream(ListItem<T> head) {
-        return StreamSupport.stream(
-            Spliterators.spliteratorUnknownSize(iterator(head), Spliterator.ORDERED),
-            false
-        );
     }
 
     /**

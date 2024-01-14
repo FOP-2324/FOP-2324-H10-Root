@@ -26,16 +26,6 @@ public final class TutorAssertions {
     }
 
     /**
-     * Returns the identity hash code of the given item.
-     *
-     * @param item the item to get the identity hash code of
-     * @return the identity hash code of the given item
-     */
-    public static String identityHashCode(ListItem<?> item) {
-        return item.getClass().getName() + "@" + System.identityHashCode(item);
-    }
-
-    /**
      * Returns the identity hash code of the given element.
      *
      * @param element the element to get the identity hash code of
@@ -43,6 +33,16 @@ public final class TutorAssertions {
      */
     public static String identityHashCode(VisitorElement<?> element) {
         return element.peek().getClass() + "@" + System.identityHashCode(element.peek());
+    }
+
+    /**
+     * Returns the identity hash code of the given item.
+     *
+     * @param item the item to get the identity hash code of
+     * @return the identity hash code of the given item
+     */
+    public static String identityHashCode(ListItem<?> item) {
+        return item.getClass().getName() + "@" + System.identityHashCode(item);
     }
 
     /**
@@ -84,6 +84,7 @@ public final class TutorAssertions {
      * Asserts that the given source/inputs is copied to the given output.
      *
      * @param source         the source of the operation to check
+     * @param inputs         the inputs of the operation to check
      * @param output         the output of the operation to check
      * @param contextBuilder the context builder to report the result to
      * @param <T>            the type of the elements in the set
@@ -161,6 +162,7 @@ public final class TutorAssertions {
      * Asserts that the given source/inputs is not copied to the given output.
      *
      * @param source         the source of the operation to check
+     * @param inputs         the inputs of the operation to check
      * @param output         the output of the operation to check
      * @param contextBuilder the context builder to report the result to
      * @param <T>            the type of the elements in the set
@@ -183,7 +185,7 @@ public final class TutorAssertions {
             .add("Input(s)", inputsHashCode)
             .add("Output", otherIdentityHashCodes)
             .build();
-        contextBuilder.add("As-Copy", hashContext);
+        contextBuilder.add("In-Place", hashContext);
         Context context = contextBuilder.build();
         Sets.itemsStream(output).forEach(other -> {
             String otherHashCode = identityHashCode(other);

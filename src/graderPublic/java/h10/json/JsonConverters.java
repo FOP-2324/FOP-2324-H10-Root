@@ -22,20 +22,6 @@ public class JsonConverters extends org.tudalgo.algoutils.tutor.general.json.Jso
     }
 
     /**
-     * Converts a {@link JsonNode} to a list item sequence containing integers.
-     *
-     * @param node the node to convert
-     * @return a {@link JsonNode} to a list item sequence containing integers
-     * @throws IllegalArgumentException if the node is not an array node
-     */
-    public static ListItem<Integer> toListItemInteger(JsonNode node) {
-        if (!node.isArray()) {
-            throw new IllegalArgumentException("Node is not an array");
-        }
-        return ListItems.convert(toList(node, JsonNode::asInt));
-    }
-
-    /**
      * Converts a {@link JsonNode} to a list item sequence containing a list item sequence of integers.
      *
      * @param node the node to convert
@@ -51,6 +37,20 @@ public class JsonConverters extends org.tudalgo.algoutils.tutor.general.json.Jso
             StreamSupport.stream(node.spliterator(), false)
                 .map(JsonConverters::toListItemInteger).toList()
         );
+    }
+
+    /**
+     * Converts a {@link JsonNode} to a list item sequence containing integers.
+     *
+     * @param node the node to convert
+     * @return a {@link JsonNode} to a list item sequence containing integers
+     * @throws IllegalArgumentException if the node is not an array node
+     */
+    public static ListItem<Integer> toListItemInteger(JsonNode node) {
+        if (!node.isArray()) {
+            throw new IllegalArgumentException("Node is not an array");
+        }
+        return ListItems.convert(toList(node, JsonNode::asInt));
     }
 
     /**

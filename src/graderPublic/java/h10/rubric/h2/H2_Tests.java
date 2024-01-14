@@ -49,22 +49,6 @@ public abstract class H2_Tests extends H10_Test {
     }
 
     /**
-     * Returns the input context information of an operation.
-     *
-     * @param cmp    the comparator used to compare the elements in the set
-     * @param source the source set to execute the operation on
-     * @param input  the input set which will be used in the operation
-     * @return the input context information of an operation
-     */
-    protected Context getInputContext(Comparator<?> cmp, MySet<?> source, MySet<?> input) {
-        return Assertions2.contextBuilder().subject("Input")
-            .add("Source set", source.toString())
-            .add("Comparator", cmp)
-            .add("Input set", input.toString())
-            .build();
-    }
-
-    /**
      * Checks whether the operation result is correct.
      *
      * @param parameters the parameter set providing the test data
@@ -105,5 +89,21 @@ public abstract class H2_Tests extends H10_Test {
                 );
             }
         });
+    }
+
+    /**
+     * Returns the input context information of an operation.
+     *
+     * @param cmp    the comparator used to compare the elements in the set
+     * @param source the source set to execute the operation on
+     * @param input  the input set which will be used in the operation
+     * @return the input context information of an operation
+     */
+    protected Context getInputContext(Comparator<?> cmp, MySet<?> source, MySet<?> input) {
+        return Assertions2.contextBuilder().subject("Input")
+            .add("Source set", source.toString())
+            .add("Comparator", cmp)
+            .add("Input set", input.toString())
+            .build();
     }
 }
