@@ -213,14 +213,10 @@ public abstract class H1_TestsPublic extends H10_Test {
         while (actualIt.hasNext() && expectedIt.hasNext()) {
             VisitorElement<Integer> a = actualIt.next();
             VisitorElement<Integer> e = expectedIt.next();
-            Context checkContext = Assertions2.contextBuilder()
-                .add("Expected node", e)
-                .add("Actual node", a)
-                .build();
             Assertions2.assertEquals(
                 e.peek(),
                 a.peek(),
-                contextBuilder.add("Equality", checkContext).build(),
+                context,
                 r -> "The result set contains the wrong elements"
             );
         }

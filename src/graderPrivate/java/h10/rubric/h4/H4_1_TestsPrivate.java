@@ -1,20 +1,18 @@
-package h10.rubric.h1;
+package h10.rubric.h4;
 
 import h10.ListItem;
 import h10.MySet;
+import h10.MySetAsCopy;
 import h10.TutorMySetAsCopy;
 import h10.rubric.TestConstants;
 import h10.rubric.TutorAssertions;
-import org.apache.logging.log4j.util.TriConsumer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
-import org.sourcegrade.jagr.api.testing.extension.JagrExecutionCondition;
 import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
@@ -25,12 +23,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 
 /**
- * Defines public test cases for the H1.1 assignment.
+ * Defines private test cases for the H4.1 assignment.
  *
  * @author Nhan Huynh
  */
 @TestForSubmission
-@DisplayName("H1.1 | As-Copy")
+@DisplayName("H4.1 | As-Copy")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Timeout(
     value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
@@ -38,38 +36,51 @@ import java.util.function.BiFunction;
     threadMode = Timeout.ThreadMode.SEPARATE_THREAD
 )
 @SkipAfterFirstFailedTest(TestConstants.SKIP_AFTER_FIRST_FAILED_TEST)
-public class H1_1_TestsPublic extends H1_TestsPublic {
+public class H4_1_TestsPrivate extends H4_TestsPrivate {
+
     @Override
     public Class<?> getClassType() {
-        return MySet.class;
+        return MySetAsCopy.class;
     }
 
     @Override
     protected <T> BiFunction<ListItem<T>, Comparator<T>, MySet<T>> setProvider() {
+        return MySetAsCopy::new;
+    }
+
+    @Override
+    protected <T> BiFunction<ListItem<T>, Comparator<T>, MySet<T>> fallbackProvider() {
         return TutorMySetAsCopy::new;
     }
 
     @Override
-    protected <T extends Comparable<T>> TriConsumer<MySet<T>, MySet<T>, Context.Builder<?>> requirementCheck() {
+    protected <T extends Comparable<T>> QuadConsumer<MySet<T>, MySet<T>[], MySet<T>, Context.Builder<?>> requirementCheck() {
         return TutorAssertions::assertAsCopy;
     }
 
-    @Order(0)
-    @DisplayName("Die Methode subset(MySet) ninmmt Elemente in die Ergebnismenge nicht auf, falls das Prädikat nicht "
-        + "erfüllt wird.")
-    @ExtendWith(JagrExecutionCondition.class)
+    @Order(3)
+    @DisplayName("Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für Mengen mit "
+        + "unterschiedlicher Länge zurück.")
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H1_Criterion_01.json", customConverters = CUSTOM_CONVERTERS)
+    @JsonParameterSetTest(value = "H4_Criterion_04.json", customConverters = CUSTOM_CONVERTERS)
     @Override
-    public void testDropAll(JsonParameterSet parameters) {
-        super.testDropAll(parameters);
+    public void testDifferentSize(JsonParameterSet parameters) {
+        super.testDifferentSize(parameters);
     }
 
-    @Order(1)
-    @DisplayName("Die Methode subset(MySet) gibt das korrekte Ergebnis für eine komplexe Eingabe zurück.")
-    @ExtendWith(JagrExecutionCondition.class)
+    @Order(4)
+    @DisplayName("Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für einfache Eingaben zurück.")
     @ParameterizedTest
-    @JsonParameterSetTest(value = "H1_Criterion_02.json", customConverters = CUSTOM_CONVERTERS)
+    @JsonParameterSetTest(value = "H4_Criterion_05.json", customConverters = CUSTOM_CONVERTERS)
+    @Override
+    public void testSimple(JsonParameterSet parameters) {
+        super.testSimple(parameters);
+    }
+
+    @Order(5)
+    @DisplayName("Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für komplexe Eingaben zurück.")
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "H4_Criterion_06.json", customConverters = CUSTOM_CONVERTERS)
     @Override
     public void testComplex(JsonParameterSet parameters) {
         super.testComplex(parameters);

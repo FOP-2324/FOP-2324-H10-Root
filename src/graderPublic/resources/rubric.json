@@ -118,27 +118,27 @@
           {
             "order": 16,
             "title": "Die Methode difference(MySet) nimmt ein Element nicht auf, falls ein Element sowohl in M als auch in N ist.",
-            "class": "h10.rubric.h3.H3_1_TestsPublic"
+            "class": "h10.rubric.h3.H3_2_TestsPublic"
           },
           {
             "order": 17,
             "title": "Die Methode difference(MySet) gibt das korrekte Ergebnis für eine leere Menge zurück.",
-            "class": "h10.rubric.h3.H3_1_TestsPublic"
+            "class": "h10.rubric.h3.H3_2_TestsPublic"
           },
           {
             "order": 18,
             "title": "Die Methode difference(MySet) nimmt die verbleibenen Elemente von M auf, falls die Menge M mehr Elemente enthält als die Menge N.",
-            "class": "h10.rubric.h3.H3_1_TestsPrivate"
+            "class": "h10.rubric.h3.H3_2_TestsPrivate"
           },
           {
             "order": 19,
             "title": "Die Methode difference(MySet) gibt das korrekte Ergebnis für einfache Eingaben zurück.",
-            "class": "h10.rubric.h3.H3_1_TestsPrivate"
+            "class": "h10.rubric.h3.H3_2_TestsPrivate"
           },
           {
             "order": 20,
             "title": "Die Methode difference(MySet) gibt das korrekte Ergebnis für komplexe Eingaben zurück.",
-            "class": "h10.rubric.h3.H3_1_TestsPrivate"
+            "class": "h10.rubric.h3.H3_2_TestsPrivate"
           }
         ]
       }
@@ -152,18 +152,18 @@
         "criteria": [
           {
             "order": 21,
-            "title": "Die Methode intersectionListItems(ListItem) nimmt ein Element auf, falls das Element in allen Mengen enthalten ist.",
+            "title":"Die Methode intersectionListItems(ListItem) nimmt ein Element auf, falls das Element in allen Mengen enthalten ist.",
             "class": "h10.rubric.h4.H4_1_TestsPublic"
           },
           {
             "order": 22,
-            "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis zurück, wenn die Menge leer ist",
-            "class": "h10.rubric.h4.H4_1_TestsPrivate"
+            "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis zurück, wenn die Hauptmenge leer ist.",
+            "class": "h10.rubric.h4.H4_1_TestsPublic"
           },
           {
             "order": 23,
-            "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für eine leere Eingabemenge zurück.",
-            "class": "h10.rubric.h4.H4_1_TestsPrivate"
+            "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für eine leere Eingabemenge(n) zurück.",
+            "class": "h10.rubric.h4.H4_1_TestsPublic"
           },
           {
             "order": 24,
@@ -172,12 +172,12 @@
           },
           {
             "order": 25,
-            "title": "Die Methode intersectionListItems(ListItem)gibt das korrekte Ergebnis für einfache Eingaben zurück.",
+            "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für einfache Eingaben zurück.",
             "class": "h10.rubric.h4.H4_1_TestsPublic"
           },
           {
             "order": 26,
-            "title": "Die Methode intersectionListItems(ListItem)gibt das korrekte Ergebnis für komplexe Eingaben zurück.",
+            "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für komplexe Eingaben zurück.",
             "class": "h10.rubric.h4.H4_1_TestsPrivate"
           }
         ]
@@ -188,32 +188,32 @@
           {
             "order": 27,
             "title": "Die Methode intersectionListItems(ListItem) nimmt ein Element auf, falls das Element in allen Mengen enthalten ist.",
-            "class": "h10.rubric.h4.H4_1_TestsPublic"
+            "class": "h10.rubric.h4.H4_2_TestsPublic"
           },
           {
             "order": 28,
-            "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis zurück, wenn die Menge leer ist",
-            "class": "h10.rubric.h4.H4_1_TestsPrivate"
+            "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis zurück, wenn die Hauptmenge leer ist.",
+            "class": "h10.rubric.h4.H4_2_TestsPublic"
           },
           {
             "order": 29,
-            "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für eine leere Eingabemenge zurück.",
-            "class": "h10.rubric.h4.H4_1_TestsPrivate"
+            "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für eine leere Eingabemenge(n) zurück.",
+            "class": "h10.rubric.h4.H4_2_TestsPublic"
           },
           {
             "order": 30,
             "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für Mengen mit unterschiedlicher Länge zurück.",
-            "class": "h10.rubric.h4.H4_1_TestsPrivate"
+            "class": "h10.rubric.h4.H4_2_TestsPrivate"
           },
           {
             "order": 31,
-            "title": "Die Methode intersectionListItems(ListItem)gibt das korrekte Ergebnis für einfache Eingaben zurück.",
-            "class": "h10.rubric.h4.H4_1_TestsPublic"
+            "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für einfache Eingaben zurück.",
+            "class": "h10.rubric.h4.H4_2_TestsPublic"
           },
           {
             "order": 32,
-            "title": "Die Methode intersectionListItems(ListItem)gibt das korrekte Ergebnis für komplexe Eingaben zurück.",
-            "class": "h10.rubric.h4.H4_1_TestsPrivate"
+            "title": "Die Methode intersectionListItems(ListItem) gibt das korrekte Ergebnis für komplexe Eingaben zurück.",
+            "class": "h10.rubric.h4.H4_2_TestsPrivate"
           }
         ]
       }
