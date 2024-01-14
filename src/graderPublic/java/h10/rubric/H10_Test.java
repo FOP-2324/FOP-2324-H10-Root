@@ -5,7 +5,6 @@ import h10.ListItem;
 import h10.MySet;
 import h10.MySetAsCopy;
 import h10.MySetInPlace;
-import h10.rubric.Links;
 import h10.util.JsonConverters;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,6 +16,7 @@ import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
 import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -43,10 +43,14 @@ public abstract class H10_Test {
      * @see JsonParameterSet
      */
     @SuppressWarnings("unused")
-    public static final Map<String, Function<JsonNode, ?>> CONVERTERS = Map.of(
-        "head", JsonConverters::toListItemInteger,
-        "predicate", JsonConverters::toPredicateInteger,
-        "expected", JsonConverters::toListItemInteger
+    public static final Map<String, Function<JsonNode, ?>> CONVERTERS = new HashMap<>(
+        Map.of(
+            "source", JsonConverters::toListItemInteger,
+            "predicate", JsonConverters::toPredicateInteger,
+            "expected", JsonConverters::toListItemInteger,
+            "other", JsonConverters::toListItemInteger,
+            "expected2D", JsonConverters::toListItemListItemInteger
+        )
     );
 
     /**

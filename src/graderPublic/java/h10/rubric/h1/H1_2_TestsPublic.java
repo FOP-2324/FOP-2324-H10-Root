@@ -31,7 +31,7 @@ import java.util.function.BiFunction;
  * @author Nhan Huynh
  */
 @TestForSubmission
-@DisplayName("H1.1 | In-Place")
+@DisplayName("H1.2 | In-Place")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Timeout(
     value = TestConstants.TEST_TIMEOUT_IN_SECONDS,

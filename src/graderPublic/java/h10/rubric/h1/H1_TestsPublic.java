@@ -1,21 +1,26 @@
 package h10.rubric.h1;
 
-import h10.rubric.H10_Test;
 import h10.ListItem;
 import h10.MySet;
 import h10.MySetAsCopy;
 import h10.MySetInPlace;
 import h10.Sets;
+import h10.rubric.H10_Test;
+import h10.rubric.TestConstants;
 import h10.util.ListItems;
 import h10.util.VisitorElement;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opentest4j.AssertionFailedError;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.sourcegrade.jagr.api.testing.extension.JagrExecutionCondition;
+import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
@@ -23,6 +28,7 @@ import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 /**
@@ -32,8 +38,15 @@ import java.util.function.Predicate;
  *
  * @author Nhan Huynh
  */
-@DisplayName("H1 | subset(MySet)")
 @TestForSubmission
+@DisplayName("H1 | subset(MySet)")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Timeout(
+    value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
+    unit = TimeUnit.SECONDS,
+    threadMode = Timeout.ThreadMode.SEPARATE_THREAD
+)
+@SkipAfterFirstFailedTest(TestConstants.SKIP_AFTER_FIRST_FAILED_TEST)
 public abstract class H1_TestsPublic extends H10_Test {
 
     /**
@@ -92,7 +105,15 @@ public abstract class H1_TestsPublic extends H10_Test {
         this.<T>requirementCheck().accept(input, output, context);
     }
 
-    private Context getInputContext(Comparator<?> cmp, Predicate<?> predicate, MySet<?> input) {
+    /**
+     * Returns the input context information of an operation.
+     *
+     * @param cmp       the comparator used to compare the elements in the set
+     * @param predicate the predicate to filter the element in the set
+     * @param input     the input set to filter the element from
+     * @return the input context information of an operation
+     */
+    protected Context getInputContext(Comparator<?> cmp, Predicate<?> predicate, MySet<?> input) {
         return Assertions2.contextBuilder().subject("Input")
             .add("Set", input)
             .add("Comparator", cmp)
@@ -123,7 +144,7 @@ public abstract class H1_TestsPublic extends H10_Test {
         };
 
         // Source
-        ListItem<Integer> head = parameters.get("head");
+        ListItem<Integer> head = parameters.get("source");
         ListItem<VisitorElement<Integer>> visitableHead = ListItems.map(head, VisitorElement::new);
         MySet<VisitorElement<Integer>> source = createSet(visitableHead);
 
@@ -169,11 +190,11 @@ public abstract class H1_TestsPublic extends H10_Test {
         };
 
         // Source
-        ListItem<Integer> head = parameters.get("head");
+        ListItem<Integer> head = parameters.get("source");
         ListItem<VisitorElement<Integer>> visitableHead = ListItems.map(head, VisitorElement::new);
         MySet<VisitorElement<Integer>> source = createSet(visitableHead);
 
-        contextBuilder.add("Source", getInputContext(getDefaultComparator(), predicate, source));
+        contextBuilder.add("Input", getInputContext(getDefaultComparator(), predicate, source));
 
         // Result
         MySet<VisitorElement<Integer>> result = source.subset(predicate);
