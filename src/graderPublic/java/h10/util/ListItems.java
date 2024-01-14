@@ -190,7 +190,7 @@ public final class ListItems {
      * @return a stream of the elements in the given list
      */
     public static <T> Stream<T> stream(ListItem<T> head) {
-       return StreamSupport.stream(
+        return StreamSupport.stream(
             Spliterators.spliteratorUnknownSize(iterator(head), Spliterator.ORDERED),
             false
         );

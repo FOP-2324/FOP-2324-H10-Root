@@ -5,7 +5,7 @@ import h10.ListItem;
 import h10.MySet;
 import h10.MySetAsCopy;
 import h10.MySetInPlace;
-import h10.util.JsonConverters;
+import h10.json.JsonConverters;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
