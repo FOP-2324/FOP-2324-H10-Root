@@ -8,18 +8,26 @@ import h10.MySetInPlace;
 import h10.json.JsonConverters;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
+import org.tudalgo.algoutils.tutor.general.reflections.BasicMethodLink;
 import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
 import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
+import spoon.reflect.declaration.CtImport;
+import spoon.reflect.visitor.ImportScanner;
+import spoon.reflect.visitor.ImportScannerImpl;
 
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Defines a base class for testing a method for the H10 assignment.
@@ -36,6 +44,14 @@ public abstract class H10_Test {
      * The name of the field containing the custom converters for this test class (JSON Converters).
      */
     public static final String CUSTOM_CONVERTERS = "CONVERTERS";
+
+    /**
+     * The ignored class which should not be checked for the requirement check.
+     */
+    private static final Set<String> IGNORED_IMPORTS = Set.of(
+        Comparator.class,
+        Predicate.class
+    ).stream().map(Class::getName).collect(Collectors.toSet());
 
     /**
      * The custom converters for this test class (JSON Converters).
@@ -71,6 +87,23 @@ public abstract class H10_Test {
     public void globalSetup() {
         type = Links.getType(getClassType());
         method = Links.getMethod(type, getMethodName());
+    }
+
+    @BeforeEach
+    public void setup() {
+        // Check Imports
+        ImportScanner importScanner = new ImportScannerImpl();
+        importScanner.computeImports(((BasicMethodLink) method).getCtElement());
+        Set<CtImport> imports = importScanner.getAllImports();
+        Set<String> found = imports.stream()
+            .map(element -> element.getReference().toString())
+            .filter(Predicate.not(element -> IGNORED_IMPORTS.contains(element)))
+            .filter(element -> element.contains("java.util")).collect(Collectors.toSet());
+        Assertions2.assertTrue(
+            found.isEmpty(),
+            contextBuilder().add("Found", found).build(),
+            r -> "Expected nno imports from java.util.*, but got".formatted(found)
+        );
     }
 
     /**
