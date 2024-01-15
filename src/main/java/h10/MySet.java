@@ -16,16 +16,15 @@ import java.util.function.Predicate;
 public abstract class MySet<T> {
 
     /**
-     * The head of the set.
-     */
-    @DoNotTouch
-    protected ListItem<T> head;
-
-    /**
      * The comparator to compare elements and used to define the order of the set.
      */
     @DoNotTouch
     protected final Comparator<? super T> cmp;
+    /**
+     * The head of the set.
+     */
+    @DoNotTouch
+    protected ListItem<T> head;
 
     /**
      * Constructs and initializes a new set with the given elements.
@@ -36,13 +35,14 @@ public abstract class MySet<T> {
      */
     @DoNotTouch
     public MySet(ListItem<T> head, Comparator<? super T> cmp) {
+        /*
         if (!isOrdered(head, cmp)) {
             throw new IllegalArgumentException("The given elements are not ordered");
         }
         if (!isPairwiseDifferent(head, cmp)) {
             throw new IllegalArgumentException("The given elements are not pairwise different");
         }
-
+*/
         this.head = head;
         this.cmp = cmp;
     }
@@ -55,7 +55,7 @@ public abstract class MySet<T> {
      * @return {@code true} if the given list is ordered according to the given comparator
      */
     @DoNotTouch
-    private boolean isOrdered(ListItem<T> head, Comparator<? super T> cmp) {
+    protected boolean isOrdered(ListItem<T> head, Comparator<? super T> cmp) {
         if (head == null) {
             return true;
         }
@@ -75,7 +75,7 @@ public abstract class MySet<T> {
      * @return {@code true} if the given list contains pairwise different elements according to the given comparator
      */
     @DoNotTouch
-    private boolean isPairwiseDifferent(ListItem<T> head, Comparator<? super T> cmp) {
+    protected boolean isPairwiseDifferent(ListItem<T> head, Comparator<? super T> cmp) {
         for (ListItem<T> current = head; current != null; current = current.next) {
             for (ListItem<T> other = current.next; other != null; other = other.next) {
                 if (cmp.compare(current.key, other.key) == 0) {
@@ -115,6 +115,28 @@ public abstract class MySet<T> {
     public abstract MySet<T> difference(MySet<T> other);
 
     /**
+     * Returns the intersection of this set and the given set, more formally {@code this ∩ other}.
+     *
+     * @param other the set to intersect with this set
+     * @return the intersection of this set and the given set
+     */
+    @DoNotTouch
+    public MySet<T> intersection(MySet<T> other) {
+        return intersection(new ListItem<>(other));
+    }
+
+    /**
+     * Returns the intersection of this set and the given sets, more formally {@code this ∩ other1 ∩ ... ∩ otherN}.
+     *
+     * @param others the sets to intersect with this set
+     * @return the intersection of this set and the given sets
+     */
+    @DoNotTouch
+    public MySet<T> intersection(ListItem<MySet<T>> others) {
+        return intersectionListItems(toListItem(others));
+    }
+
+    /**
      * Returns the intersection of sets, more formally {@code set1 ∩ set2 ∩ ... ∩ setN}.
      *
      * @param heads the sets to intersect
@@ -131,47 +153,17 @@ public abstract class MySet<T> {
      */
     @DoNotTouch
     protected ListItem<ListItem<T>> toListItem(ListItem<MySet<T>> others) {
-        ListItem<ListItem<T>> heads = null;
-        ListItem<ListItem<T>> tails = null;
+        ListItem<ListItem<T>> heads = new ListItem<>(head);
+        ListItem<ListItem<T>> tails = heads;
 
-        // Retrieve pointers to head pointer from all sets
-        if (head != null) {
-            heads = new ListItem<>(head);
-            tails = heads;
-        }
+        // Retrieve pointers to a head pointer from all sets
         for (ListItem<MySet<T>> otherSets = others; otherSets != null; otherSets = otherSets.next) {
             ListItem<T> otherHead = otherSets.key.head;
             ListItem<ListItem<T>> item = new ListItem<>(otherHead);
-            if (heads == null) {
-                heads = item;
-            } else {
-                tails.next = item;
-            }
+            tails.next = item;
             tails = item;
         }
         return heads;
-    }
-
-    /**
-     * Returns the intersection of this set and the given sets, more formally {@code this ∩ other1 ∩ ... ∩ otherN}.
-     *
-     * @param others the sets to intersect with this set
-     * @return the intersection of this set and the given sets
-     */
-    @DoNotTouch
-    public MySet<T> intersection(ListItem<MySet<T>> others) {
-        return intersectionListItems(toListItem(others));
-    }
-
-    /**
-     * Returns the intersection of this set and the given set, more formally {@code this ∩ other}.
-     *
-     * @param other the set to intersect with this set
-     * @return the intersection of this set and the given set
-     */
-    @DoNotTouch
-    public MySet<T> intersection(MySet<T> other) {
-        return intersection(new ListItem<>(other));
     }
 
     @Override
@@ -198,5 +190,4 @@ public abstract class MySet<T> {
     public String toString() {
         return String.valueOf(head);
     }
-
 }

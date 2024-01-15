@@ -137,6 +137,7 @@ public class MySetInPlace<T> extends MySet<T> {
                 if (previous == null) {
                     // Case 3.1: Since previous is not set yet, this means we the head of the set should be decoupled
                     head = current.next;
+                    otherCurrent = otherCurrent.next;
                 } else {
                     // Case 3.1: Previous is set to the last element which is not decoupled from the set
                     // Since the previous element is the element which is not removed and the successor needs to be
@@ -149,21 +150,6 @@ public class MySetInPlace<T> extends MySet<T> {
         }
 
         // If there are remaining elements in the current set, keep them
-        while (current != null) {
-            previous = current;
-            current = current.next;
-        }
-
-        // If there are remaining elements in the other set, remove them
-        if (otherCurrent != null) {
-            if (previous == null) {
-                // This set was empty
-                head = otherCurrent;
-            } else {
-                previous.next = otherCurrent;
-            }
-        }
-
         return this;
     }
 
@@ -174,7 +160,9 @@ public class MySetInPlace<T> extends MySet<T> {
         ListItem<T> newHead = null;
         ListItem<T> tail = null;
 
-        while (heads != null && heads.next != null && heads.key != null) {
+        // Indicator when to stop all loops
+        boolean end = false;
+        while (!end && heads != null && heads.next != null && heads.key != null) {
             T current = heads.key.key;
             // Check if the current element is contained in all sets
             boolean common = true;
@@ -182,8 +170,8 @@ public class MySetInPlace<T> extends MySet<T> {
                 // Case 1: The other set is smaller than the current set. We do not have to check for common elements
                 // anymore
                 if (otherHeads.key == null) {
-                    head = newHead;
-                    return this;
+                    end = true;
+                    break;
                 }
                 T other = otherHeads.key.key;
                 int comparison = cmp.compare(current, other);
@@ -205,6 +193,11 @@ public class MySetInPlace<T> extends MySet<T> {
                 }
             }
 
+            // Stop all loops we are done
+            if (end) {
+                break;
+            }
+
             // If the element is not contained in all sets, skip it
             if (!common) {
                 heads.key = heads.key.next;
@@ -221,7 +214,10 @@ public class MySetInPlace<T> extends MySet<T> {
             heads.key = heads.key.next;
         }
         head = newHead;
-        tail.next = null;
+        // Check since an empty list does not have a successor element after tail
+        if (tail != null) {
+            tail.next = null;
+        }
         return this;
     }
 
