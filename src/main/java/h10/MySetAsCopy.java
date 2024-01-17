@@ -66,7 +66,7 @@ public class MySetAsCopy<T> extends MySet<T> {
                 tail = pair;
             }
         }
-        return new MySetInPlace<>(newHead, Comparator.comparing((ListItem<T> o) -> o.key, cmp)
+        return new MySetAsCopy<>(newHead, Comparator.comparing((ListItem<T> o) -> o.key, cmp)
             .thenComparing(
                 (ListItem<T> o) -> {
                     assert o.next != null;
