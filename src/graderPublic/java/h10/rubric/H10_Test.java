@@ -18,12 +18,16 @@ import org.tudalgo.algoutils.tutor.general.reflections.BasicTypeLink;
 import org.tudalgo.algoutils.tutor.general.reflections.Link;
 import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
 import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
+import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtImport;
+import spoon.reflect.declaration.CtTypeInformation;
+import spoon.reflect.declaration.CtVariable;
 import spoon.reflect.visitor.ImportScanner;
 import spoon.reflect.visitor.ImportScannerImpl;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -51,10 +55,11 @@ public abstract class H10_Test {
     /**
      * The ignored class which should not be checked for the requirement check.
      */
-    private static final Set<String> IGNORED_IMPORTS = Set.of(
+    private static final Set<TypeLink> IGNORED_IMPORTS = Set.of(
         Comparator.class,
-        Predicate.class
-    ).stream().map(Class::getName).collect(Collectors.toSet());
+        Predicate.class,
+        Function.class
+    ).stream().map(BasicTypeLink::of).collect(Collectors.toSet());
 
     /**
      * The custom converters for this test class (JSON Converters).
@@ -99,9 +104,11 @@ public abstract class H10_Test {
         assert method != null;
         importScanner.computeImports(((BasicMethodLink) method).getCtElement());
         Set<CtImport> imports = importScanner.getAllImports();
-        Set<TypeLink> found = imports.stream()
-            .map(element -> element.getReference().toString())
-            .filter(Predicate.not(IGNORED_IMPORTS::contains))
+        List<CtVariable<?>> variables = ((BasicMethodLink) method).getCtElement()
+            .filterChildren(element -> element instanceof CtVariable<?>).list();
+        Set<TypeLink> foundTypes = imports.stream().map(CtImport::getReferencedTypes)
+            .filter(Objects::nonNull)
+            .map(Object::toString)
             .filter(element -> element.contains("java.util"))
             .map(element -> {
                 try {
@@ -111,18 +118,31 @@ public abstract class H10_Test {
                 }
             })
             .filter(Objects::nonNull)
-            .filter(Predicate.not(IGNORED_IMPORTS::contains))
             .map(BasicTypeLink::of)
+            .filter(Predicate.not(IGNORED_IMPORTS::contains))
+            // Only class and arrays are not allowed
             .filter(t -> t.kind() != Link.Kind.INTERFACE)
             .collect(Collectors.toSet());
-        String types = found.stream().
+
+        String types = foundTypes.stream().
             map(TypeLink::reflection).
             map(Class::getName)
             .collect(Collectors.joining(", "));
         Assertions2.assertTrue(
-            found.isEmpty(),
+            foundTypes.isEmpty(),
             contextBuilder().add("Found", types).build(),
-            r -> "Expected nno imports from java.util.*, but got %s".formatted(types)
+            r -> "Expected no imports from java.util.*, but got %s".formatted(types)
+        );
+
+        // Array check
+        Set<CtElement> arrays = variables.stream().map(CtVariable::getType)
+            .filter(CtTypeInformation::isArray)
+            .collect(Collectors.toSet());
+        String arrayTypes = arrays.stream().map(CtElement::toString).collect(Collectors.joining(", "));
+        Assertions2.assertTrue(
+            arrays.isEmpty(),
+            contextBuilder().add("Found", arrayTypes).build(),
+            r -> "Expected no arrays, but got %s".formatted(arrayTypes)
         );
     }
 
