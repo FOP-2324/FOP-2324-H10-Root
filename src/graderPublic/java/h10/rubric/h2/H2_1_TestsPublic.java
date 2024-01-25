@@ -36,7 +36,7 @@ import java.util.function.BiFunction;
 public class H2_1_TestsPublic extends H2_TestsPublic {
     @Override
     public Class<?> getClassType() {
-        return MySet.class;
+        return MySetAsCopy.class;
     }
 
     @Override

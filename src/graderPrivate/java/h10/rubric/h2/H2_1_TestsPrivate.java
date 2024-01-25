@@ -42,7 +42,7 @@ import java.util.function.BiFunction;
 public class H2_1_TestsPrivate extends H2_TestsPrivate {
     @Override
     public Class<?> getClassType() {
-        return MySet.class;
+        return MySetAsCopy.class;
     }
 
     @Override

@@ -14,6 +14,8 @@ import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.reflections.BasicMethodLink;
+import org.tudalgo.algoutils.tutor.general.reflections.BasicTypeLink;
+import org.tudalgo.algoutils.tutor.general.reflections.Link;
 import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
 import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
 import spoon.reflect.declaration.CtImport;
@@ -23,6 +25,7 @@ import spoon.reflect.visitor.ImportScannerImpl;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -93,16 +96,33 @@ public abstract class H10_Test {
     public void setup() {
         // Check Imports
         ImportScanner importScanner = new ImportScannerImpl();
+        assert method != null;
         importScanner.computeImports(((BasicMethodLink) method).getCtElement());
         Set<CtImport> imports = importScanner.getAllImports();
-        Set<String> found = imports.stream()
+        Set<TypeLink> found = imports.stream()
             .map(element -> element.getReference().toString())
-            .filter(Predicate.not(element -> IGNORED_IMPORTS.contains(element)))
-            .filter(element -> element.contains("java.util")).collect(Collectors.toSet());
+            .filter(Predicate.not(IGNORED_IMPORTS::contains))
+            .filter(element -> element.contains("java.util"))
+            .map(element -> {
+                try {
+                    return Class.forName(element);
+                } catch (ClassNotFoundException e) {
+                    return null;
+                }
+            })
+            .filter(Objects::nonNull)
+            .filter(Predicate.not(IGNORED_IMPORTS::contains))
+            .map(BasicTypeLink::of)
+            .filter(t -> t.kind() != Link.Kind.INTERFACE)
+            .collect(Collectors.toSet());
+        String types = found.stream().
+            map(TypeLink::reflection).
+            map(Class::getName)
+            .collect(Collectors.joining(", "));
         Assertions2.assertTrue(
             found.isEmpty(),
-            contextBuilder().add("Found", found).build(),
-            r -> "Expected nno imports from java.util.*, but got".formatted(found)
+            contextBuilder().add("Found", types).build(),
+            r -> "Expected nno imports from java.util.*, but got %s".formatted(types)
         );
     }
 

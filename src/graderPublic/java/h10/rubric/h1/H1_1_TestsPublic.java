@@ -2,6 +2,7 @@ package h10.rubric.h1;
 
 import h10.ListItem;
 import h10.MySet;
+import h10.MySetAsCopy;
 import h10.TutorMySetAsCopy;
 import h10.rubric.TestConstants;
 import h10.rubric.TutorAssertions;
@@ -41,7 +42,7 @@ import java.util.function.BiFunction;
 public class H1_1_TestsPublic extends H1_TestsPublic {
     @Override
     public Class<?> getClassType() {
-        return MySet.class;
+        return MySetAsCopy.class;
     }
 
     @Override
