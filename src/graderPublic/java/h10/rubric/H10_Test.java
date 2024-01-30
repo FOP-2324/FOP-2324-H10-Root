@@ -136,6 +136,7 @@ public abstract class H10_Test {
 
         // Array check
         Set<CtElement> arrays = variables.stream().map(CtVariable::getType)
+            .filter(Objects::nonNull)
             .filter(CtTypeInformation::isArray)
             .collect(Collectors.toSet());
         String arrayTypes = arrays.stream().map(CtElement::toString).collect(Collectors.joining(", "));
