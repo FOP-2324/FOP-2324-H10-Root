@@ -4,10 +4,7 @@ import org.tudalgo.algoutils.student.annotation.DoNotTouch;
 import org.tudalgo.algoutils.student.annotation.StudentImplementationRequired;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.function.Predicate;
-
-import static org.tudalgo.algoutils.student.Student.crash;
 
 /**
  * An out-of-place implementation of MySet.
@@ -33,124 +30,162 @@ public class MySetAsCopy<T> extends MySet<T> {
     @Override
     @StudentImplementationRequired
     public MySet<T> subset(Predicate<? super T> pred) {
-        ListItem<T> current = head;
-        ListItem<T> lastTrue = null;
-        MySet<T> mySetAsCopy = new MySetAsCopy<>(null, cmp);
-        while (current != null) {
+        // TODO H1.1
+        ListItem<T> newHead = null;
+        ListItem<T> tail = null;
+        for (ListItem<T> current = head; current != null; current = current.next) {
             if (pred.test(current.key)) {
-                ListItem<T> even = new ListItem<>(current.key);
-                if (mySetAsCopy.head == null) {
-                    mySetAsCopy.head = even;
+                ListItem<T> item = new ListItem<>(current.key);
+                if (newHead == null) {
+                    newHead = item;
+                } else {
+                    tail.next = item;
                 }
-                if (lastTrue != null) {
-                    lastTrue.next = even;
-                }
-                lastTrue = even;
+                tail = item;
             }
-            current = current.next;
         }
-        return mySetAsCopy;
+        return new MySetAsCopy<>(newHead, cmp);
     }
 
     @Override
     @StudentImplementationRequired
     public MySet<ListItem<T>> cartesianProduct(MySet<T> other) {
-        Comparator<ListItem<T>> comparator = Comparator.comparing((ListItem<T> s) -> s.key, cmp).thenComparing(s -> s.next.key, cmp);
-        MySet<ListItem<T>> mySetAsCopy = new MySetAsCopy<>(null, comparator);
-        ListItem<T> currentX = this.head;
-        ListItem<T> currentY;
-        ListItem<ListItem<T>> currentTupel;
-        ListItem<ListItem<T>> lastTupel = null;
-
-        while (currentX != null) {
-            currentY = other.head;
-            while (currentY != null) {
-                currentTupel = new ListItem<>(new ListItem<>(currentX.key));
-                currentTupel.key.next = new ListItem<>(currentY.key);
-                if (mySetAsCopy.head == null) {
-                    mySetAsCopy.head = currentTupel;
-                    lastTupel = currentTupel;
+        // TODO H2.1
+        ListItem<ListItem<T>> newHead = null;
+        ListItem<ListItem<T>> tail = null;
+        for (ListItem<T> current = this.head; current != null; current = current.next) {
+            for (ListItem<T> otherCurrent = other.head; otherCurrent != null; otherCurrent = otherCurrent.next) {
+                ListItem<T> item = new ListItem<>(current.key);
+                item.next = new ListItem<>(otherCurrent.key);
+                ListItem<ListItem<T>> pair = new ListItem<>(item);
+                if (newHead == null) {
+                    newHead = pair;
                 } else {
-                    lastTupel.next = currentTupel;
-                    lastTupel = currentTupel;
+                    tail.next = pair;
                 }
-                currentY = currentY.next;
+                tail = pair;
             }
-            currentX = currentX.next;
         }
-        return mySetAsCopy;
+        return new MySetAsCopy<>(newHead, Comparator.comparing((ListItem<T> o) -> o.key, cmp)
+            .thenComparing(
+                (ListItem<T> o) -> {
+                    assert o.next != null;
+                    return o.next.key;
+                }, cmp));
     }
 
     @Override
     @StudentImplementationRequired
     public MySet<T> difference(MySet<T> other) {
-        MySetAsCopy<T> mySetAsCopy = new MySetAsCopy<>(null, cmp);
+        // TODO H3.1
+        ListItem<T> newHead = null;
+        ListItem<T> tail = null;
 
-        ListItem<T> lastElement = null;
-        ListItem<T> currentM = this.head;
-        while (currentM != null) {
-            boolean found = false;
-            ListItem<T> currentN = other.head;
-            while (currentN != null) {
-                if (cmp.compare(currentM.key, currentN.key) == 0) {
-                    found = true;
-                    break;
-                }
-                currentN = currentN.next;
+        ListItem<T> current = head;
+        ListItem<T> otherCurrent = other.head;
+
+        while (current != null && otherCurrent != null) {
+            int compare = cmp.compare(current.key, otherCurrent.key);
+            if (compare > 0) {
+                // Case 1: Since the element in the other set is smaller than the element in this set,
+                // we need to check the next element in the other set if it is equal, smaller or greater to the current
+                // element in this set
+                // E.g. this set: 1, 2, 3, 4, 5 and other set: 0, 1, 2, 3, 4
+                // Since 0 < 1, move the pointer of the other set to the next element
+                // Also move the current set pointer since we already added the element to the new set
+                otherCurrent = otherCurrent.next;
+                continue;
+            } else if (compare == 0) {
+                // Case 2: Skip both elements on both sets if they are equal
+                current = current.next;
+                otherCurrent = otherCurrent.next;
+                continue;
             }
-            if (!found) {
-                ListItem<T> newElement = new ListItem<>(currentM.key);
-                if (lastElement == null) {
-                    mySetAsCopy.head = newElement;
-                } else {
-                    lastElement.next = newElement;
-                }
-                lastElement = newElement;
+
+            // Case 3: If they are not equal, always add the element to the new set
+            ListItem<T> item = new ListItem<>(current.key);
+            if (newHead == null) {
+                newHead = item;
+            } else {
+                tail.next = item;
             }
-            currentM = currentM.next;
+            tail = item;
+
+            // Since the element in the other set is greater than the element in this set,
+            // we need to check the next element in this set if it is equal, smaller or greater to the current
+            // element in the other set
+            // E.g. this set: 1, 2, 3, 4, 5 and other set: 2, 3, 4, 5, 6
+            // Since 1 < 2, move the pointer of this set to the next element
+            current = current.next;
         }
-        return mySetAsCopy;
+        while (current != null) {
+            // Case 3: If the other set is empty, add all remaining elements of this set to the new set
+            ListItem<T> item = new ListItem<>(current.key);
+            if (newHead == null) {
+                newHead = item;
+            } else {
+                tail.next = item;
+            }
+            tail = item;
+            current = current.next;
+        }
+        return new MySetAsCopy<>(newHead, cmp);
     }
 
     @Override
     @StudentImplementationRequired
     protected MySet<T> intersectionListItems(ListItem<ListItem<T>> heads) {
-        MySetAsCopy<T> mySetAsCopy = new MySetAsCopy<>(null, cmp);
-        if (heads.next == null || heads.next.key == null) {
-            mySetAsCopy.head = null;
-            return mySetAsCopy;
-        }
-        ListItem<T> itemToCheck = head;
-        ListItem<T> lastResultElement = null;
-        while (itemToCheck != null) {
-            ListItem<ListItem<T>> checkList = heads;
-            boolean itemFound = false;
-            while (checkList != null) {
-                itemFound = false;
-                ListItem<T> checkListItem = checkList.key;
-                while (checkListItem != null) {
-                    if (cmp.compare(checkListItem.key, itemToCheck.key) == 0) {
-                        itemFound = true;
-                        break;
-                    }
-                    checkListItem = checkListItem.next;
+        // TODO H4.1
+        ListItem<T> newHead = null;
+        ListItem<T> tail = null;
+
+        while (heads != null && heads.next != null && heads.key != null) {
+            T current = heads.key.key;
+            heads.key = heads.key.next;
+            // Check if the current element is contained in all sets
+            boolean common = true;
+            for (ListItem<ListItem<T>> otherHeads = heads.next; otherHeads != null; ) {
+                // Case 1: The other set is smaller than the current set. We do not have to check for common elements
+                // anymore
+                if (otherHeads.key == null) {
+                    return new MySetAsCopy<>(newHead, cmp);
                 }
-                if (!itemFound) {
+                T other = otherHeads.key.key;
+                int comparison = cmp.compare(current, other);
+
+                if (comparison == 0) {
+                    // Case 2: Current set contains the element, check next set
+                    otherHeads.key = otherHeads.key.next;
+                    otherHeads = otherHeads.next;
+                } else if (comparison < 0) {
+                    // Case 3: Current set does not contain the element, check next element in current set
+                    // Since the elements are ordered and the element x < y where x is in this set and y is in the other
+                    // set, we can safely assume that the element is not contained in the other sets or else we would
+                    // have found it already
+                    common = false;
                     break;
-                }
-                checkList = checkList.next;
-            }
-            if (itemFound) {
-                ListItem<T> newElement = new ListItem<>(itemToCheck.key);
-                if (lastResultElement == null) {
-                    mySetAsCopy.head = newElement;
                 } else {
-                    lastResultElement.next = newElement;
+                    // Case 4: Current set is greater than the other set, check successor element of the other set
+                    otherHeads.key = otherHeads.key.next;
                 }
-                lastResultElement = newElement;
             }
-            itemToCheck = itemToCheck.next;
+
+            // If the element is not contained in all sets, skip it
+            if (!common) {
+                continue;
+            }
+
+            // Add the element to the new set if it is contained in all sets
+            ListItem<T> item = new ListItem<>(current);
+            if (newHead == null) {
+                newHead = item;
+            } else {
+                tail.next = item;
+            }
+            tail = item;
         }
-        return mySetAsCopy;
+
+        return new MySetAsCopy<>(newHead, cmp);
     }
+
 }
