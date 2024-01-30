@@ -99,6 +99,7 @@ public abstract class H10_Test {
 
     @BeforeEach
     public void setup() {
+
         // Check Imports
         ImportScanner importScanner = new ImportScannerImpl();
         assert method != null;
@@ -106,6 +107,7 @@ public abstract class H10_Test {
         Set<CtImport> imports = importScanner.getAllImports();
         List<CtVariable<?>> variables = ((BasicMethodLink) method).getCtElement()
             .filterChildren(element -> element instanceof CtVariable<?>).list();
+
         Set<TypeLink> foundTypes = imports.stream().map(CtImport::getReferencedTypes)
             .filter(Objects::nonNull)
             .map(Object::toString)
@@ -136,8 +138,10 @@ public abstract class H10_Test {
 
         // Array check
         Set<CtElement> arrays = variables.stream().map(CtVariable::getType)
+            .filter(Objects::nonNull)
             .filter(CtTypeInformation::isArray)
             .collect(Collectors.toSet());
+
         String arrayTypes = arrays.stream().map(CtElement::toString).collect(Collectors.joining(", "));
         Assertions2.assertTrue(
             arrays.isEmpty(),

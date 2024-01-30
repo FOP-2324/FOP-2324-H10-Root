@@ -1,10 +1,13 @@
 package h10;
 
+import org.jetbrains.annotations.Nullable;
 import org.tudalgo.algoutils.student.annotation.DoNotTouch;
 import org.tudalgo.algoutils.student.annotation.StudentImplementationRequired;
 
 import java.util.Comparator;
 import java.util.function.Predicate;
+
+import static org.tudalgo.algoutils.student.Student.crash;
 
 /**
  * An in-place implementation of MySet.
@@ -30,30 +33,23 @@ public class MySetInPlace<T> extends MySet<T> {
     @Override
     @StudentImplementationRequired
     public MySet<T> subset(Predicate<? super T> pred) {
-        // TODO H1.2
-        // The previous element is the last element of the set which is not decoupled
-        ListItem<T> previous = null;
         ListItem<T> current = head;
-
+        ListItem<T> lastTrue = null;
         while (current != null) {
-            // Remove the element from the set when it does not satisfy the predicate
-            // Previous will always be set to the current element if it should not be decoupled
-            if (!pred.test(current.key)) {
-                if (previous == null) {
-                    // Case 1: Since previous is not set yet, this means we the head of the set should be decoupled
-                    head = current.next;
+            if (pred.test(current.key)) {
+                if (lastTrue != null) {
+                    lastTrue.next = current;
                 } else {
-                    // Case 2: Previous is set to the last element which is not decoupled from the set
-                    // Since the previous element is the element which is not removed and the successor needs to be
-                    // removed which is the current element, we can safely set the successor of the previous element to
-                    // the successor of the current element to remove the current element from the set
-                    previous.next = current.next;
+                    head = current;
                 }
-            } else {
-                // Case 3: Remember the previous element which is not removed
-                previous = current;
+                lastTrue = current;
             }
             current = current.next;
+        }
+        if (lastTrue != null) {
+            lastTrue.next = null;
+        } else {
+            head = null;
         }
         return this;
     }
@@ -61,164 +57,112 @@ public class MySetInPlace<T> extends MySet<T> {
     @Override
     @StudentImplementationRequired
     public MySet<ListItem<T>> cartesianProduct(MySet<T> other) {
-        // TODO H2.2
-        ListItem<ListItem<T>> newHead = null;
-        ListItem<ListItem<T>> tail = null;
-        ListItem<T> current = this.head;
-        while (current != null) {
-            // Item will be decoupled after processing
-            ListItem<T> decoupled = current;
-            ListItem<T> otherCurrent = other.head;
-            while (otherCurrent != null) {
-                ListItem<T> item = new ListItem<>(current.key);
-                item.next = new ListItem<>(otherCurrent.key);
-                ListItem<ListItem<T>> pair = new ListItem<>(item);
-                if (newHead == null) {
-                    newHead = pair;
-                } else {
-                    tail.next = pair;
-                }
-                tail = pair;
+        Comparator<ListItem<T>> comparator = Comparator.comparing((ListItem<T> s) -> s.key, cmp).thenComparing((ListItem<T> s) -> s.next.key, cmp);
+        MySetInPlace<ListItem<T>> mySetInPlace = new MySetInPlace<>(null, comparator);
+        ListItem<T> currentX = this.head;
+        ListItem<T> lastX = null;
+        ListItem<T> currentY;
+        ListItem<T> lastY = null;
+        ListItem<ListItem<T>> currentTupel;
+        ListItem<ListItem<T>> lastTupel = null;
 
-                // Decouple the other element from the set only if it is the last iteration since we need
-                // the reference to the element in the set for all other iterations
-                if (current.next == null) {
-                    ListItem<T> otherDecoupled = otherCurrent;
-                    otherCurrent = otherCurrent.next;
-                    otherDecoupled.next = null;
-                } else {
-                    otherCurrent = otherCurrent.next;
-                }
+        while (currentX != null) {
+            currentY = other.head;
+            if (lastX != null) {
+                lastX.next = null;
             }
-
-            current = current.next;
-            // Decouple the current element from the set
-            decoupled.next = null;
+            if (lastY != null) {
+                lastY.next = null;
+            }
+            while (currentY != null) {
+                currentTupel = new ListItem<>(new ListItem<>(currentX.key));
+                currentTupel.key.next = new ListItem<>(currentY.key);
+                if (mySetInPlace.head == null) {
+                    mySetInPlace.head = currentTupel;
+                } else {
+                    lastTupel.next = currentTupel;
+                }
+                lastTupel = currentTupel;
+                lastY = currentY;
+                currentY = currentY.next;
+            }
+            lastX = currentX;
+            currentX = currentX.next;
         }
-
-        return new MySetInPlace<>(newHead, Comparator.comparing((ListItem<T> o) -> o.key, cmp)
-            .thenComparing(
-                (ListItem<T> o) -> {
-                    assert o.next != null;
-                    return o.next.key;
-                }, cmp));
+        return mySetInPlace;
     }
 
     @Override
     @StudentImplementationRequired
     public MySet<T> difference(MySet<T> other) {
-        // TODO H3.2
-        ListItem<T> current = head;
-        ListItem<T> otherCurrent = other.head;
-        // The previous element is the last element of the set which is not decoupled
-        ListItem<T> previous = null;
+        MySetInPlace<T> mySetInPlace = new MySetInPlace<>(null, cmp);
+        ListItem<T> currentM = this.head;
+        ListItem<T> lastM = null;
 
-        while (current != null && otherCurrent != null) {
-            int compare = cmp.compare(current.key, otherCurrent.key);
-
-            if (compare < 0) {
-                // Case 1: Since the element in the other set is greater than the element in this set,
-                // we need to check the next element in this set if it is equal, smaller or greater to the current
-                // element in the other set
-                // E.g. this set: 1, 2, 3, 4, 5 and other set: 2, 3, 4, 5, 6
-                // Since 1 < 2, move the pointer of this set to the next element
-                previous = current;
-                current = current.next;
-            } else if (compare > 0) {
-                // Case 2: Since the element in the other set is smaller than the element in this set,
-                // we need to check the next element in the other set if it is equal, smaller or greater to the current
-                // element in this set
-                // E.g. this set: 1, 2, 3, 4, 5 and other set: 0, 1, 2, 3, 4
-                // Since 0 < 1, move the pointer of the other set to the next element
-                otherCurrent = otherCurrent.next;
-            } else {
-                // Case 3: Elements are equal, remove the element from the current set
-                // Previous will always be set to the current element if it should not be decoupled
-                if (previous == null) {
-                    // Case 3.1: Since previous is not set yet, this means we the head of the set should be decoupled
-                    head = current.next;
-                    otherCurrent = otherCurrent.next;
-                } else {
-                    // Case 3.1: Previous is set to the last element which is not decoupled from the set
-                    // Since the previous element is the element which is not removed and the successor needs to be
-                    // removed which is the current element, we can safely set the successor of the previous element to
-                    // the successor of the current element to remove the current element from the set
-                    previous.next = current.next;
+        while (currentM != null) {
+            boolean found = false;
+            ListItem<T> currentN = other.head;
+            while (currentN != null) {
+                if (cmp.compare(currentM.key, currentN.key) == 0) {
+                    found = true;
+                    break;
                 }
-                current = current.next;
+                currentN = currentN.next;
             }
+            if (!found) {
+                if (lastM == null) {
+                    mySetInPlace.head = currentM;
+                } else {
+                    lastM.next = currentM;
+                }
+                lastM = currentM;
+            }
+            currentM = currentM.next;
         }
-
-        // If there are remaining elements in the current set, keep them
-        return this;
+        if (lastM != null) {
+            lastM.next = null;
+        }
+        return mySetInPlace;
     }
 
     @Override
     @StudentImplementationRequired
     protected MySet<T> intersectionListItems(ListItem<ListItem<T>> heads) {
-        // TODO H4.2
-        ListItem<T> newHead = null;
-        ListItem<T> tail = null;
+        ListItem<T> myListItem = this.head;
+        ListItem<T> lastElement = null;
 
-        // Indicator when to stop all loops
-        boolean end = false;
-        while (!end && heads != null && heads.next != null && heads.key != null) {
-            T current = heads.key.key;
-            // Check if the current element is contained in all sets
-            boolean common = true;
-            for (ListItem<ListItem<T>> otherHeads = heads.next; otherHeads != null; ) {
-                // Case 1: The other set is smaller than the current set. We do not have to check for common elements
-                // anymore
-                if (otherHeads.key == null) {
-                    end = true;
-                    break;
-                }
-                T other = otherHeads.key.key;
-                int comparison = cmp.compare(current, other);
-
-                if (comparison == 0) {
-                    // Case 2: Current set contains the element, check next set
-                    otherHeads.key = otherHeads.key.next;
-                    otherHeads = otherHeads.next;
-                } else if (comparison < 0) {
-                    // Case 3: Current set does not contain the element, check next element in current set
-                    // Since the elements are ordered and the element x < y where x is in this set and y is in the other
-                    // set, we can safely assume that the element is not contained in the other sets or else we would
-                    // have found it already
-                    common = false;
-                    break;
-                } else {
-                    // Case 4: Current set is greater than the other set, check successor element of the other set
-                    otherHeads.key = otherHeads.key.next;
-                }
-            }
-
-            // Stop all loops we are done
-            if (end) {
-                break;
-            }
-
-            // If the element is not contained in all sets, skip it
-            if (!common) {
-                heads.key = heads.key.next;
-                continue;
-            }
-
-            // Add the element to the new set if it is contained in all sets
-            if (newHead == null) {
-                newHead = heads.key;
-            } else {
-                tail.next = heads.key;
-            }
-            tail = heads.key;
-            heads.key = heads.key.next;
+        if (heads.next == null || heads.next.key == null) {
+            this.head = null;
+            return this;
         }
-        head = newHead;
-        // Check since an empty list does not have a successor element after tail
-        if (tail != null) {
-            tail.next = null;
+        while (myListItem != null) {
+            boolean itemFound = false;
+            ListItem<ListItem<T>> currentSet = heads.next;
+            ListItem<T> currentListItem = currentSet.key;
+            while (currentSet != null) {
+                while (currentListItem != null) {
+                    if (cmp.compare(currentListItem.key, myListItem.key) == 0) {
+                        itemFound = true;
+                        break;
+                    }
+                    currentListItem = currentListItem.next;
+                }
+                if (!itemFound) {
+                    break;
+                }
+                currentSet = currentSet.next;
+            }
+            if (!itemFound) {
+                if (lastElement == null) {
+                    this.head = myListItem.next;
+                } else {
+                    lastElement.next = myListItem.next;
+                }
+            } else {
+                lastElement = myListItem;
+            }
+            myListItem = myListItem.next;
         }
         return this;
     }
-
 }
