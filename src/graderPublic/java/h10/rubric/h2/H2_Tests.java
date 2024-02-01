@@ -11,15 +11,14 @@ import h10.util.ListItems;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.Timeout;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
+import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Defines a base class for testing a method for the H2 assignment. A subclass of this class needs
@@ -31,11 +30,7 @@ import java.util.concurrent.TimeUnit;
 @TestForSubmission
 @DisplayName("H2 | cartesianProduct(MySet)")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Timeout(
-    value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
-    unit = TimeUnit.SECONDS,
-    threadMode = Timeout.ThreadMode.SEPARATE_THREAD
-)
+@SkipAfterFirstFailedTest(TestConstants.SKIP_AFTER_FIRST_FAILED_TEST)
 public abstract class H2_Tests extends H10_Test {
 
     /**

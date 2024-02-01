@@ -14,7 +14,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opentest4j.AssertionFailedError;
@@ -28,7 +27,6 @@ import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 /**
@@ -41,11 +39,6 @@ import java.util.function.Predicate;
 @TestForSubmission
 @DisplayName("H1 | subset(MySet)")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Timeout(
-    value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
-    unit = TimeUnit.SECONDS,
-    threadMode = Timeout.ThreadMode.SEPARATE_THREAD
-)
 @SkipAfterFirstFailedTest(TestConstants.SKIP_AFTER_FIRST_FAILED_TEST)
 public abstract class H1_TestsPublic extends H10_Test {
 
